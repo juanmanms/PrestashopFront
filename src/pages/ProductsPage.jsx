@@ -35,7 +35,7 @@ const ProductsPage = () => {
 
     const updateProductPriceInDB = async (id_product, price) => {
         try {
-            const response = await fetch('http://localhost:3000/products', {
+            const response = await fetch('https://apiprestashoptorreblanca.onrender.com/products', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const ProductsPage = () => {
 
     useEffect(() => {
         const getProducts = async () => {
-            await fetch('http://localhost:3000/sellers/products', {
+            await fetch('https://apiprestashoptorreblanca.onrender.com/products', {
                 method: 'GET',
                 headers: {
                     Authorization: `${localStorage.getItem('token')}`,

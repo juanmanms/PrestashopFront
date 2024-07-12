@@ -3,10 +3,100 @@ import { setToken, addUser, removeUser } from '../../redux/userSlice';
 
 
 export const loginSubmit = (username, password, dispatch) => {
+    const apiUrl = import.meta.env.REACT_APP_URL_API || 'https://apiprestashoptorreblanca.onrender.com/';
 
     console.log('Login submitted:', { username, password });
 
-    fetch('http://localhost:3000/auth/login', {
+    fetch(`${apiUrl}auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: username, password }),
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Login failed');
+        })
+        .then((data) => {
+            if (data === 'Usuario o contraseña incorrectos') {
+                console.log('Login failed:', data);
+                return;
+            }
+            console.log('Login success:', data);
+            localStorage.setItem('token', data);
+            dispatch(setToken(data));
+            getSeller(dispatch, addUser); // Asegúrate de pasar dispatch y addUser aquí
+        })
+        .catch((error) => {
+            console.error('Login error:', error);
+        });
+
+
+    console.log('Login submitted:', { username, password });
+
+    fetch(`${apiUrl}auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: username, password }),
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Login failed');
+        })
+        .then((data) => {
+            if (data === 'Usuario o contraseña incorrectos') {
+                console.log('Login failed:', data);
+                return;
+            }
+            console.log('Login success:', data);
+            localStorage.setItem('token', data);
+            dispatch(setToken(data));
+            getSeller(dispatch, addUser); // Asegúrate de pasar dispatch y addUser aquí
+        })
+        .catch((error) => {
+            console.error('Login error:', error);
+        });
+
+    console.log('Login submitted:', { username, password });
+
+    fetch(`${apiUrl}auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: username, password }),
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Login failed');
+        })
+        .then((data) => {
+            if (data === 'Usuario o contraseña incorrectos') {
+                console.log('Login failed:', data);
+                return;
+            }
+            console.log('Login success:', data);
+            localStorage.setItem('token', data);
+            dispatch(setToken(data));
+            getSeller(dispatch, addUser); // Asegúrate de pasar dispatch y addUser aquí
+        })
+        .catch((error) => {
+            console.error('Login error:', error);
+        });
+
+
+    console.log('Login submitted:', { username, password });
+
+    fetch(`${apiUrl}auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
