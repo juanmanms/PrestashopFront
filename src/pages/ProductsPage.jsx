@@ -99,10 +99,12 @@ const ProductsPage = () => {
                             <td className="py-2 px-4 border-b border-gray-200">{product.product_name}</td>
                             <td className="py-2 px-4 border-b border-gray-200">
                                 <input type="text" value={product.price} onChange={(e) => InputSinIVAChange(e, product.id_product)}
+                                    className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                 />
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
                                 <input type="text" value={product.precio_IVA || 'NS'} onChange={(e) => InputConIvaChange(e, product.id_product)}
+                                    className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                 />
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">{product.quantity}</td>
