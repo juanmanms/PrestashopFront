@@ -3,7 +3,7 @@ import { setToken, addUser, removeUser } from '../../redux/userSlice';
 
 
 export const loginSubmit = (username, password, dispatch) => {
-    const apiUrl = import.meta.env.REACT_APP_URL_API || 'https://apiprestashoptorreblanca.onrender.com/';
+    const apiUrl = import.meta.env.REACT_APP_URL_API || 'http://localhost:3000/';
 
     fetch(`${apiUrl}auth/login`, {
         method: 'POST',
@@ -40,7 +40,7 @@ export const loginSubmit = (username, password, dispatch) => {
 
 export const getSeller = async (dispatch, addUser) => {
     try {
-        const response = await fetch('https://apiprestashoptorreblanca.onrender.com/sellers', {
+        const response = await fetch('http://localhost:3000/sellers', {
             method: 'GET',
             headers: {
                 Authorization: `${localStorage.getItem('token')}`,

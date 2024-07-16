@@ -1,4 +1,5 @@
 import NavBar from "./NavBar"
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"
 import { logout } from "../login/loginService";
 
@@ -20,7 +21,7 @@ export const Header = () => {
                         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Torreblanca</span>
                     </a>
                     <div className="flex items-center space-x-6 rtl:space-x-reverse">
-                        <a href="tel:5541251234" className="text-sm text-gray-500 dark:text-white hover:underline">{user.name}</a>
+                        <Link to="seller" className="text-sm text-gray-500 dark:text-white hover:underline">{user.name}</Link>
                         <button onClick={handleLogout} className="text-sm text-blue-600 dark:text-blue-500 hover:underline">Cerrar</button>
                     </div>
                 </div>
