@@ -3,7 +3,7 @@ import { setToken, addUser, removeUser } from '../../redux/userSlice';
 
 
 export const loginSubmit = (username, password, dispatch) => {
-    const apiUrl = import.meta.env.REACT_APP_URL_API || 'http://localhost:3000/';
+    const apiUrl = import.meta.env.REACT_APP_URL_API || 'https://panel.mercattorreblanca.cat/';
 
     fetch(`${apiUrl}auth/login`, {
         method: 'POST',
@@ -40,7 +40,7 @@ export const loginSubmit = (username, password, dispatch) => {
 
 export const getSeller = async (dispatch, addUser) => {
     try {
-        const response = await fetch('http://localhost:3000/sellers', {
+        const response = await fetch('https://panel.mercattorreblanca.cat/sellers', {
             method: 'GET',
             headers: {
                 Authorization: `${localStorage.getItem('token')}`,

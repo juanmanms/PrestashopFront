@@ -7,10 +7,10 @@ const NavBar = () => {
                 <div className="flex items-center">
                     <ul className="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
                         <li>
-                            <Link to="/products" className="text-gray-900 dark:text-white hover:underline" aria-current="page">Productos</Link>
+                            <Link to="/productos" className="text-gray-900 dark:text-white hover:underline" aria-current="page">Productos</Link>
                         </li>
                         <li>
-                            <Link to="#" className="text-gray-900 dark:text-white hover:underline" disabled >IVA</Link>
+                            <Link to="/combinaciones" className="text-gray-900 dark:text-white hover:underline" disabled >Combinaciones</Link>
                         </li>
                         <li>
                             <Link to="#" className="text-gray-900 dark:text-white hover:underline" disabled >Imagenes</Link>

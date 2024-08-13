@@ -4,7 +4,7 @@
 export const ProductService = () => {
     const updateProductPriceInDB = async (id_product, price) => {
         try {
-            const response = await fetch('http://localhost:3000/products', {
+            const response = await fetch('https://panel.mercattorreblanca.cat/products', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ export const ProductService = () => {
 
     const updateProductIVAInDB = async (id_product, id_tax_rules_group) => {
         try {
-            const response = await fetch('http://localhost:3000/products/iva', {
+            const response = await fetch('https://panel.mercattorreblanca.cat/products/iva', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export const ProductService = () => {
     }
 
     const getProducts = async (callback) => {
-        await fetch('http://localhost:3000/products', {
+        await fetch('https://panel.mercattorreblanca.cat/products', {
             method: 'GET',
             headers: {
                 Authorization: `${localStorage.getItem('token')}`,
@@ -67,10 +67,98 @@ export const ProductService = () => {
             });
     };
 
+    const updateProductActiveInDB = async (id_product, active) => {
+        try {
+            const response = await fetch('https://panel.mercattorreblanca.cat/products/active', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`, // Asumiendo que necesitas autenticación
+                },
+                body: JSON.stringify({
+                    id: id_product,
+                    active: active,
+                }),
+            });
+
+            const data = await response.json();
+            console.log(data.message); // "Product updated"
+        } catch (error) {
+            console.error('Error updating product active:', error);
+        }
+    }
+
+    //Servicios de combinaciones
+    const getCombinations = async (callback) => {
+        await fetch('https://panel.mercattorreblanca.cat/products/combinations', {
+            method: 'GET',
+            headers: {
+                Authorization: `${localStorage.getItem('token')}`,
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Get combinations failed');
+            })
+            .then((data) => {
+                callback(data)
+                //setProducts(data); // Assuming the data is an array of products
+                //setFilteredProducts(data); // Inicialmente, todos los productos están "filtrados"
+            })
+            .catch((error) => {
+                console.error('Get combinations error:', error);
+            }
+            );
+    }
+
+    const updateProductNameInDB = async (id_product, name) => {
+        try {
+            const response = await fetch('https://panel.mercattorreblanca.cat/products/name', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`, // Asumiendo que necesitas autenticación
+                },
+                body: JSON.stringify({
+                    id: id_product,
+                    name: name,
+                }),
+            });
+
+            const data = await response.json();
+            console.log(data.message); // "Product updated"
+        } catch (error) {
+            console.error('Error updating product name:', error);
+        }
+    }
+
+    const getAttributes = async () => {
+        try {
+            const response = await fetch('https://panel.mercattorreblanca.cat/attributes', {
+                method: 'GET',
+            });
+
+            const data = await response.json();
+            console.log(data); // Array of attributes
+            return data;
+        }
+        catch (error) {
+            console.error('Error getting attributes:', error);
+        }
+    }
+
+
+
     return {
         updateProductPriceInDB,
         updateProductIVAInDB,
-        getProducts
+        getProducts,
+        getCombinations,
+        updateProductActiveInDB,
+        updateProductNameInDB,
+        getAttributes
     }
 }
 
