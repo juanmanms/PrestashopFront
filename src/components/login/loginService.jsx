@@ -66,6 +66,6 @@ export const getSeller = async (dispatch, addUser) => {
 export const logout = (dispatch) => {
     localStorage.removeItem('token');
     localStorage.removeItem('state');
-    window.location.reload();
     dispatch(removeUser());
+    window.location.href = '/';
 }
