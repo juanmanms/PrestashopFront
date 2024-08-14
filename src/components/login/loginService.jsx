@@ -2,8 +2,9 @@ import { setToken, addUser, removeUser } from '../../redux/userSlice';
 
 
 
+
 export const loginSubmit = (username, password, dispatch) => {
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const apiUrl = process.env.REACT_APP_URL_API;
 
     fetch(`${apiUrl}auth/login`, {
         method: 'POST',
