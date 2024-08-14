@@ -22,7 +22,7 @@ const TableCombination = () => {
     }, [searchTerm, products]);
 
     if (products.length === 0) {
-        return <div>Loading...</div>;
+        return <div>Sin resultados...</div>;
     }
 
     return (

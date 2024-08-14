@@ -2,9 +2,11 @@
 
 
 export const ProductService = () => {
+    const apiUrl = process.env.REACT_APP_URL_API;
+
     const updateProductPriceInDB = async (id_product, price) => {
         try {
-            const response = await fetch('https://panel.mercattorreblanca.cat/products', {
+            const response = await fetch(`${apiUrl}products`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,7 +27,7 @@ export const ProductService = () => {
 
     const updateProductIVAInDB = async (id_product, id_tax_rules_group) => {
         try {
-            const response = await fetch('https://panel.mercattorreblanca.cat/products/iva', {
+            const response = await fetch(`${apiUrl}products/iva`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +47,7 @@ export const ProductService = () => {
     }
 
     const getProducts = async (callback) => {
-        await fetch('https://panel.mercattorreblanca.cat/products', {
+        await fetch(`${apiUrl}products`, {
             method: 'GET',
             headers: {
                 Authorization: `${localStorage.getItem('token')}`,
@@ -69,7 +71,7 @@ export const ProductService = () => {
 
     const updateProductActiveInDB = async (id_product, active) => {
         try {
-            const response = await fetch('https://panel.mercattorreblanca.cat/products/active', {
+            const response = await fetch(`${apiUrl}products/active`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +92,7 @@ export const ProductService = () => {
 
     //Servicios de combinaciones
     const getCombinations = async (callback) => {
-        await fetch('https://panel.mercattorreblanca.cat/products/combinations', {
+        await fetch(`${apiUrl}products/combinations`, {
             method: 'GET',
             headers: {
                 Authorization: `${localStorage.getItem('token')}`,
@@ -115,7 +117,7 @@ export const ProductService = () => {
 
     const updateProductNameInDB = async (id_product, name) => {
         try {
-            const response = await fetch('https://panel.mercattorreblanca.cat/products/name', {
+            const response = await fetch(`${apiUrl}products/name`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -136,7 +138,7 @@ export const ProductService = () => {
 
     const getAttributes = async () => {
         try {
-            const response = await fetch('https://panel.mercattorreblanca.cat/attributes', {
+            const response = await fetch(`${apiUrl}attributes`, {
                 method: 'GET',
             });
 
