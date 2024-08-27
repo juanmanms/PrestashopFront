@@ -29,6 +29,34 @@ const TableCombination = () => {
         console.log('Borrando combinación:', id_product_attribute);
     };
 
+    const changePriceSinIva = (e, id_product_attribute) => {
+        e.preventDefault();
+        console.log('Cambiando precio sin IVA:', id_product_attribute, 'nuevo precio:', e.target.value);
+        const newProducts = products.map((product) => {
+            if (product.id_product_attribute === id_product_attribute) {
+                productsService.updatePriceCombinationInDB(product.id_product_attribute, parseFloat(e.target.value));
+                return { ...product, combination_price: parseFloat(e.target.value), price_with_tax: parseFloat(e.target.value) * (product.tax_rate * 0.01 + 1) };
+            }
+            return product;
+        }
+        );
+        setProducts(newProducts);
+    };
+
+    const changePriceConIva = (e, id_product_attribute) => {
+        e.preventDefault();
+        console.log('Cambiando precio con IVA:', id_product_attribute, 'nuevo precio:', e.target.value);
+        const newProducts = products.map((product) => {
+            if (product.id_product_attribute === id_product_attribute) {
+                productsService.updatePriceCombinationInDB(product.id_product_attribute, parseFloat(e.target.value) / (1 + product.tax_rate * 0.01));
+                return { ...product, price_with_tax: parseFloat(e.target.value), combination_price: parseFloat(e.target.value) / (1 + product.tax_rate * 0.01) };
+            }
+            return product;
+        }
+        );
+        setProducts(newProducts);
+    }
+
     return (
         <div>
             <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -58,13 +86,22 @@ const TableCombination = () => {
                                     <td className="py-2 px-4 border-b border-gray-200">{product.id_product}</td>
                                     <td className="py-2 px-4 border-b border-gray-200">{product.product_name}</td>
                                     <td className="py-2 px-4 border-b border-gray-200">{product.attribute_names}</td>
-                                    <td className="py-2 px-4 border-b border-gray-200">{product.combination_price}
-                                        {/* <input type="number" value={product.combination_price} className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" /> */}
+                                    <td className="py-2 px-4 border-b border-gray-200">
+                                        <input
+                                            type="number"
+                                            value={product.combination_price}
+                                            onChange={(e) => changePriceSinIva(e, product.id_product_attribute)}
+                                            className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
                                     </td>
-                                    <td className="py-2 px-4 border-b border-gray-200">{product.price_with_tax || 'NS'}
-                                        {/* <input type="number" value={product.price_with_tax || 'NS'} className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" /> */}
+                                    <td className="py-2 px-4 border-b border-gray-200">
+                                        <input
+                                            type="number"
+                                            value={product.price_with_tax || 'NS'}
+                                            className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                            onChange={(e) => changePriceConIva(e, product.id_product_attribute)}
+                                        />
                                     </td>
-                                    <td className="py-2 px-4 border-b border-gray-200"><button onClick={() => deleteCombination(product.id_product_attribute)} >🗑</button></td>
+                                    <td className="py-2 px-4 border-b border-gray-200"><button onClick={() => deleteCombination(product.id_product_attribute)} disabled >🗑</button></td>
                                 </tr>
                             </>
                         );

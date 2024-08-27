@@ -172,6 +172,32 @@ export const ProductService = () => {
         }
     }
 
+    const updatePriceCombinationInDB = async (id_product_attribute, price) => {
+        try {
+            const response = await fetch(`${apiUrl}products/combinations/active`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`, // Asumiendo que necesitas autenticación
+                },
+                body: JSON.stringify({
+                    id: id_product_attribute,
+                    price: price,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+
+            const data = await response.json();
+            console.log(data.message); // "Price updated"
+        } catch (error) {
+            console.error('Error updating combination price:', error);
+        }
+    }
+
 
 
 
@@ -183,7 +209,8 @@ export const ProductService = () => {
         updateProductActiveInDB,
         updateProductNameInDB,
         getAttributes,
-        addCombination
+        addCombination,
+        updatePriceCombinationInDB
     }
 }
 
