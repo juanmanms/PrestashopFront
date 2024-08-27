@@ -158,7 +158,7 @@ const TablePrice = () => {
                                 />
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
-                                <input type="number" value={product.precio_IVA || 'NS'} onChange={(e) => InputConIvaChange(e, product.id_product)}
+                                <input type="number" value={product.precio_IVA || 0} onChange={(e) => InputConIvaChange(e, product.id_product)}
                                     className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                 />
                             </td>

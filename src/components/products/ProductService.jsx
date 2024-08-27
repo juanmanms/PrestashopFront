@@ -138,7 +138,7 @@ export const ProductService = () => {
 
     const getAttributes = async () => {
         try {
-            const response = await fetch(`${apiUrl}attributes`, {
+            const response = await fetch(`${apiUrl}attributes/group`, {
                 method: 'GET',
             });
 
@@ -151,6 +151,28 @@ export const ProductService = () => {
         }
     }
 
+    const addCombination = async (attribute, id) => {
+        try {
+            const response = await fetch(`${apiUrl}products/combinations/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`, // Asumiendo que necesitas autenticación
+                },
+                body: JSON.stringify({
+                    id: id,
+                    atributo: attribute,
+                }),
+            });
+
+            const data = await response.json();
+            console.log(data.message); // "Combination added"
+        } catch (error) {
+            console.error('Error adding combination:', error);
+        }
+    }
+
+
 
 
     return {
@@ -160,7 +182,8 @@ export const ProductService = () => {
         getCombinations,
         updateProductActiveInDB,
         updateProductNameInDB,
-        getAttributes
+        getAttributes,
+        addCombination
     }
 }
 

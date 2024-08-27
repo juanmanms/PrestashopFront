@@ -25,6 +25,10 @@ const TableCombination = () => {
         return <div>Sin resultados...</div>;
     }
 
+    const deleteCombination = (id_product_attribute) => {
+        console.log('Borrando combinación:', id_product_attribute);
+    };
+
     return (
         <div>
             <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -36,7 +40,7 @@ const TableCombination = () => {
                         <th className="py-2 px-4 border-b border-gray-200">Atributo</th>
                         <th className="py-2 px-4 border-b border-gray-200">Sin IVA</th>
                         <th className="py-2 px-4 border-b border-gray-200">Con IVA</th>
-                        <th className="py-2 px-4 border-b border-gray-200">Activo</th>
+                        <th className="py-2 px-4 border-b border-gray-200">Borrar combinación</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,13 +54,17 @@ const TableCombination = () => {
                                         <td colSpan={6} className="py-2 px-4 border-b border-gray-200 bg-yellow-200 "></td>
                                     </tr>
                                 )}
-                                <tr key={`${product.id_product}-${product.id_attribute}`} style={{ backgroundColor: index % 2 === 0 ? '#f2f2f2' : '#ffffff' }}>
+                                <tr key={product.id_product_attribute} style={{ backgroundColor: index % 2 === 0 ? '#f2f2f2' : '#ffffff' }}>
                                     <td className="py-2 px-4 border-b border-gray-200">{product.id_product}</td>
                                     <td className="py-2 px-4 border-b border-gray-200">{product.product_name}</td>
                                     <td className="py-2 px-4 border-b border-gray-200">{product.attribute_names}</td>
-                                    <td className="py-2 px-4 border-b border-gray-200">{product.combination_price}</td>
-                                    <td className="py-2 px-4 border-b border-gray-200">{product.price_with_tax}</td>
-                                    <td className="py-2 px-4 border-b border-gray-200">{product.active ? 'Sí' : 'No'}</td>
+                                    <td className="py-2 px-4 border-b border-gray-200">{product.combination_price}
+                                        {/* <input type="number" value={product.combination_price} className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" /> */}
+                                    </td>
+                                    <td className="py-2 px-4 border-b border-gray-200">{product.price_with_tax || 'NS'}
+                                        {/* <input type="number" value={product.price_with_tax || 'NS'} className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" /> */}
+                                    </td>
+                                    <td className="py-2 px-4 border-b border-gray-200"><button onClick={() => deleteCombination(product.id_product_attribute)} >🗑</button></td>
                                 </tr>
                             </>
                         );
