@@ -25,7 +25,7 @@ export const loginSubmit = (username, password, dispatch) => {
                 console.log('Login failed:', data);
                 return;
             }
-            console.log('Login success:', data);
+            //console.log('Login success:', data);
             localStorage.setItem('token', data);
             dispatch(setToken(data));
             getSeller(dispatch, addUser); // Asegúrate de pasar dispatch y addUser aquí
@@ -42,7 +42,7 @@ export const loginSubmit = (username, password, dispatch) => {
 
 export const getSeller = async (dispatch, addUser) => {
     try {
-        const response = await fetch(`${apiUrl}`, {
+        const response = await fetch(`${apiUrl}sellers`, {
             method: 'GET',
             headers: {
                 Authorization: `${localStorage.getItem('token')}`,
@@ -50,7 +50,7 @@ export const getSeller = async (dispatch, addUser) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log('Get seller success:', data[0]);
+            //console.log('Get seller success:', data[0]);
             dispatch(addUser({
                 id_seller: data[0].id_seller,
                 id_customer: data[0].id_customer,

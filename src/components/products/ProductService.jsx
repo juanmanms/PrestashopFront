@@ -174,7 +174,7 @@ export const ProductService = () => {
 
     const updatePriceCombinationInDB = async (id_product_attribute, price) => {
         try {
-            const response = await fetch(`${apiUrl}products/combinations/active`, {
+            const response = await fetch(`${apiUrl}products/combinations/price`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -5,14 +5,12 @@ import Modal from 'react-modal';
 
 const CreateCombination = ({ selectedProduct, isOpen, onClose }) => {
     const productsService = useMemo(() => ProductService(), []);
-    const [attributes, setAttributes] = useState([]);
     const [groupedAttributes, setGroupedAttributes] = useState({});
     const [selectedAttributes, setSelectedAttributes] = useState([]);
 
     useEffect(() => {
         productsService.getAttributes()
             .then((data) => {
-                setAttributes(data);
                 setGroupedAttributes(groupAttributesByGroup(data));
             })
             .catch((error) => {
@@ -50,18 +48,20 @@ const CreateCombination = ({ selectedProduct, isOpen, onClose }) => {
             attributes: selectedAttributes
         };
 
-        console.log('Selected data:', data);
-        // Aquí puedes enviar los datos a tu API o manejarlos como necesites
-        //recorrer attributes y hacer un fetch a la api para crear la combinación
         data.attributes.map((attribute) => {
             console.log('attribute:', attribute, 'productId:', data.productId);
             productsService.addCombination(attribute, data.productId);
         });
+
+        setTimeout(() => {
+            window.location.href = '/combinaciones';
+        }, 2000);
     };
 
     return (
         <Modal isOpen={isOpen} onRequestClose={onClose} contentLabel="Create Combination" >
-            <h2>Crear Combinación de {selectedProduct.product_name}</h2>
+            <h2>{selectedProduct.product_name}</h2>
+            <h3>Selecciona los atributos que quieras añadir</h3>
             <div className="grid grid-cols-3 gap-4">
                 {Object.entries(groupedAttributes).map(([groupId, group]) => (
                     <div key={groupId} className="border p-4">
@@ -81,7 +81,7 @@ const CreateCombination = ({ selectedProduct, isOpen, onClose }) => {
                     </div>
                 ))}
             </div>
-            <button onClick={handleSubmit} className="mt-4 p-2 bg-blue-500 text-white">Enviar</button>
+            <button onClick={handleSubmit} className="mt-4 p-2 bg-blue-500 text-white">Generar</button>
         </Modal>
     );
 };
