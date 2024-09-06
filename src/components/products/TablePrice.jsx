@@ -178,8 +178,9 @@ const TablePrice = () => {
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
                                 <button
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    className={` font-bold py-2 px-4 rounded ${product.id_tax_rules_group === 0 ? 'bg-blue-100 cursor-not-allowed ' : 'bg-blue-500 hover:bg-blue-700 text-white'}`}
                                     onClick={() => openModal(product)}
+                                    disabled={product.id_tax_rules_group === 0}
                                 >
                                     Crear
                                 </button>
