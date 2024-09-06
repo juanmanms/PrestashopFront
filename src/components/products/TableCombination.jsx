@@ -89,16 +89,18 @@ const TableCombination = () => {
                                     <td className="py-2 px-4 border-b border-gray-200">
                                         <input
                                             type="number"
-                                            value={product.combination_price}
+                                            value={product.combination_price ? parseFloat(product.combination_price).toFixed(2) : '0.00'}
                                             onChange={(e) => changePriceSinIva(e, product.id_product_attribute)}
+                                            onFocus={(e) => e.target.select()}
                                             className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
                                     </td>
                                     <td className="py-2 px-4 border-b border-gray-200">
                                         <input
                                             type="number"
-                                            value={product.price_with_tax || 'NS'}
+                                            value={product.price_with_tax ? parseFloat(product.price_with_tax).toFixed(2) : '0.00'}
                                             className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                             onChange={(e) => changePriceConIva(e, product.id_product_attribute)}
+                                            onFocus={(e) => e.target.select()}
                                         />
                                     </td>
                                     <td className="py-2 px-4 border-b border-gray-200"><button onClick={() => deleteCombination(product.id_product_attribute)} disabled >🗑</button></td>
