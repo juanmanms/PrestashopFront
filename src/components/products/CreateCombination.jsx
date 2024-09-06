@@ -54,7 +54,16 @@ const CreateCombination = ({ selectedProduct, isOpen, onClose }) => {
         });
 
         setTimeout(() => {
-            window.location.href = '/combinaciones';
+            const closeModalAndShowNotification = () => {
+                onClose();
+                // Generate toast/notification of combination created
+
+                // You can use a library like react-toastify or any other notification librarys
+            };
+
+            setTimeout(() => {
+                closeModalAndShowNotification();
+            }, 2000);
         }, 2000);
     };
 
