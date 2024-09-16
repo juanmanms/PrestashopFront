@@ -211,8 +211,19 @@ export const ProductService = () => {
                 }),
             });
 
-            const data = await response.json();
-            console.log(data.message); // "Combination deleted"
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+
+            // Verificar si la respuesta es JSON antes de parsearla
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                console.log(data.message); // "Combination deleted"
+            } else {
+                throw new Error('Unexpected content type: ' + contentType);
+            }
         } catch (error) {
             console.error('Error deleting combination:', error);
         }
