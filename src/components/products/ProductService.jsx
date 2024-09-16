@@ -213,6 +213,7 @@ export const ProductService = () => {
 
             if (!response.ok) {
                 const errorText = await response.text();
+                console.error(`HTTP error! status: ${response.status}, message: ${errorText}`);
                 throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
             }
 
@@ -222,6 +223,8 @@ export const ProductService = () => {
                 const data = await response.json();
                 console.log(data.message); // "Combination deleted"
             } else {
+                const errorText = await response.text();
+                console.error('Unexpected content type:', contentType, 'Response:', errorText);
                 throw new Error('Unexpected content type: ' + contentType);
             }
         } catch (error) {
