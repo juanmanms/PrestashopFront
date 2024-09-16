@@ -22,6 +22,7 @@ export const Header = () => {
                     </a>
                     <div className="flex items-center space-x-6 rtl:space-x-reverse">
                         {/* <Link to="seller" className="text-sm text-gray-500 dark:text-white hover:underline">{user.name}</Link> */}
+                        <span>{user.name}</span>
                         <button onClick={handleLogout} className="text-sm text-blue-600 dark:text-blue-500 hover:underline">Cerrar</button>
                     </div>
                 </div>
