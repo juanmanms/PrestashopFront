@@ -25,9 +25,6 @@ const TableCombination = () => {
         return <div>Sin resultados...</div>;
     }
 
-    const deleteCombination = (id_product_attribute) => {
-        console.log('Borrando combinación:', id_product_attribute);
-    };
 
     const changePriceSinIva = (e, id_product_attribute) => {
         e.preventDefault();
@@ -103,7 +100,12 @@ const TableCombination = () => {
                                             onFocus={(e) => e.target.select()}
                                         />
                                     </td>
-                                    <td className="py-2 px-4 border-b border-gray-200"><button onClick={() => deleteCombination(product.id_product_attribute)} disabled >🗑</button></td>
+                                    <td className="py-2 px-4 border-b border-gray-200">
+                                        <button onClick={() => {
+                                            productsService.deleteCombination(product.id_product_attribute);
+                                            setProducts(products.filter(p => p.id_product_attribute !== product.id_product_attribute));
+                                        }}>🗑</button>
+                                    </td>
                                 </tr>
                             </>
                         );

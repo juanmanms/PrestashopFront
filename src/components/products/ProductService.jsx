@@ -198,6 +198,26 @@ export const ProductService = () => {
         }
     }
 
+    const deleteCombination = async (id_product_attribute) => {
+        try {
+            const response = await fetch(`${apiUrl}products/combinations`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`, // Asumiendo que necesitas autenticación
+                },
+                body: JSON.stringify({
+                    id: id_product_attribute,
+                }),
+            });
+
+            const data = await response.json();
+            console.log(data.message); // "Combination deleted"
+        } catch (error) {
+            console.error('Error deleting combination:', error);
+        }
+    }
+
 
 
 
@@ -210,7 +230,8 @@ export const ProductService = () => {
         updateProductNameInDB,
         getAttributes,
         addCombination,
-        updatePriceCombinationInDB
+        updatePriceCombinationInDB,
+        deleteCombination
     }
 }
 

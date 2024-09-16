@@ -55,6 +55,8 @@ const CreateCombination = ({ selectedProduct, isOpen, onClose }) => {
 
         setTimeout(() => {
             onClose();
+            //redirect to combinations page
+            window.location.href = `/combinaciones`;
         }, 1000);
     };
 
