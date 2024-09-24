@@ -4,6 +4,8 @@ import ClientAddresses from '../components/clientes/ClientAddresses';
 import OrdersService from '../components/orders/ordersService';
 import { DataComanda } from '../components/orders/DataComanda';
 import PreuComanda from '../components/orders/PreuComanda';
+import useCustomNotification from '../common/hooks/useCustomNotification';
+
 
 const FormOrder = () => {
     const ordersService = OrdersService();
@@ -13,6 +15,8 @@ const FormOrder = () => {
     const [product, setProduct] = useState(null);
     const [price, setPrice] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
+    const { contextHolder, openNotificationWithIcon } = useCustomNotification();
+
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -31,14 +35,25 @@ const FormOrder = () => {
         setVisible(false);
     }
 
+    const clearData = () => {
+        setSelectedClient(null);
+        setSelectedAddress(null);
+        setPrice(null);
+    }
+
     const createOrder = async () => {
         console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate)
         ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate)
+        clearData();
+        //mostrar notificacion de pedido creado
+        openNotificationWithIcon('success', 'Pedido creado', 'El pedido se ha creado correctamente');
+
     }
 
 
     return (
         <div className="bg-white p-4 rounded shadow-md">
+            {contextHolder}
             <h2 className="text-xl font-semibold mb-2">Crear un nuevo pedido</h2>
             <div className="mt-4">
                 {selectedClient && (

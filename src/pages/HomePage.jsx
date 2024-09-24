@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
-import CreateOrder from '../components/orders/CreateOrder';
-
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
 
@@ -16,7 +15,9 @@ const HomePage = () => {
             <p className="mb-4">Bienvenido a tu dashboard, aquí puedes gestionar tus productos y ventas</p>
 
             {/* Aquí puedes añadir más componentes o lógica, como listados de productos, gráficas de ventas, etc. */}
-            <CreateOrder />
+            <Link to="/order" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Comenzar
+            </Link>
 
         </div>
     )
