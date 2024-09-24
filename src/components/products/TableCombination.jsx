@@ -2,12 +2,16 @@
 import { useState, useLayoutEffect, useMemo, useEffect } from 'react';
 import ProductService from './ProductService'; // Adjust the import path as necessary
 import SearchProduct from './SearchProduct';
+import useCustomNotification from '../../common/hooks/useCustomNotification';
+
 
 const TableCombination = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const productsService = useMemo(() => ProductService(), []);
     const [searchTerm, setSearchTerm] = useState("");
+    const { contextHolder, openNotificationWithIcon } = useCustomNotification();
+
 
     useLayoutEffect(() => {
         productsService.getCombinations(setProducts);
@@ -54,8 +58,16 @@ const TableCombination = () => {
         setProducts(newProducts);
     }
 
+    const handleDeleteCombination = (id_product_attribute) => {
+        productsService.deleteCombination(id_product_attribute);
+        setProducts(products.filter(product => product.id_product_attribute !== id_product_attribute));
+        openNotificationWithIcon('success', 'Success', 'Combination deleted successfully');
+    }
+
+
     return (
         <div>
+            {contextHolder}
             <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <table className="min-w-full bg-white">
                 <thead>
@@ -102,8 +114,7 @@ const TableCombination = () => {
                                     </td>
                                     <td className="py-2 px-4 border-b border-gray-200">
                                         <button onClick={() => {
-                                            productsService.deleteCombination(product.id_product_attribute);
-                                            setProducts(products.filter(p => p.id_product_attribute !== product.id_product_attribute));
+                                            handleDeleteCombination(product.id_product_attribute);
                                         }}>🗑</button>
                                     </td>
                                 </tr>
