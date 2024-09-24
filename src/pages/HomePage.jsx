@@ -16,7 +16,7 @@ const HomePage = () => {
 
             {/* Aquí puedes añadir más componentes o lógica, como listados de productos, gráficas de ventas, etc. */}
             <Link to="/order" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                Comenzar
+                Crear Pedido
             </Link>
 
         </div>
