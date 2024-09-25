@@ -6,6 +6,7 @@ import LoginPage from '../pages/LoginPage';
 import ProductsPage from '../pages/ProductsPage';
 import CombinationPage from '../pages/CombinationPage';
 import FormOrder from '../pages/FormOrder';
+import ImagesPage from '../pages/ImagesPage';
 
 
 function SellerDashboard() {
@@ -21,6 +22,7 @@ function SellerDashboard() {
                 <Route path="/combinaciones" element={<CombinationPage />} />
                 <Route path="/seller" element={<h1>Seller</h1>} />
                 <Route path="/order" element={<FormOrder />} />
+                <Route path="/imagenes" element={<ImagesPage />} />
             </Routes>
         </BrowserRouter>
     );

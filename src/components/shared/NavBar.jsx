@@ -12,12 +12,12 @@ const NavBar = () => {
                         <li>
                             <Link to="/combinaciones" className="text-gray-900 dark:text-white hover:underline" disabled >Combinaciones</Link>
                         </li>
-                        {/* <li>
-                            <Link to="#" className="text-gray-900 dark:text-white hover:underline" disabled >Imagenes</Link>
+                        <li>
+                            <Link to="/imagenes" className="text-gray-900 dark:text-white hover:underline" disabled >Imagenes</Link>
                         </li>
                         <li>
-                            <Link to="#" className="text-gray-900 dark:text-white hover:underline" disabled >Categorias</Link>
-                        </li> */}
+                            <Link to="/order" className="text-gray-900 dark:text-white hover:underline" disabled >Pedidos</Link>
+                        </li>
                     </ul>
                 </div>
             </div>

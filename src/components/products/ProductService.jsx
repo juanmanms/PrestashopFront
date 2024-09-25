@@ -232,6 +232,59 @@ export const ProductService = () => {
         }
     }
 
+    const getImagenes = async (callback) => {
+        await fetch(`${apiUrl}products/imagenes`, {
+            method: 'GET',
+            headers: {
+                Authorization: `${localStorage.getItem('token')}`,
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Get images failed');
+            })
+            .then((data) => {
+                callback(data)
+            })
+            .catch((error) => {
+                console.error('Get images error:', error);
+            }
+            );
+    }
+
+    const uploadImage = () => {
+        console.log('subir imagen');
+    }
+
+    const deleteImage = async (id_product, id_image) => {
+        console.log('Borrar imagen:', id_image, 'del producto:', id_product);
+        await fetch(`${apiUrl}products/imagenes`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({
+                id_product: id_product,
+                id_image: id_image,
+            }),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Delete image failed');
+            })
+            .then((data) => {
+                console.log(data.message); // "Image deleted"
+            })
+            .catch((error) => {
+                console.error('Delete image error:', error);
+            });
+    }
+
 
 
 
@@ -245,7 +298,10 @@ export const ProductService = () => {
         getAttributes,
         addCombination,
         updatePriceCombinationInDB,
-        deleteCombination
+        deleteCombination,
+        getImagenes,
+        uploadImage,
+        deleteImage
     }
 }
 
