@@ -6,8 +6,8 @@ import SearchProduct from "../components/products/SearchProduct";
 
 
 const ImagesPage = () => {
-    //const apiUrl = process.env.REACT_APP_URL_API;
-    const apiUrl = 'https://botiga.mercattorreblanca.cat/';
+    const apiUrl = process.env.REACT_APP_URL_API;
+    //const apiUrl = 'https://botiga.mercattorreblanca.cat/';
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
