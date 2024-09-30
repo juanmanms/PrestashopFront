@@ -254,8 +254,31 @@ export const ProductService = () => {
             );
     }
 
-    const uploadImage = () => {
-        console.log('subir imagen');
+    const uploadImage = async (image) => {
+        try {
+            console.log('array de imagenes', image);
+
+            const formData = new FormData();
+            formData.append('image', image);
+
+            const response = await fetch(`${apiUrl}products/imagenes`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Upload image failed');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+        }
     }
 
     const deleteImage = async (id_product, id_image) => {
