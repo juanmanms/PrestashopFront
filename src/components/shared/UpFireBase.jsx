@@ -18,7 +18,7 @@ const UpFireBase = ({ id, onClose }) => {
         const archivoI = e.target.files[0];
         //cargar al storage
         const fileType = archivoI.type.split('/')[1];
-        const refArchivo = ref(storage, `torreblanca/${id}.${fileType}`);
+        const refArchivo = ref(storage, `${process.env.REACT_APP_DirectorioImagenes}/${id}.${fileType}`);
         await uploadBytes(refArchivo, archivoI)
         urlImDesc = await getDownloadURL(refArchivo)
 
