@@ -5,6 +5,8 @@ import SearchProduct from "../components/products/SearchProduct";
 import ImageProduct from "../components/products/ImageProduct";
 import UploadImage from "../components/products/UpLoadImage";
 
+import UploadImageModal from "../components/products/UploadImageModal";
+
 
 
 const ImagesPage = () => {
@@ -13,12 +15,21 @@ const ImagesPage = () => {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [fileLists, setFileLists] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    const showModal = (product) => {
+        setSelectedProduct(product);
+        setModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalVisible(false);
+        setSelectedProduct(null);
+    };
 
     const productsService = useMemo(() => ProductService(), []);
 
-    const uploadImage = () => {
-        productsService.uploadImage(fileLists);
-    };
 
     const deleteImage = (id_product, id_image) => {
         productsService.deleteImage(id_product, id_image);
@@ -58,7 +69,9 @@ const ImagesPage = () => {
                 record.image_url ? (
                     <Button type="primary" onClick={() => deleteImage(record.id_product, record.id_image)}>Borrar</Button>
                 ) : (
-                    <Button type="primary" disabled onClick={() => uploadImage()} >Cargar imagen</Button>
+                    <Button type="primary" onClick={() => showModal(record)}>
+                        Cargar imagen
+                    </Button>
 
                 )
             ),
@@ -83,6 +96,13 @@ const ImagesPage = () => {
                 rowKey={record => record.id_image || record.id_product}
                 rowClassName={(record, index) => (index % 2 === 0 ? 'bg-green-200' : 'bg-orange-100')}
             />
+            {selectedProduct && (
+                <UploadImageModal
+                    visible={modalVisible}
+                    onClose={handleCloseModal}
+                    product={selectedProduct}
+                />
+            )}
         </div>
     );
 }

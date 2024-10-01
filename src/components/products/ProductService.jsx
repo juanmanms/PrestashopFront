@@ -256,12 +256,10 @@ export const ProductService = () => {
 
     const uploadImage = async (image) => {
         try {
-            console.log('array de imagenes', image);
-
             const formData = new FormData();
             formData.append('image', image);
 
-            const response = await fetch(`${apiUrl}products/imagenes`, {
+            const response = await fetch(`${apiUrl}/products/imagenes`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `${localStorage.getItem('token')}`,
@@ -276,10 +274,10 @@ export const ProductService = () => {
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error('Error uploading image:', error);
+            console.error('Upload image error:', error);
             throw error;
         }
-    }
+    };
 
     const deleteImage = async (id_product, id_image) => {
         console.log('Borrar imagen:', id_image, 'del producto:', id_product);
