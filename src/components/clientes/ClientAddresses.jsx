@@ -16,24 +16,36 @@ const ClientAddresses = ({ id_cliente, setSelectedAddress }) => {
     const handleAddressSelect = (address) => {
         setSelectedAddress(address);
     };
+    const handleClick = async () => {
+        window.location.reload();
+    }
+
 
     return (
         <div>
             <h1>Direcciones</h1>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-
-                {addresses.map((address) => (
-                    <div key={address.id_address} style={{ display: 'flex', alignItems: 'center' }}>
-                        <input
-                            type="radio"
-                            name="selectedAddress"
-                            value={address.id_address}
-                            onChange={() => handleAddressSelect(address)}
-                        />
-                        <CardAddress {...address} />
-                    </div>
-                ))}
-            </div>
+            {addresses.length < 1 ? (
+                <div>
+                    <p>Este cliente no tiene direcciones disponibles, recargar pedidp</p>
+                    <button onClick={handleClick} className="bg-blue-500 text-white px-4 py-2 mt-3 rounded hover:bg-blue-600">
+                        Seleciona otra cliente
+                    </button>
+                </div>
+            ) : (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                    {addresses.map((address) => (
+                        <div key={address.id_address} style={{ display: 'flex', alignItems: 'center' }}>
+                            <input
+                                type="radio"
+                                name="selectedAddress"
+                                value={address.id_address}
+                                onChange={() => handleAddressSelect(address)}
+                            />
+                            <CardAddress {...address} />
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }

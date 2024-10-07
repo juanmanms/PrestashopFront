@@ -19,11 +19,17 @@ const UpFireBase = ({ id, onClose }) => {
         //cargar al storage
         const fileType = archivoI.type.split('/')[1];
         const refArchivo = ref(storage, `${process.env.REACT_APP_DirectorioImagenes}/${id}.${fileType}`);
-        await uploadBytes(refArchivo, archivoI)
-        urlImDesc = await getDownloadURL(refArchivo)
+        try {
+            await uploadBytes(refArchivo, archivoI)
+            urlImDesc = await getDownloadURL(refArchivo)
+            console.log(urlImDesc)
+            //openNotificationWithIcon('success', 'Success', 'Combination deleted successfully');
+            onClose()
+        } catch (error) {
+            console.log(error)
+        }
 
-        console.log(urlImDesc)
-        onClose()
+
 
     }
     return (
