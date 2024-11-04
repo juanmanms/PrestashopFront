@@ -55,7 +55,6 @@ export const DataComanda = ({ setStartDate }) => {
                     format: 'DD-MM-YYYY',
                     type: 'mask',
                 }}
-                defaultValue={minDate}
                 minDate={minDate}
                 disabledDate={disabledDate}
                 locale={spanishLocale}
