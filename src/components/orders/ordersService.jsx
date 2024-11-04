@@ -12,7 +12,7 @@ export const OrdersService = () => {
             });
 
             const data = await response.json();
-            console.log(data); // 1"Product updated"
+            //console.log(data); // 1"Product updated"
             return data;
         } catch (error) {
             console.error('Error updating product price:', error);
@@ -38,11 +38,29 @@ export const OrdersService = () => {
         }
     }
 
+    const getOrders = async () => {
+        try {
+            const response = await fetch(`${apiUrl}orders/orders`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+    }
+
 
 
     return {
         getProductID,
         createCart,
+        getOrders
     };
 
 }

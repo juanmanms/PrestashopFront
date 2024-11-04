@@ -16,7 +16,7 @@ dayjs.extend(customParseFormat);
 
 export const DataComanda = ({ setStartDate }) => {
     const disabledDate = (current) => {
-        return current && current.day() === 0;
+        return current && (current.day() === 0 || current.day() === 1);
     }
 
     const minDate = dayjs().tz('Europe/Madrid').hour() < 17 && dayjs().tz('Europe/Madrid').day() >= 1 && dayjs().tz('Europe/Madrid').day() <= 5

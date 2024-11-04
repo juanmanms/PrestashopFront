@@ -1,7 +1,5 @@
 import { setToken, addUser, removeUser } from '../../redux/userSlice';
-
-
-
+import { toast } from 'react-toastify';
 
 
 const apiUrl = process.env.REACT_APP_URL_API;
@@ -23,6 +21,7 @@ export const loginSubmit = (username, password, dispatch) => {
         .then((data) => {
             if (data === 'Usuario o contraseña incorrectos') {
                 console.log('Login failed:', data);
+                toast.error(data, ', comprueba tu usuario y contraseña');
                 return;
             }
             //console.log('Login success:', data);
@@ -32,6 +31,7 @@ export const loginSubmit = (username, password, dispatch) => {
         })
         .catch((error) => {
             console.error('Login error:', error);
+            toast.error('Login failed. catch error.');
         });
 
 

@@ -21,6 +21,12 @@ const ClientAddresses = ({ id_cliente, setSelectedAddress }) => {
     }
 
 
+    useEffect(() => {
+        if (addresses.length > 0) {
+            setSelectedAddress(addresses[0]);
+        }
+    }, [addresses]);
+
     return (
         <div>
             <h1>Direcciones</h1>
@@ -33,12 +39,13 @@ const ClientAddresses = ({ id_cliente, setSelectedAddress }) => {
                 </div>
             ) : (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-                    {addresses.map((address) => (
+                    {addresses.map((address, index) => (
                         <div key={address.id_address} style={{ display: 'flex', alignItems: 'center' }}>
                             <input
                                 type="radio"
                                 name="selectedAddress"
                                 value={address.id_address}
+                                checked={index === 0}
                                 onChange={() => handleAddressSelect(address)}
                             />
                             <CardAddress {...address} />

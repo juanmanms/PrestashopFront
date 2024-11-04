@@ -3,8 +3,7 @@ import ProductService from "../components/products/ProductService";
 import { Table, Button } from 'antd';
 import SearchProduct from "../components/products/SearchProduct";
 import ImageProduct from "../components/products/ImageProduct";
-import UploadImage from "../components/products/UpLoadImage";
-
+import UploadingAwait from "../components/shared/UploadingAwait";
 import UploadImageModal from "../components/products/UploadImageModal";
 
 
@@ -88,6 +87,7 @@ const ImagesPage = () => {
 
     return (
         <div>
+            <UploadingAwait />
             <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             {/* <UploadImage fileList={fileLists} setFileList={setFileLists} /> */}
             <Table

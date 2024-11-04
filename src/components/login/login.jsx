@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { loginSubmit } from './loginService';
 import { useDispatch } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -18,6 +20,7 @@ function Login() {
 
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100">
+            <ToastContainer />
             <div className="bg-blue-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
