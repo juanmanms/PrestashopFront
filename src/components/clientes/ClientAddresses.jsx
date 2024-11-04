@@ -29,7 +29,6 @@ const ClientAddresses = ({ id_cliente, setSelectedAddress }) => {
 
     return (
         <div>
-            <h1>Direcciones</h1>
             {addresses.length < 1 ? (
                 <div>
                     <p>Este cliente no tiene direcciones disponibles, recargar pedidp</p>

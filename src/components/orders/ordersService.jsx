@@ -19,7 +19,7 @@ export const OrdersService = () => {
         }
     };
 
-    const createCart = async (id_customer, id_address, product, price, date) => {
+    const createCart = async (id_customer, id_address, product, price, date, carrier) => {
         try {
             const response = await fetch(`${apiUrl}orders/cart`, {
                 method: 'POST',
@@ -27,7 +27,7 @@ export const OrdersService = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `${localStorage.getItem('token')}`,
                 },
-                body: JSON.stringify({ id_customer, id_address, product, price, date }),
+                body: JSON.stringify({ id_customer, id_address, product, price, date, carrier }),
             });
 
             const data = await response.json();

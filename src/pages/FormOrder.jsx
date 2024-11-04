@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import SelectClientes from '../components/clientes/SelectClientes';
 import ClientAddresses from '../components/clientes/ClientAddresses';
 import OrdersService from '../components/orders/ordersService';
@@ -6,6 +6,7 @@ import { DataComanda } from '../components/orders/DataComanda';
 import PreuComanda from '../components/orders/PreuComanda';
 import useCustomNotification from '../common/hooks/useCustomNotification';
 import TableOrders from '../components/orders/TableOrders';
+import SelectDelivery from '../components/orders/SelectCarrier';
 
 
 const FormOrder = () => {
@@ -16,7 +17,9 @@ const FormOrder = () => {
     const [product, setProduct] = useState(null);
     const [price, setPrice] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
+    const [isDelivery, setIsDelivery] = useState(false);
     const { contextHolder, openNotificationWithIcon } = useCustomNotification();
+    const delivery = useRef(10);
 
 
 
@@ -28,6 +31,11 @@ const FormOrder = () => {
 
         fetchProduct();
     }, []);
+
+    useEffect(() => {
+        delivery.current = isDelivery ? process.env.REACT_APP_Domicilio : process.env.REACT_APP_recogida;
+        console.log(delivery.current)
+    }, [isDelivery])
 
 
     const handleClick = async () => {
@@ -45,8 +53,8 @@ const FormOrder = () => {
     }
 
     const createOrder = async () => {
-        console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate)
-        ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate)
+        console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate, 'transportista', delivery.current)
+        ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate, delivery.current)
         clearData();
         //mostrar notificacion de pedido creado
         openNotificationWithIcon('success', 'Pedido creado', 'El pedido se ha creado correctamente');
@@ -85,9 +93,10 @@ const FormOrder = () => {
                     {selectedClient && selectedAddress && (
                         <>
                             <div className="flex justify-around items-center mt-4">
-                                <PreuComanda setPrice={setPrice} />
+                                <SelectDelivery isDelivery={isDelivery} setIsDelivery={setIsDelivery} />
                                 <DataComanda setStartDate={setStartDate} />
                             </div>
+                            <PreuComanda setPrice={setPrice} />
                             <button onClick={createOrder} disabled={!price || price < 0} className={`text-white mt-5 px-4 py-2 rounded ${price < 1 ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'}`}>
                                 Crear pedido
                             </button>
