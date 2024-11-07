@@ -22,7 +22,8 @@ const SelectClientes = ({ visible, onClose, setSelectedClient }) => {
 
     const filteredClients = clients.filter(client =>
         client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.email.toLowerCase().includes(searchTerm.toLowerCase())
+        client.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        client.apellidos.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleSelect = () => {
@@ -31,6 +32,7 @@ const SelectClientes = ({ visible, onClose, setSelectedClient }) => {
 
     return (
         <Modal
+            width={800}
             title="Seleccionar Cliente"
             open={visible}
             onCancel={onClose}
@@ -48,7 +50,7 @@ const SelectClientes = ({ visible, onClose, setSelectedClient }) => {
             ]}
         >
             <Input
-                placeholder="Buscar cliente"
+                placeholder="Buscar cliente por nombre, apellido o correo"
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
                 style={{ marginBottom: 16 }}
@@ -58,7 +60,7 @@ const SelectClientes = ({ visible, onClose, setSelectedClient }) => {
                 rowKey="id"
                 columns={[
                     { title: 'Nombre', dataIndex: 'name', key: 'name' },
-                    // { title: 'Apellidos', dataIndex: 'apellidos', key: 'apellidos' },
+                    { title: 'Apellidos', dataIndex: 'apellidos', key: 'apellidos' },
                     { title: 'Email', dataIndex: 'email', key: 'email' },
                 ]}
                 rowSelection={{

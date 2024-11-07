@@ -136,7 +136,7 @@ const TablePrice = () => {
                     <tr>
                         <th className="py-2 px-4 border-b border-gray-200">ID</th>
                         <th className="py-2 px-4 border-b border-gray-200">Nombre</th>
-                        <th className="py-2 px-4 border-b border-gray-200">Sin IVA</th>
+                        {/* <th className="py-2 px-4 border-b border-gray-200">Sin IVA</th> */}
                         <th className="py-2 px-4 border-b border-gray-200 cursor-pointer" onClick={handleSort}>Con IVA</th>
                         <th className="py-2 px-4 border-b border-gray-200">IVA</th>
                         <th className="py-2 px-4 border-b border-gray-200">Activo</th>
@@ -153,12 +153,12 @@ const TablePrice = () => {
                                     onFocus={(e) => e.target.select()}
                                 />
                             </td>
-                            <td className="py-2 px-4 border-b border-gray-200">
+                            {/* <td className="py-2 px-4 border-b border-gray-200">
                                 <input type="number" value={product.price} onChange={(e) => InputSinIVAChange(e, product.id_product)}
                                     className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                     onFocus={(e) => e.target.select()}
                                 />
-                            </td>
+                            </td> */}
                             <td className="py-2 px-4 border-b border-gray-200">
                                 <input type="number" value={product.precio_IVA || product.price} onChange={(e) => InputConIvaChange(e, product.id_product)}
                                     className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"

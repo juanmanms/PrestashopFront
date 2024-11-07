@@ -7,6 +7,23 @@ const TableOrders = () => {
 
     const [orders, setOrders] = useState([]);
 
+    const stateMapping = {
+        6: 'cancelado',
+        22: 'Ticket Definitivo',
+        23: 'Comanda per revisar',
+        24: 'EN REPARTIMENT',
+        26: 'Entrega en efectivo',
+        27: 'Entrega, pagado en la parada',
+        28: 'Pagament en efectiu',
+        29: 'Pagament a parada',
+        30: 'Entrega TPV'
+    };
+
+    const changeState = (order) => {
+        console.log("cambio de estado en el pedido", order)
+        ordersService.cancelOrder(order);
+    }
+
     useEffect(() => {
         const fetchOrders = async () => {
             try {
@@ -47,6 +64,18 @@ const TableOrders = () => {
             title: 'Estado',
             dataIndex: 'current_state',
             key: 'current_state',
+            render: (state, order) => {
+                const isDisabled = [6, 26, 27, 30].includes(state);
+                return (
+                    <button
+                        disabled={isDisabled}
+                        className={`px-2 py-1 rounded ${isDisabled ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                        onClick={() => changeState(order['Id Pedido'])}
+                    >
+                        {stateMapping[state] || 'Desconocido'}
+                    </button>
+                );
+            }
         }
     ];
 

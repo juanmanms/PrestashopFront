@@ -55,12 +55,28 @@ export const OrdersService = () => {
         }
     }
 
+    const cancelOrder = async (id_order) => {
+        console.log("llego")
+        const response = await fetch(`${apiUrl}orders/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({ id_order }),
+        });
+
+        const data = await response.json();
+        return data;
+    }
+
 
 
     return {
         getProductID,
         createCart,
-        getOrders
+        getOrders,
+        cancelOrder
     };
 
 }
