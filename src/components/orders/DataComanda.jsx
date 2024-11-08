@@ -19,9 +19,9 @@ export const DataComanda = ({ setStartDate }) => {
         return current && (current.day() === 0 || current.day() === 1);
     }
 
-    const minDate = dayjs().tz('Europe/Madrid').hour() < 17 && dayjs().tz('Europe/Madrid').day() >= 1 && dayjs().tz('Europe/Madrid').day() <= 5
+    const minDate = dayjs().tz('Europe/Madrid').hour() < 17 && dayjs().tz('Europe/Madrid').day() >= 1 && dayjs().tz('Europe/Madrid').day() <= 6
         ? dayjs().tz('Europe/Madrid')
-        : dayjs().tz('Europe/Madrid').day() === 5 && dayjs().tz('Europe/Madrid').hour() >= 17
+        : dayjs().tz('Europe/Madrid').day() === 6 && dayjs().tz('Europe/Madrid').hour() >= 17
             ? dayjs().tz('Europe/Madrid').add(3, 'day')
             : dayjs().tz('Europe/Madrid').day() === 6
                 ? dayjs().tz('Europe/Madrid').add(2, 'day')
