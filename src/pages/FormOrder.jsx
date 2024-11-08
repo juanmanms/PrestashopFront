@@ -17,7 +17,7 @@ const FormOrder = () => {
     const [product, setProduct] = useState(null);
     const [price, setPrice] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
-    const [isDelivery, setIsDelivery] = useState(false);
+    const [isDelivery, setIsDelivery] = useState(true);
     const { contextHolder, openNotificationWithIcon } = useCustomNotification();
     const delivery = useRef(10);
 
