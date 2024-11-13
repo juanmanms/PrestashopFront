@@ -30,7 +30,7 @@ export const DataComanda = ({ setStartDate }) => {
                     : dayjs().tz('Europe/Madrid').add(1, 'day');
 
     const handleDate = (date) => {
-        setStartDate(date ? date.add(2, 'hour') : null);
+        setStartDate(date ? date.tz('Europe/Madrid').add(1, 'hour') : null);
     }
 
     const spanishLocale = {
