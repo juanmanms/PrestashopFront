@@ -20,6 +20,8 @@ const TablePrice = () => {
         { id: 3, value: 4 },
         { id: 2, value: 10 },
         { id: 1, value: 21 },
+        { id: 10, value: 2 },
+        { id: 11, value: 7.5 },
     ];
 
     const InputSinIVAChange = (e, productId) => {
