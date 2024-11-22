@@ -7,6 +7,8 @@ import ProductsPage from '../pages/ProductsPage';
 import CombinationPage from '../pages/CombinationPage';
 import FormOrder from '../pages/FormOrder';
 import ImagesPage from '../pages/ImagesPage';
+import CustomerForm from '../pages/CustomerForm';
+import RepartidorPage from '../pages/RepartidorPage';
 
 
 function SellerDashboard() {
@@ -23,6 +25,8 @@ function SellerDashboard() {
                 <Route path="/seller" element={<h1>Seller</h1>} />
                 <Route path="/order" element={<FormOrder />} />
                 <Route path="/imagenes" element={<ImagesPage />} />
+                <Route path="/cliente" element={<CustomerForm />} />4
+                <Route path="/repartidor" element={<RepartidorPage />} />4
             </Routes>
         </BrowserRouter>
     );

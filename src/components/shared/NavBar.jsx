@@ -1,13 +1,25 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import DKMobile from './links/DKMobile';
+import MenuMobile from './links/MenuMobile'
+import { useSelector } from "react-redux"
 
 const NavBar = () => {
+    const user = useSelector((state) => state.user);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    console.log(user.id_employee)
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const menuItems = !user.id_employee ? [
+        { to: "/productos", label: "Productos", disabled: false },
+        { to: "/combinaciones", label: "Combinaciones", disabled: false },
+        { to: "/imagenes", label: "Imagenes", disabled: false },
+        { to: "/order", label: "Pedidos", disabled: false },
+    ] : [
+        { to: "/repartidor", label: "Repartido", disabled: false }
+    ];
     return (
         <nav className="bg-gray-50 dark:bg-gray-700">
             <div className="max-w-screen-xl px-4 py-3 mx-auto flex items-center justify-between">
@@ -31,18 +43,14 @@ const NavBar = () => {
                     </svg>
                 </button>
                 <ul className="hidden md:flex md:flex-row md:space-x-8 rtl:space-x-reverse text-sm font-medium">
-                    <li>
-                        <Link to="/productos" className="text-gray-900 dark:text-white hover:underline" aria-current="page">Productos</Link>
-                    </li>
-                    <li>
-                        <Link to="/combinaciones" className="text-gray-900 dark:text-white hover:underline" disabled>Combinaciones</Link>
-                    </li>
-                    <li>
-                        <Link to="/imagenes" className="text-gray-900 dark:text-white hover:underline" disabled>Imagenes</Link>
-                    </li>
-                    <li>
-                        <Link to="/order" className="text-gray-900 dark:text-white hover:underline" disabled>Pedidos</Link>
-                    </li>
+                    {menuItems.map((item, index) => (
+                        <DKMobile
+                            key={index}
+                            to={item.to}
+                            label={item.label}
+                            disabled={item.disabled}
+                        />
+                    ))}
                 </ul>
             </div>
             {/* Modal lateral */}
@@ -67,18 +75,15 @@ const NavBar = () => {
                     </svg>
                 </button>
                 <ul className="flex flex-col space-y-4 mt-12 px-4 text-sm">
-                    <li>
-                        <Link to="/productos" className="text-gray-900 dark:text-white hover:underline" onClick={toggleMenu}>Productos</Link>
-                    </li>
-                    <li>
-                        <Link to="/combinaciones" className="text-gray-900 dark:text-white hover:underline" disabled onClick={toggleMenu}>Combinaciones</Link>
-                    </li>
-                    <li>
-                        <Link to="/imagenes" className="text-gray-900 dark:text-white hover:underline" disabled onClick={toggleMenu}>Imagenes</Link>
-                    </li>
-                    <li>
-                        <Link to="/order" className="text-gray-900 dark:text-white hover:underline" disabled onClick={toggleMenu}>Pedidos</Link>
-                    </li>
+                    {menuItems.map((item, index) => (
+                        <MenuMobile
+                            key={index}
+                            to={item.to}
+                            label={item.label}
+                            disabled={item.disabled}
+                            toggleMenu={toggleMenu}
+                        />
+                    ))}
                 </ul>
             </div>
             {/* Fondo oscuro cuando el menú está abierto */}
