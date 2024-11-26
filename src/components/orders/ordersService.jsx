@@ -56,7 +56,6 @@ export const OrdersService = () => {
     }
 
     const cancelOrder = async (id_order) => {
-        console.log("llego")
         const response = await fetch(`${apiUrl}orders/cancel`, {
             method: 'POST',
             headers: {
@@ -87,12 +86,31 @@ export const OrdersService = () => {
         }
     }
 
+    const getPedidosReparto = async (customer) => {
+        try {
+            const response = await fetch(`${apiUrl}orders/reparto/pedidos`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({ customer }),
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+    }
+
     return {
         getProductID,
         createCart,
         getOrders,
         cancelOrder,
-        getRepartos
+        getRepartos,
+        getPedidosReparto
     };
 
 }

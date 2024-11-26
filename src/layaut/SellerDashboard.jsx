@@ -26,7 +26,7 @@ function SellerDashboard() {
                 <Route path="/order" element={<FormOrder />} />
                 <Route path="/imagenes" element={<ImagesPage />} />
                 <Route path="/cliente" element={<CustomerForm />} />4
-                <Route path="/repartidor" element={<RepartidorPage />} />4
+                <Route path="/repartos" element={<RepartidorPage />} />4
             </Routes>
         </BrowserRouter>
     );

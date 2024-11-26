@@ -6,7 +6,7 @@ import { useSelector } from "react-redux"
 const NavBar = () => {
     const user = useSelector((state) => state.user);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    console.log(user.id_employee)
+    console.log(user.role)
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -18,7 +18,7 @@ const NavBar = () => {
         { to: "/imagenes", label: "Imagenes", disabled: false },
         { to: "/order", label: "Pedidos", disabled: false },
     ] : [
-        { to: "/repartidor", label: "Repartido", disabled: false }
+        { to: "/repartos", label: "Repartido", disabled: false }
     ];
     return (
         <nav className="bg-gray-50 dark:bg-gray-700">
