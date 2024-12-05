@@ -306,6 +306,32 @@ export const ProductService = () => {
             });
     }
 
+    const getProductsBySeller = async (id_seller) => {
+        console.log('id_seller:', id_seller);
+        try {
+            const response = await fetch(`${apiUrl}products/productos`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    id: id_seller,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Get products by seller error:', error);
+            throw error;
+        }
+    };
+
 
 
 
@@ -322,7 +348,8 @@ export const ProductService = () => {
         deleteCombination,
         getImagenes,
         uploadImage,
-        deleteImage
+        deleteImage,
+        getProductsBySeller,
     }
 }
 

@@ -9,6 +9,8 @@ import FormOrder from '../pages/FormOrder';
 import ImagesPage from '../pages/ImagesPage';
 import CustomerForm from '../pages/CustomerForm';
 import RepartidorPage from '../pages/RepartidorPage';
+import ConsultasPage from '../pages/ConsultasPage';
+import ConfigPage from '../pages/ConfigPage';
 
 
 function SellerDashboard() {
@@ -25,8 +27,10 @@ function SellerDashboard() {
                 <Route path="/seller" element={<h1>Seller</h1>} />
                 <Route path="/order" element={<FormOrder />} />
                 <Route path="/imagenes" element={<ImagesPage />} />
-                <Route path="/cliente" element={<CustomerForm />} />4
-                <Route path="/repartos" element={<RepartidorPage />} />4
+                <Route path="/cliente" element={<CustomerForm />} />
+                <Route path="/repartos" element={<RepartidorPage />} />
+                <Route path="/consultas" element={<ConsultasPage />} />
+                <Route path="/configuracion" element={<ConfigPage />} />
             </Routes>
         </BrowserRouter>
     );

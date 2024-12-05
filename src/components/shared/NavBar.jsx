@@ -11,15 +11,20 @@ const NavBar = () => {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
-
     const menuItems = !user.id_employee ? [
         { to: "/productos", label: "Productos", disabled: false },
         { to: "/combinaciones", label: "Combinaciones", disabled: false },
         { to: "/imagenes", label: "Imagenes", disabled: false },
         { to: "/order", label: "Pedidos", disabled: false },
+    ] : user.role === "1" ? [
+        { to: "/admin", label: "Admin", disabled: false },
+        { to: "/repartos", label: "Repartos", disabled: false },
+        { to: "/consultas", label: "Consultas", disabled: false },
+        { to: "/configuracion", label: "Configuración", disabled: false }
     ] : [
-        { to: "/repartos", label: "Repartido", disabled: false }
+        { to: "/repartos", label: "Repartos", disabled: false }
     ];
+
     return (
         <nav className="bg-gray-50 dark:bg-gray-700">
             <div className="max-w-screen-xl px-4 py-3 mx-auto flex items-center justify-between">

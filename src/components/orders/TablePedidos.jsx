@@ -41,9 +41,25 @@ const TablePedidos = ({ setCliente }) => {
             key: 'Pedidos',
         },
         {
+            title: 'FormaPago',
+            dataIndex: 'FormaPago',
+            key: 'FormaPago',
+            render: (text) => text || 'tpv',
+        },
+        {
+            title: 'Transporte',
+            dataIndex: 'TransporteMenosDescuentos',
+            key: 'TransporteMenosDescuentos',
+            render: (text) => {
+                const value = parseFloat(text).toFixed(2);
+                return value !== '0.00' ? <span style={{ backgroundColor: 'yellow' }}>{value}</span> : value;
+            },
+        },
+        {
             title: 'Total Pagado',
             dataIndex: 'TotalPagarCliente',
             key: 'TotalPagarCliente',
+            render: (text) => parseFloat(text).toFixed(2),
         },
         {
             title: 'CP',
@@ -76,12 +92,18 @@ const TablePedidos = ({ setCliente }) => {
     ];
 
     return (
-        <div>
+        <div className="p-4">
             <h2 className="text-2xl font-semibold mb-4">Repartos pendientes</h2>
             {orders.length === 0 ? (
                 <p>No hay pedidos</p>
             ) : (
-                <Table dataSource={orders} columns={columns} rowKey="id_customer" />
+                <Table
+                    dataSource={orders}
+                    columns={columns}
+                    rowKey="id_customer"
+                    scroll={{ x: '100%' }}
+                    className="w-full overflow-x-auto"
+                />
             )}
         </div>
     );

@@ -104,13 +104,31 @@ export const OrdersService = () => {
         }
     }
 
+    const getCienOrders = async () => {
+        try {
+            const response = await fetch(`${apiUrl}orders/historico`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+    }
+
     return {
         getProductID,
         createCart,
         getOrders,
         cancelOrder,
         getRepartos,
-        getPedidosReparto
+        getPedidosReparto,
+        getCienOrders
     };
 
 }
