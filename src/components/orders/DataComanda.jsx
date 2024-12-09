@@ -96,10 +96,8 @@ export const DataComanda = ({ setStartDate }) => {
 
 
     return (
-        <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700">
-                Fecha en entrega
-            </label>
+        <div>
+            <h2>Fecha de entrega</h2>
             {loading ? (
                 <p>Cargando...</p>
             ) : (

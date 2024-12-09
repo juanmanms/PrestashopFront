@@ -2,11 +2,12 @@ import { useEffect, useState, useRef } from 'react';
 import SelectClientes from '../components/clientes/SelectClientes';
 import ClientAddresses from '../components/clientes/ClientAddresses';
 import OrdersService from '../components/orders/ordersService';
-import { DataComanda } from '../components/orders/DataComanda';
 import PreuComanda from '../components/orders/PreuComanda';
 import useCustomNotification from '../common/hooks/useCustomNotification';
 import TableOrders from '../components/orders/TableOrders';
+import { DataComanda } from '../components/orders/DataComanda';
 import SelectDelivery from '../components/orders/SelectCarrier';
+import SelectPay from '../components/orders/SelectPay';
 
 
 const FormOrder = () => {
@@ -18,6 +19,7 @@ const FormOrder = () => {
     const [price, setPrice] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
     const [isDelivery, setIsDelivery] = useState(true);
+    const [paymentMethod, setPaymentMethod] = useState('tpv');
     const { contextHolder, openNotificationWithIcon } = useCustomNotification();
     const delivery = useRef(10);
 
@@ -52,8 +54,8 @@ const FormOrder = () => {
     }
 
     const createOrder = async () => {
-        console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate, 'transportista', delivery.current)
-        ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate, delivery.current)
+        console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate, 'transportista', delivery.current, 'payment', paymentMethod)
+        ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate, delivery.current, paymentMethod);
         clearData();
         //mostrar notificacion de pedido creado
         openNotificationWithIcon('success', 'Pedido creado', 'El pedido se ha creado correctamente');
@@ -94,6 +96,7 @@ const FormOrder = () => {
                             <div className="flex justify-around items-center mt-4">
                                 <SelectDelivery isDelivery={isDelivery} setIsDelivery={setIsDelivery} />
                                 <DataComanda setStartDate={setStartDate} />
+                                <SelectPay paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
                             </div>
                             <PreuComanda setPrice={setPrice} />
                             <button onClick={createOrder} disabled={!price || price < 0} className={`text-white mt-5 px-4 py-2 rounded ${price < 1 ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'}`}>

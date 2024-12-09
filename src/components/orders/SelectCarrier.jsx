@@ -7,21 +7,16 @@ const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
     };
 
     return (
-        <div className="w-full max-w-sm p-6 space-y-6 bg-card rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-center">Opciones de entrega</h2>
-            <div className="flex items-center justify-between">
-                <p htmlFor="delivery-option" className="text-lg cursor-pointer">
-                    {isDelivery ? "Envío a domicilio" : "Entrega en consigna"}
-                </p>
-                <Switch
-                    id="delivery-option"
-                    checked={isDelivery}
-                    onChange={handleSwitchChange}
-                    aria-label="Cambiar entre recogida en tienda y envío a domicilio"
-                    checkedChildren="🚚"
-                    unCheckedChildren="📍"
-                />
-            </div>
+        <div>
+            <h2>Opciones de entrega</h2>
+            <Switch
+                id="delivery-option"
+                checked={isDelivery}
+                onChange={handleSwitchChange}
+                aria-label="Cambiar entre recogida en tienda y envío a domicilio"
+                checkedChildren="🚚"
+                unCheckedChildren="📍"
+            />
         </div>
     );
 };

@@ -35,7 +35,7 @@ const TableOrders = () => {
             }
         };
         fetchOrders();
-    }, [ordersService]);
+    }, []);
 
 
     const columns = [
