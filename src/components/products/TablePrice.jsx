@@ -24,18 +24,19 @@ const TablePrice = () => {
         { id: 11, value: 7.5 },
     ];
 
-    const InputSinIVAChange = (e, productId) => {
-        e.preventDefault();
-        console.log('productId:', productId, 'cambio precio a:', e.target.value);
-        const newProducts = products.map((product) => {
-            if (product.id_product === productId) {
-                productsService.updateProductPriceInDB(product.id_product, parseFloat(e.target.value));
-                return { ...product, price: parseFloat(e.target.value), precio_IVA: parseFloat(e.target.value) * (product.tax_rate * 0.01 + 1) };
-            }
-            return product;
-        });
-        setProducts(newProducts);
-    }
+    //Cambio de precio sin IVA
+    // const InputSinIVAChange = (e, productId) => {
+    //     e.preventDefault();
+    //     console.log('productId:', productId, 'cambio precio a:', e.target.value);
+    //     const newProducts = products.map((product) => {
+    //         if (product.id_product === productId) {
+    //             productsService.updateProductPriceInDB(product.id_product, parseFloat(e.target.value));
+    //             return { ...product, price: parseFloat(e.target.value), precio_IVA: parseFloat(e.target.value) * (product.tax_rate * 0.01 + 1) };
+    //         }
+    //         return product;
+    //     });
+    //     setProducts(newProducts);
+    // }
 
     const InputConIvaChange = (e, productId) => {
         e.preventDefault();

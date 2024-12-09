@@ -40,7 +40,18 @@ const DiasReparto = () => {
             console.error('Error updating delivery day:', error);
             message.error('Error updating delivery day');
         }
+        console.log(dias);
     };
+
+    const handleTimeChange = (e, id, field) => {
+        const value = e.target.value;
+        setDias(prevDias =>
+            prevDias.map(dia =>
+                dia.id_delivery_day === id ? { ...dia, [field]: value } : dia
+            )
+        );
+    };
+
 
     const columns = [
         {
@@ -52,11 +63,25 @@ const DiasReparto = () => {
             title: 'Hora de inicio',
             dataIndex: 'start_time',
             key: 'start_time',
+            render: (text, record) => (
+                <input
+                    type="time"
+                    value={record.start_time}
+                    onChange={(e) => handleTimeChange(e, record.id_delivery_day, 'start_time')}
+                />
+            ),
         },
         {
             title: 'Hora de fin',
             dataIndex: 'end_time',
             key: 'end_time',
+            render: (text, record) => (
+                <input
+                    type="time"
+                    value={record.end_time}
+                    onChange={(e) => handleTimeChange(e, record.id_delivery_day, 'end_time')}
+                />
+            ),
         },
         {
             title: 'Activo',

@@ -11,7 +11,7 @@ const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
             <h2 className="text-2xl font-bold text-center">Opciones de entrega</h2>
             <div className="flex items-center justify-between">
                 <p htmlFor="delivery-option" className="text-lg cursor-pointer">
-                    {isDelivery ? "Envío a domicilio" : "Recogida en mercado"}
+                    {isDelivery ? "Envío a domicilio" : "Entrega en consigna"}
                 </p>
                 <Switch
                     id="delivery-option"
