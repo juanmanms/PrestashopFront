@@ -72,11 +72,7 @@ export const DataComanda = ({ setStartDate }) => {
     const currentDay = now.day();
 
     const minDate = (() => {
-        console.log("now", now)
-        console.log("currentHour", currentHour)
         const today = dias.find(day => day.id_delivery_day === currentDay);
-        console.log("today.end_time", today)
-
         if (today && currentHour < dayjs(today.end_time, 'HH:mm').hour()) {
             return now; // Hoy mismo si estamos antes de la hora de finalización
         }
