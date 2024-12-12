@@ -66,6 +66,7 @@ const SelectClientes = ({ visible, onClose, setSelectedClient }) => {
                 rowSelection={{
                     type: 'radio',
                     onChange: (_, selectedRows) => setSelectedClient(selectedRows[0]),
+                    onSelect: handleSelect
                 }}
             />
         </Modal>

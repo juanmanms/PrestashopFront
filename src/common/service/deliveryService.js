@@ -37,11 +37,35 @@ export const DeliveryService = () => {
         }
     };
 
+    const getCarriers = async () => {
+        try {
+            const response = await fetch(`${apiUrl}repartos/carrier`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Network response was not ok:', errorText);
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching carriers:', error);
+            throw error;
+        }
+    };
+
 
 
     return {
         getDeliveryDays,
         updateActiveDay,
+        getCarriers,
     };
 
 

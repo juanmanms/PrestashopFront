@@ -68,10 +68,34 @@ export const ClientesService = () => {
         }
     };
 
+    const createClient = async (data) => {
+        try {
+            const response = await fetch(`${apiUrl}clients/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(data), // Enviar todos los datos del formulario juntos
+
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Client created:', data);
+            } else {
+                throw new Error('Create client failed');
+            }
+        } catch (error) {
+            console.error('Error creating client:', error);
+        }
+    }
+
     return {
         getClients,
         getAddresses,
-        sendEmail
+        sendEmail,
+        createClient
     };
 }
 

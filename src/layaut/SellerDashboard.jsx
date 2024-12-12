@@ -11,6 +11,7 @@ import CustomerForm from '../pages/CustomerForm';
 import RepartidorPage from '../pages/RepartidorPage';
 import ConsultasPage from '../pages/ConsultasPage';
 import ConfigPage from '../pages/ConfigPage';
+import ClientesPage from '../pages/ClientesPage';
 
 
 function SellerDashboard() {
@@ -31,6 +32,7 @@ function SellerDashboard() {
                 <Route path="/repartos" element={<RepartidorPage />} />
                 <Route path="/consultas" element={<ConsultasPage />} />
                 <Route path="/configuracion" element={<ConfigPage />} />
+                <Route path="/clientes" element={<ClientesPage />} />
             </Routes>
         </BrowserRouter>
     );

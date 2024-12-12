@@ -86,9 +86,43 @@ export const OrdersService = () => {
         }
     }
 
+    const getRepartosFuturo = async () => {
+        try {
+            const response = await fetch(`${apiUrl}orders/repartoFuturo`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+    }
+
     const getPedidosReparto = async (customer) => {
         try {
             const response = await fetch(`${apiUrl}orders/reparto/pedidos`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({ customer }),
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+    }
+    const getPedidosRepartoFuturo = async (customer) => {
+        try {
+            const response = await fetch(`${apiUrl}orders/reparto/pedidosFuturo`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,6 +155,36 @@ export const OrdersService = () => {
         }
     }
 
+    const changeStateOrder = async (id_order, state) => {
+        const response = await fetch(`${apiUrl}orders/change-state`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({ id_order, state }),
+        });
+
+        const data = await response.json();
+        return data;
+    }
+
+    const changePaymentOrders = async (id_order, payment) => {
+        console.log('Forma de pago seleccionada:', payment, 'para el pedido:', id_order);
+        const response = await fetch(`${apiUrl}orders/change-forma-pago`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({ id_order, payment }),
+        });
+
+        const data = await response.json();
+        return data
+    }
+
+
     return {
         getProductID,
         createCart,
@@ -128,7 +192,11 @@ export const OrdersService = () => {
         cancelOrder,
         getRepartos,
         getPedidosReparto,
-        getCienOrders
+        getCienOrders,
+        getRepartosFuturo,
+        getPedidosRepartoFuturo,
+        changeStateOrder,
+        changePaymentOrders
     };
 
 }

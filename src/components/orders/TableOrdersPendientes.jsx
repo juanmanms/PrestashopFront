@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import OrdersService from './ordersService';
-import { Table, Dropdown } from 'antd';
+import { Table, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { stateMapping } from '../../common/utils/OrderUtils';
+import { stateMappingEntrega } from '../../common/utils/OrderUtils';
 
 
 const TableOrdersPendientes = ({ cliente, setCliente }) => {
@@ -25,7 +25,26 @@ const TableOrdersPendientes = ({ cliente, setCliente }) => {
     }, [cliente]);
 
     const handleStateChange = async (id_order, state) => {
-        console.log('Cambio de estado en el pedido', id_order, state);
+        try {
+            await ordersService.changeStateOrder(id_order, state);
+            const data = await ordersService.getPedidosReparto(cliente);
+            setOrders(data);
+        } catch (error) {
+            message.error('Error al cambiar el estado del pedido');
+            console.error('Error changing order state:', error);
+        }
+    };
+
+    const handlePaymentChange = async (id_order, payment) => {
+        try {
+            await ordersService.changePaymentOrders(id_order, payment);
+            const data = await ordersService.getPedidosReparto(cliente);
+            setOrders(data);
+        } catch (error) {
+            message.error('Error al cambiar la forma de pago del pedido');
+            console.error('Error changing order payment:', error);
+        }
+        // console.log('Forma de pago seleccionada:', payment, 'para el pedido:', id_order);
     };
 
     const columns = [
@@ -53,7 +72,7 @@ const TableOrdersPendientes = ({ cliente, setCliente }) => {
             title: 'FormaPago',
             dataIndex: 'FormaPago',
             key: 'FormaPago',
-            render: (text) => {
+            render: (text, record) => {
                 const paymentMethods = ['tpv', 'efectivo', 'parada'];
                 const menuItems = paymentMethods.map((method) => ({
                     key: method,
@@ -61,7 +80,7 @@ const TableOrdersPendientes = ({ cliente, setCliente }) => {
                 }));
                 const menuProps = {
                     items: menuItems,
-                    onClick: ({ key }) => console.log('Forma de pago seleccionada:', key),
+                    onClick: ({ key }) => handlePaymentChange(record.IDPedido, key),
                 };
                 return (
                     <Dropdown menu={menuProps}>
@@ -77,9 +96,9 @@ const TableOrdersPendientes = ({ cliente, setCliente }) => {
             dataIndex: 'Estado',
             key: 'Estado',
             render: (text, record) => {
-                const menuItems = Object.keys(stateMapping).map((state) => ({
+                const menuItems = Object.keys(stateMappingEntrega).map((state) => ({
                     key: state,
-                    label: stateMapping[state],
+                    label: stateMappingEntrega[state],
                 }));
                 const menuProps = {
                     items: menuItems,
@@ -88,7 +107,7 @@ const TableOrdersPendientes = ({ cliente, setCliente }) => {
                 return (
                     <Dropdown menu={menuProps}>
                         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                            {stateMapping[text] || text} <DownOutlined />
+                            {stateMappingEntrega[text] || text} <DownOutlined />
                         </a>
                     </Dropdown>
                 );

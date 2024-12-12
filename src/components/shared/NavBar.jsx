@@ -20,9 +20,12 @@ const NavBar = () => {
         { to: "/admin", label: "Admin", disabled: false },
         { to: "/repartos", label: "Repartos", disabled: false },
         { to: "/consultas", label: "Consultas", disabled: false },
-        { to: "/configuracion", label: "Configuración", disabled: false }
+        { to: "/configuracion", label: "Configuración", disabled: false },
+        { to: "/clientes", label: "Clientes", disabled: false },
     ] : [
-        { to: "/repartos", label: "Repartos", disabled: false }
+        { to: "/repartos", label: "Repartos", disabled: false },
+        { to: "/consultas", label: "Consultas", disabled: false },
+        { to: "/clientes", label: "Clientes", disabled: false },
     ];
 
     return (
