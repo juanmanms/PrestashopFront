@@ -60,12 +60,36 @@ export const DeliveryService = () => {
         }
     };
 
+    const updateDeliveryTime = async (dia, tipo, hora) => {
+        try {
+            const response = await fetch(`${apiUrl}repartos/update-time`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: dia,
+                    tipo: tipo,
+                    hora: hora,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response;
+        } catch (error) {
+            console.error('Error updating delivery time:', error);
+            throw error;
+        }
+    }
+
 
 
     return {
         getDeliveryDays,
         updateActiveDay,
         getCarriers,
+        updateDeliveryTime,
     };
 
 

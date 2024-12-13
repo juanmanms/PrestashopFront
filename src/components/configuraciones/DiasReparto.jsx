@@ -40,16 +40,23 @@ const DiasReparto = () => {
             console.error('Error updating delivery day:', error);
             message.error('Error updating delivery day');
         }
-        console.log(dias);
     };
 
-    const handleTimeChange = (e, id, field) => {
+    const handleTimeChange = async (e, id, field) => {
         const value = e.target.value;
-        setDias(prevDias =>
-            prevDias.map(dia =>
-                dia.id_delivery_day === id ? { ...dia, [field]: value } : dia
-            )
-        );
+        try {
+            setDias(prevDias =>
+                prevDias.map(dia =>
+                    dia.id_delivery_day === id ? { ...dia, [field]: value } : dia
+                )
+            );
+            await deliveryService.updateDeliveryTime(id, field, value);
+            message.success('Hora actualizada correctamente');
+        } catch (error) {
+            console.error('Error updating delivery time:', error);
+            message.error('Error updating delivery time');
+        }
+        console.log(dias);
     };
 
 
