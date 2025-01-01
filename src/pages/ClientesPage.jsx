@@ -13,7 +13,8 @@ const ClientesPage = () => {
 
     const showModal = () => {
         // setIsModalVisible(true);
-        message.error('Funcionalidad no implementada');
+        // message.error('Funcionalidad no implementada');
+        setIsModalVisible(true);
     };
 
     const handleCancel = () => {

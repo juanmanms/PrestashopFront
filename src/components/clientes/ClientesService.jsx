@@ -91,11 +91,35 @@ export const ClientesService = () => {
         }
     }
 
+    const updateClient = async (data, id_client) => {
+        try {
+            const response = await fetch(`${apiUrl}clients/update/${id_client}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(data), // Enviar todos los datos del formulario juntos
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Client updated:', data);
+            } else {
+                throw new Error('Update client failed');
+            }
+        } catch (error) {
+            console.error('Error updating client:', error);
+        }
+    }
+
+
     return {
         getClients,
         getAddresses,
         sendEmail,
-        createClient
+        createClient,
+        updateClient,
     };
 }
 

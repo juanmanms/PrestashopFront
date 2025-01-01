@@ -9,13 +9,14 @@ const Configuraciones = ({ id, setConsfiguraciones }) => {
     return (
         <>
             <header>
-                <button onClick={() => setConsfiguraciones(0)}>Atrás</button>
+                <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => setConsfiguraciones(0)}>Atrás</button>
             </header>
             <div>
-                <h2>Consulta ID: {id}</h2>
                 {id === 1 && <DiasReparto />}
-                {id === 3 && <OpcionesPago />}
                 {id === 2 && <OpcionesReparto />}
+                {id === 3 && <OpcionesPago />}
 
                 {/* Agrega más condiciones según sea necesario
                 {/* Aquí puedes agregar más lógica para mostrar los detalles de la consulta */}

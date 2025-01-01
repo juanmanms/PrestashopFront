@@ -24,7 +24,7 @@ const HistoricoCien = () => {
     };
 
     fetchData();
-  }, []);
+  }, [ordersService]);
 
   const columns = [
     {
@@ -55,7 +55,8 @@ const HistoricoCien = () => {
     {
       title: 'Estado',
       dataIndex: 'Estado',
-      key: 'Estado'
+      key: 'Estado',
+      render: (text) => stateMapping[text] || text
     },
     {
       title: 'Fecha Pedido',
@@ -64,18 +65,18 @@ const HistoricoCien = () => {
     },
     {
       title: 'Población',
-      dataIndex: 'Poblacion',
-      key: 'Poblacion'
+      dataIndex: 'Población',
+      key: 'Población'
     },
     {
       title: 'Teléfono Fijo',
-      dataIndex: 'TelefonoFijo',
-      key: 'TelefonoFijo'
+      dataIndex: 'TeléfonoFijo',
+      key: 'TeléfonoFijo'
     },
     {
       title: 'Teléfono Móvil',
-      dataIndex: 'TelefonoMovil',
-      key: 'TelefonoMovil'
+      dataIndex: 'TeléfonoMóvil',
+      key: 'TeléfonoMóvil'
     },
     {
       title: 'Total Compra',
@@ -103,7 +104,7 @@ const HistoricoCien = () => {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-semibold mb-4">Repartos pendientes</h2>
-      {orders.length === 0 ? (
+      {loading ? (
         <p>No hay pedidos</p>
       ) : (
         <Table

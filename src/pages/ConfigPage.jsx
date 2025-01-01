@@ -14,12 +14,12 @@ const cardData = [
         description: 'Selecciona los días de reparto',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
-    {
-        id: 2,
-        title: 'Opciones de reparto',
-        description: 'Activar o desactivar tipos de envio',
-        imageUrl: '/placeholder.svg?height=200&width=300',
-    },
+    // {
+    //     id: 2,
+    //     title: 'Opciones de reparto',
+    //     description: 'Activar o desactivar tipos de envio',
+    //     imageUrl: '/placeholder.svg?height=200&width=300',
+    // },
     {
         id: 3,
         title: 'Opciones de pago',

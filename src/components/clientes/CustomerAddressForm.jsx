@@ -68,7 +68,7 @@ const CustomerAddressForm = ({ cliente, setSelectedClient }) => {
     const onSubmitUpdate = (data) => {
         console.log('Update');
         // Aquí puedes enviar los datos a tu API de PrestaShop
-        clientsService.createClient(data);
+        clientsService.updateClient(data, cliente.id);
 
         message.success('Formulario enviado con éxito');
     };

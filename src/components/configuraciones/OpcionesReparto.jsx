@@ -1,7 +1,9 @@
 
 const OpcionesReparto = () => {
     return (
-        <div>OpcionesReparto</div>
+        <div className="container mx-auto mt-4">
+            <h2>Opciones de reparto</h2>
+        </div>
     )
 }
 
