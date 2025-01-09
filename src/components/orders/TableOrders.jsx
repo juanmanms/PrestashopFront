@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Table, message } from 'antd';
 import OrdersService from './ordersService';
 import { stateMapping } from '../../common/utils/OrderUtils';
 
@@ -23,6 +23,11 @@ const TableOrders = () => {
     const changeState = (order) => {
         console.log("cambio de estado en el pedido", order)
         ordersService.cancelOrder(order);
+        const updatedOrders = orders.map(o =>
+            o['Id Pedido'] === order ? { ...o, current_state: 6 } : o
+        );
+        setOrders(updatedOrders);
+        message.success('Pedido cancelado correctamente');
     }
 
     useEffect(() => {
