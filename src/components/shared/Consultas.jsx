@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import ProductosParadas from '../consultas/ProductosParadas';
 import HistoricoCien from '../consultas/HistoricoCien';
+import ResumCliente from '../consultas/ResumCliente';
 
 const Consultas = ({ id, setConsulta }) => {
     // Implementa la lógica para mostrar la consulta basada en el id
@@ -17,6 +18,7 @@ const Consultas = ({ id, setConsulta }) => {
             <div>
                 {id === 1 && <ProductosParadas />}
                 {id === 2 && <HistoricoCien />}
+                {id === 3 && <ResumCliente />}
                 {/* Agrega más condiciones según sea necesario */}
                 {/* Aquí puedes agregar más lógica para mostrar los detalles de la consulta */}
             </div>

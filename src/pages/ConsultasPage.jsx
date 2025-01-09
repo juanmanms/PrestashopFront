@@ -20,6 +20,12 @@ const cardData = [
         description: 'Pedidos no cancelados',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
+    {
+        id: 3,
+        title: 'Resumen generico',
+        description: 'Resumen de pedidos por fecha',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
     // {
     //     id: 3,
     //     title: 'Card 3',
