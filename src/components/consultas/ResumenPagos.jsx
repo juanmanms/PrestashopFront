@@ -6,7 +6,7 @@ import * as XLSX from 'xlsx';
 
 
 
-const ResumCliente = () => {
+const ResumPagos = () => {
     const consultService = useMemo(() => ConsultService(), [])
     const [report, setReport] = useState([])
     const [group, setGroup] = useState(false)
@@ -25,6 +25,11 @@ const ResumCliente = () => {
             title: 'Cliente',
             dataIndex: 'Cliente',
             key: 'name',
+        },
+        {
+            title: 'Forma de pago',
+            dataIndex: 'Pago',
+            key: 'Pago',
         },
         {
             title: 'Fecha',
@@ -88,10 +93,10 @@ const ResumCliente = () => {
     }
 
 
-    const handleGroupParada = (value,) => {
+    const handleGroupPago = () => {
         setGroup(true)
         const grouped = report.reduce((acc, item) => {
-            const key = item[value];
+            const key = item.Pago;
             if (!acc[key]) {
                 acc[key] = [];
             }
@@ -106,15 +111,16 @@ const ResumCliente = () => {
             Data: "--",
             Cliente: "--",
             ID: "--",
-            id_customer: "--"
+            id_customer: "--",
+            Parada: "--"
         }));
         setFilterReport(filtered)
     }
 
-    const handleGroupCliente = (value) => {
+    const handleGroupCliente = () => {
         setGroup(true)
         const grouped = report.reduce((acc, item) => {
-            const key = item[value];
+            const key = `${item.Cliente}-${item.Pago}`;
             if (!acc[key]) {
                 acc[key] = [];
             }
@@ -128,6 +134,27 @@ const ResumCliente = () => {
             NumeroPedidos: group.length,
             Data: "--",
             Parada: "--",
+            ID: "--"
+        }));
+        setFilterReport(filtered)
+    }
+    const handleGroupParada = () => {
+        setGroup(true)
+        const grouped = report.reduce((acc, item) => {
+            const key = `${item.Parada}-${item.Pago}`;
+            if (!acc[key]) {
+                acc[key] = [];
+            }
+            acc[key].push(item);
+            return acc;
+        }, {});
+        const filtered = Object.values(grouped).map(group => ({
+            ...group[0],
+            Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
+            Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
+            NumeroPedidos: group.length,
+            Data: "--",
+            Cliente: "--",
             ID: "--"
         }));
         setFilterReport(filtered)
@@ -179,12 +206,16 @@ const ResumCliente = () => {
                 <div className="mb-4">
                     <h3>Agrupado por:</h3>
                     <label className="block">
-                        <input type="radio" name="group" value="Parada" onChange={(e) => handleGroupParada(e.target.value)} />
-                        Parada
+                        <input type="radio" name="group" value="Forma de pago" onChange={() => handleGroupPago()} />
+                        Forma de pago
                     </label>
                     <label className="block">
-                        <input type="radio" name="group" value="Cliente" onChange={(e) => handleGroupCliente(e.target.value)} />
-                        Cliente
+                        <input type="radio" name="group" value="Cliente-pago" onChange={() => handleGroupCliente()} />
+                        Cliente y forma de pago
+                    </label>
+                    <label className="block">
+                        <input type="radio" name="group" value="Parada-pago" onChange={() => handleGroupParada()} />
+                        Parada y forma de pago
                     </label>
                     <label className="block">
                         <input type="radio" name="group" value="sin-agrup" onChange={() => handleNoGroup()} />
@@ -215,4 +246,4 @@ const ResumCliente = () => {
     )
 }
 
-export default ResumCliente
+export default ResumPagos

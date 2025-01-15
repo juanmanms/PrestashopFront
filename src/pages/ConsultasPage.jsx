@@ -27,6 +27,12 @@ const cardData = [
         description: 'Resumen de pedidos por fecha',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
+    {
+        id: 4,
+        title: 'Resumen de pagos',
+        description: 'Resumen de pagos por fecha',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
     // {
     //     id: 3,
     //     title: 'Card 3',
