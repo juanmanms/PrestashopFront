@@ -18,9 +18,27 @@ export const SellerService = () => {
         }
     }
 
+    const getFamilys = async () => {
+        try {
+            const response = await fetch(`${apiUrl}sellers/familys`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+    }
+
 
     return {
         getSellers,
+        getFamilys
     };
 
 };

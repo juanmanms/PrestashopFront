@@ -93,7 +93,7 @@ const TablePedidos = ({ setCliente }) => {
 
     return (
         <div className="p-4">
-            <h2 className="text-2xl font-semibold mb-4">Repartos pendientes</h2>
+            <h2 className="text-2xl font-semibold mb-4">Repartos pendientes para hoy</h2>
             {orders.length === 0 ? (
                 <p>No hay pedidos</p>
             ) : (

@@ -332,6 +332,81 @@ export const ProductService = () => {
         }
     };
 
+    const getProdutsCategories = async () => {
+        try {
+            const response = await fetch(`${apiUrl}products/categorias`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Get products categories error:', error);
+            throw error;
+        }
+    };
+
+    const addProductCategory = async (id_product, id_category) => {
+        console.log('id_product:', id_product, 'id_category:', id_category, 'creando');
+        try {
+            const response = await fetch(`${apiUrl}products/categorias-add-product`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    id_product: id_product,
+                    id_category: id_category,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data.message); // "Category added"
+        } catch {
+            console.error('Error adding product category:');
+        }
+
+    };
+
+    const deleteProductCategory = async (id_product, id_category) => {
+        console.log('id_product:', id_product, 'id_category:', id_category, 'eliminando');
+        try {
+            const response = await fetch(`${apiUrl}products/categorias-delete-product`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    id_product: id_product,
+                    id_category: id_category,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data.message); // "Category added"
+        } catch {
+            console.error('Error adding product category:');
+        }
+    };
+
 
 
 
@@ -350,6 +425,9 @@ export const ProductService = () => {
         uploadImage,
         deleteImage,
         getProductsBySeller,
+        getProdutsCategories,
+        addProductCategory,
+        deleteProductCategory,
     }
 }
 

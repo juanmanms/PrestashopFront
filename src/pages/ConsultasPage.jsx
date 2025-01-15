@@ -3,6 +3,7 @@ import { Card, Row, Col, Typography } from 'antd';
 import Consultas from '../components/shared/Consultas';
 
 
+
 const { Meta } = Card;
 const { Title } = Typography;
 

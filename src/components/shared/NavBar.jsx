@@ -6,7 +6,6 @@ import { useSelector } from "react-redux"
 const NavBar = () => {
     const user = useSelector((state) => state.user);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    console.log(user.role)
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -16,8 +15,9 @@ const NavBar = () => {
         { to: "/combinaciones", label: "Combinaciones", disabled: false },
         { to: "/imagenes", label: "Imagenes", disabled: false },
         { to: "/order", label: "Pedidos", disabled: false },
+        { to: "/productos-categorias", label: "P->C", disabled: false }
     ] : user.role === "1" ? [
-        { to: "/admin", label: "Admin", disabled: false },
+        // { to: "/admin", label: "Admin", disabled: false },
         { to: "/repartos", label: "Repartos", disabled: false },
         { to: "/consultas", label: "Consultas", disabled: false },
         { to: "/configuracion", label: "Configuración", disabled: false },

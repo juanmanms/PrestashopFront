@@ -12,6 +12,7 @@ import RepartidorPage from '../pages/RepartidorPage';
 import ConsultasPage from '../pages/ConsultasPage';
 import ConfigPage from '../pages/ConfigPage';
 import ClientesPage from '../pages/ClientesPage';
+import CategoryPage from '../pages/CategoryPage';
 
 
 function SellerDashboard() {
@@ -33,6 +34,7 @@ function SellerDashboard() {
                 <Route path="/consultas" element={<ConsultasPage />} />
                 <Route path="/configuracion" element={<ConfigPage />} />
                 <Route path="/clientes" element={<ClientesPage />} />
+                <Route path="/productos-categorias" element={<CategoryPage />} />
             </Routes>
         </BrowserRouter>
     );
