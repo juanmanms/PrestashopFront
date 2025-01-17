@@ -15,7 +15,7 @@ const NavBar = () => {
         { to: "/combinaciones", label: "Combinaciones", disabled: false },
         { to: "/imagenes", label: "Imagenes", disabled: false },
         { to: "/order", label: "Pedidos", disabled: false },
-        { to: "/productos-categorias", label: "P->C", disabled: false }
+        { to: "/productos-categorias", label: "Categorias", disabled: false }
     ] : user.role === "1" ? [
         // { to: "/admin", label: "Admin", disabled: false },
         { to: "/repartos", label: "Repartos", disabled: false },

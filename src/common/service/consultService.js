@@ -25,6 +25,65 @@ export const ConsultService = () => {
 
     };
 
+    const getClientsMoreAddress = async () => {
+        try {
+            const response = await fetch(`${apiUrl}utiles/clientes-address`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating delivery time:', error);
+            throw error;
+        }
+
+    }
+
+    const getProductsSinFoto = async () => {
+        try {
+            const response = await fetch(`${apiUrl}utiles/sin-foto`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating delivery time:', error);
+            throw error;
+        }
+
+    }
+
+    const getProductSinCategoria = async () => {
+        try {
+            const response = await fetch(`${apiUrl}utiles/sin-categoria`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating delivery time:', error);
+            throw error;
+        }
+    }
+
 
 
 
@@ -32,6 +91,9 @@ export const ConsultService = () => {
 
     return {
         getReportsGeneric,
+        getClientsMoreAddress,
+        getProductsSinFoto,
+        getProductSinCategoria
     };
 
 

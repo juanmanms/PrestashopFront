@@ -3,6 +3,9 @@ import ProductosParadas from '../consultas/ProductosParadas';
 import HistoricoCien from '../consultas/HistoricoCien';
 import ResumCliente from '../consultas/ResumCliente';
 import ResumPagos from '../consultas/ResumenPagos';
+import ClienteMoreAddress from '../consultas/ClienteMoreAddress';
+import SinFotos from '../consultas/SinFotos';
+import SinCategorias from '../consultas/SinCategorias';
 
 const Consultas = ({ id, setConsulta }) => {
     // Implementa la lógica para mostrar la consulta basada en el id
@@ -21,6 +24,9 @@ const Consultas = ({ id, setConsulta }) => {
                 {id === 2 && <HistoricoCien />}
                 {id === 3 && <ResumCliente />}
                 {id === 4 && <ResumPagos />}
+                {id === 5 && <SinFotos />}
+                {id === 6 && <SinCategorias />}
+                {id === 7 && <ClienteMoreAddress />}
                 {/* Agrega más condiciones según sea necesario */}
                 {/* Aquí puedes agregar más lógica para mostrar los detalles de la consulta */}
             </div>

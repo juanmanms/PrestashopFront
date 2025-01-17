@@ -33,6 +33,25 @@ const cardData = [
         description: 'Resumen de pagos por fecha',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
+    {
+        id: 5,
+        title: 'Productos sin fotos',
+        description: 'Productos que no tienen fotos, por parada',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
+    {
+        id: 6,
+        title: 'Productos sin categoria',
+        description: 'Productos que no están bien categorizados',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
+    {
+        id: 7,
+        title: 'Clientes - direcciones',
+        description: 'Clientes con más de una dirección',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
+
     // {
     //     id: 3,
     //     title: 'Card 3',
