@@ -11,8 +11,8 @@ const ResumPagos = () => {
     const [report, setReport] = useState([])
     const [group, setGroup] = useState(false)
     const [filterReport, setFilterReport] = useState([])
-    const [from, setFrom] = useState("2024-12-01")
-    const [to, setTo] = useState("2024-12-31")
+    const [from, setFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0])
+    const [to, setTo] = useState(new Date().toISOString().split('T')[0])
 
 
     const columns = [
@@ -72,25 +72,39 @@ const ResumPagos = () => {
         setTo(dates)
     }
 
-    const buttonLastMonth = () => {
+    const buttonLastWeek = () => {
         const date = new Date()
-        const firstDay = new Date(date.getFullYear(), date.getMonth() - 1, 1)
-        const lastDay = new Date(date.getFullYear(), date.getMonth(), 0)
-        lastDay.setMonth(lastDay.getMonth() + 1)
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() - 7)
+        const lastDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (6 - date.getDay() - 7))
 
         setFrom(firstDay.toISOString().split('T')[0])
         setTo(lastDay.toISOString().split('T')[0])
     }
 
-    const buttonThisMonth = () => {
-        //desde el uno del mes hasta hoy
+    const buttonWeek = () => {
         const date = new Date()
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
-
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay())
+        const lastDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (6 - date.getDay()))
 
         setFrom(firstDay.toISOString().split('T')[0])
-        setTo(new Date().toISOString().split('T')[0])
+        setTo(lastDay.toISOString().split('T')[0])
     }
+
+
+
+    const buttonDay = () => {
+        const date = new Date()
+        setFrom(date.toISOString().split('T')[0])
+        setTo(date.toISOString().split('T')[0])
+    }
+
+    const buttonYesterday = () => {
+        const date = new Date()
+        date.setDate(date.getDate() - 1)
+        setFrom(date.toISOString().split('T')[0])
+        setTo(date.toISOString().split('T')[0])
+    }
+
 
 
     const handleGroupPago = () => {
@@ -138,6 +152,28 @@ const ResumPagos = () => {
         }));
         setFilterReport(filtered)
     }
+    const handleGroupClientDay = () => {
+        setGroup(true)
+        const grouped = report.reduce((acc, item) => {
+            const key = `${item.Cliente}-${item.Pago}-${item.Data}`;
+            if (!acc[key]) {
+                acc[key] = [];
+            }
+            acc[key].push(item);
+            return acc;
+        }, {});
+        const filtered = Object.values(grouped).map(group => ({
+            ...group[0],
+            Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
+            Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
+            NumeroPedidos: group.length,
+            Parada: "--",
+            ID: "--"
+        }));
+        setFilterReport(filtered)
+    }
+
+
     const handleGroupParada = () => {
         setGroup(true)
         const grouped = report.reduce((acc, item) => {
@@ -181,6 +217,12 @@ const ResumPagos = () => {
 
         fetchReport()
         handleNoGroup()
+        const radios = document.getElementsByName('group');
+        radios.forEach(radio => {
+            if (radio.value === 'sin-agrup') {
+                radio.checked = true;
+            }
+        });
     }, [from, to, consultService])
 
     useEffect(() => {
@@ -213,6 +255,11 @@ const ResumPagos = () => {
                         <input type="radio" name="group" value="Cliente-pago" onChange={() => handleGroupCliente()} />
                         Cliente y forma de pago
                     </label>
+                    <label
+                        className="block">
+                        <input type="radio" name="group" value="Cliente-pago-dia" onChange={() => handleGroupClientDay()} />
+                        Cliente, forma de pago y día
+                    </label>
                     <label className="block">
                         <input type="radio" name="group" value="Parada-pago" onChange={() => handleGroupParada()} />
                         Parada y forma de pago
@@ -232,8 +279,13 @@ const ResumPagos = () => {
                         Hasta:
                         <input type="date" onChange={(e) => handleDateToChange(e.target.value)} value={to} />
                     </label>
-                    <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonLastMonth}>Ultimo mes</button>
-                    <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={buttonThisMonth}>Este mes</button>
+                    <div className="flex justify-around">
+
+                        <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonLastWeek}>Semana pasada</button>
+                        <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonWeek}>Esta semana</button>
+                        <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonDay}>Hoy</button>
+                        <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonYesterday}>Ayer</button>
+                    </div>
                 </div>
                 <div className="mb-4">
                     <h3>Agrupado por:</h3>
