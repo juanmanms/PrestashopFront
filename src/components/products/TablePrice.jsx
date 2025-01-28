@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect, useMemo } from "react"
+import { useLayoutEffect, useState, useEffect, useMemo, useRef } from "react"
 import ProductService from "./ProductService"
 import SearchProduct from './SearchProduct';
 import CreateCombination from "./CreateCombination";
@@ -11,6 +11,8 @@ const TablePrice = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
     const [selectedProduct, setSelectedProduct] = useState(null); // Estado para el producto seleccionado
+    const [inputValues, setInputValues] = useState({});
+    const debounceTimeout = useRef(null);
 
     // Estado para el orden de clasificación
     const productsService = useMemo(() => ProductService(), []);
@@ -79,17 +81,35 @@ const TablePrice = () => {
     }
 
     const changeName = (e, productId) => {
-        e.preventDefault();
-        console.log('productId:', productId, 'cambio nombre a:', e.target.value);
-        const newProducts = products.map((product) => {
-            if (product.id_product === productId) {
-                productsService.updateProductNameInDB(product.id_product, e.target.value);
-                return { ...product, product_name: e.target.value };
-            }
-            return product;
-        });
-        setProducts(newProducts);
-    }
+        const newValue = e.target.value;
+
+        // Actualiza el estado local del input rápidamente
+        setInputValues((prevValues) => ({
+            ...prevValues,
+            [productId]: newValue,
+        }));
+
+        // Limpia el timeout anterior si el usuario sigue escribiendo
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+
+        // Configura un nuevo timeout
+        debounceTimeout.current = setTimeout(() => {
+            // Actualiza el estado del producto después del debounce
+            const newProducts = products.map((product) => {
+                if (product.id_product === productId) {
+                    return { ...product, product_name: newValue };
+                }
+                return product;
+            });
+            setProducts(newProducts);
+
+            // Solo hace la llamada a la base de datos después del debounce
+            productsService.updateProductNameInDB(productId, newValue);
+            console.log('Nombre actualizado en la DB:', productId, newValue);
+        }, 500); // Cambia el tiempo (en ms) según sea necesario
+    };
 
     const handleSort = () => {
         const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -151,7 +171,7 @@ const TablePrice = () => {
                         <tr key={product.id_product} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-blue-100'}>
                             <td className="py-2 px-4 border-b border-gray-200">{product.id_product}</td>
                             <td className="py-2 px-4 border-b border-gray-200">
-                                <input type="text" value={product.product_name} onChange={(e) => changeName(e, product.id_product)}
+                                <input type="text" value={inputValues[product.id_product] || product.product_name} onChange={(e) => changeName(e, product.id_product)}
                                     className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                     onFocus={(e) => e.target.select()}
                                 />
