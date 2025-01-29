@@ -12,6 +12,7 @@ const TablePrice = () => {
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
     const [selectedProduct, setSelectedProduct] = useState(null); // Estado para el producto seleccionado
     const [inputValues, setInputValues] = useState({});
+    //const [ivaValues, setIvaValues] = useState({});
     const debounceTimeout = useRef(null);
 
     // Estado para el orden de clasificación
@@ -42,16 +43,22 @@ const TablePrice = () => {
 
     const InputConIvaChange = (e, productId) => {
         e.preventDefault();
-        console.log('productId:', productId, 'cambio precio a:', e.target.value);
-        const newProducts = products.map((product) => {
-            if (product.id_product === productId) {
-                productsService.updateProductPriceInDB(product.id_product, parseFloat(e.target.value) / (1 + product.tax_rate * 0.01));
-                return { ...product, price: parseFloat(e.target.value) / (1 + product.tax_rate * 0.01), precio_IVA: parseFloat(e.target.value) };
-            }
-            return product;
-        });
-        setProducts(newProducts);
-    }
+        const newPriceIVA = parseFloat(e.target.value);
+
+        setProducts((prevProducts) =>
+            prevProducts.map((product) => {
+                if (product.id_product === productId) {
+                    // Obtenemos el IVA más reciente del estado
+                    const ivaPercentage = tiposIVA.find((tipo) => tipo.id === product.id_tax_rules_group)?.value || 0;
+                    const priceWithoutIVA = newPriceIVA / (1 + ivaPercentage * 0.01);
+
+                    productsService.updateProductPriceInDB(productId, priceWithoutIVA);
+                    return { ...product, price: priceWithoutIVA, precio_IVA: newPriceIVA };
+                }
+                return product;
+            })
+        );
+    };
 
     const changeIVA = (e, productId) => {
         e.preventDefault();
@@ -147,6 +154,7 @@ const TablePrice = () => {
     }, [searchTerm, products]);
 
 
+
     if (products.length === 0) {
         return <div>Sin resultados</div>;
     }
@@ -180,6 +188,7 @@ const TablePrice = () => {
                                 <input type="number" value={product.price} onChange={(e) => InputSinIVAChange(e, product.id_product)}
                                     className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                     onFocus={(e) => e.target.select()}
+
                                 />
                             </td> */}
                             <td className="py-2 px-4 border-b border-gray-200">
