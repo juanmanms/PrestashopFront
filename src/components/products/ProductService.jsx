@@ -407,6 +407,29 @@ export const ProductService = () => {
         }
     };
 
+    const createProduct = async (product) => {
+        try {
+            const response = await fetch(`${apiUrl}products/add-product`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(product),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Create product error:', error);
+            throw error;
+        }
+    };
+
 
 
 
@@ -428,6 +451,7 @@ export const ProductService = () => {
         getProdutsCategories,
         addProductCategory,
         deleteProductCategory,
+        createProduct
     }
 }
 

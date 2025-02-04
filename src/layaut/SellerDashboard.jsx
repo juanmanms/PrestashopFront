@@ -13,6 +13,7 @@ import ConsultasPage from '../pages/ConsultasPage';
 import ConfigPage from '../pages/ConfigPage';
 import ClientesPage from '../pages/ClientesPage';
 import CategoryPage from '../pages/CategoryPage';
+import ProductPage from '../pages/ProductPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 
@@ -36,6 +37,7 @@ function SellerDashboard() {
                 <Route path="/configuracion" element={<ConfigPage />} />
                 <Route path="/clientes" element={<ClientesPage />} />
                 <Route path="/productos-categorias" element={<CategoryPage />} />
+                <Route path="/producto" element={<ProductPage />} />
                 <Route path="*" element={<NotFoundPage />} /> {/* Ruta para la página 404 */}
             </Routes>
         </BrowserRouter>
