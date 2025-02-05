@@ -84,6 +84,25 @@ export const ConsultService = () => {
         }
     }
 
+    const getInfoSeller = async () => {
+        try {
+            const response = await fetch(`${apiUrl}utiles/info-seller`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating delivery time:', error);
+            throw error;
+        }
+    }
+
 
 
 
@@ -93,7 +112,8 @@ export const ConsultService = () => {
         getReportsGeneric,
         getClientsMoreAddress,
         getProductsSinFoto,
-        getProductSinCategoria
+        getProductSinCategoria,
+        getInfoSeller
     };
 
 

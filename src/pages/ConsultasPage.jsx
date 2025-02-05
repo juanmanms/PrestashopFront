@@ -51,6 +51,12 @@ const cardData = [
         description: 'Clientes con más de una dirección',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
+    {
+        id: 8,
+        title: 'Info vendedor',
+        description: 'Información del vendedor',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
 
     // {
     //     id: 3,

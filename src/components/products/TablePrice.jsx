@@ -2,6 +2,7 @@ import { useLayoutEffect, useState, useEffect, useMemo, useRef } from "react"
 import ProductService from "./ProductService"
 import SearchProduct from './SearchProduct';
 import CreateCombination from "./CreateCombination";
+import { Button, Table } from "antd";
 
 
 const TablePrice = () => {
@@ -160,14 +161,13 @@ const TablePrice = () => {
     }
 
     return (
-        <div>
+        <div className="p-4">
             <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <table className="min-w-full bg-white">
                 <thead>
                     <tr>
                         <th className="py-2 px-4 border-b border-gray-200">ID</th>
                         <th className="py-2 px-4 border-b border-gray-200">Nombre</th>
-                        {/* <th className="py-2 px-4 border-b border-gray-200">Sin IVA</th> */}
                         <th className="py-2 px-4 border-b border-gray-200 cursor-pointer" onClick={handleSort}>Con IVA</th>
                         <th className="py-2 px-4 border-b border-gray-200">IVA</th>
                         <th className="py-2 px-4 border-b border-gray-200">Activo</th>
@@ -184,13 +184,6 @@ const TablePrice = () => {
                                     onFocus={(e) => e.target.select()}
                                 />
                             </td>
-                            {/* <td className="py-2 px-4 border-b border-gray-200">
-                                <input type="number" value={product.price} onChange={(e) => InputSinIVAChange(e, product.id_product)}
-                                    className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                                    onFocus={(e) => e.target.select()}
-
-                                />
-                            </td> */}
                             <td className="py-2 px-4 border-b border-gray-200">
                                 <input type="number" value={product.precio_IVA || product.price} onChange={(e) => InputConIvaChange(e, product.id_product)}
                                     className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
@@ -213,7 +206,7 @@ const TablePrice = () => {
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
                                 <button
-                                    className={` font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white `}
+                                    className="font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white"
                                     onClick={() => openModal(product)}
                                 >
                                     Crear
