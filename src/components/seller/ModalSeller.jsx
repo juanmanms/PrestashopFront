@@ -26,6 +26,12 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                 <hr />
                 <p><strong>Email:</strong> <a href={`mailto:${vendedor.email}`}>{vendedor.email}</a></p>
                 <p><strong>Teléfono:</strong> <a href={`tel:${vendedor.phone}`}>{vendedor.phone}</a></p>
+                <p><strong>Contacto</strong>{vendedor.keyword}</p>
+                {vendedor.Imagen_Categoria && (
+                    <div className="modal-seller-image">
+                        <img src={vendedor.Imagen_Categoria} alt="Imagen de Categoría" style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                )}
             </div>
         </Modal>
     );

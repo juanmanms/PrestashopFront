@@ -64,9 +64,9 @@ const InfoSeller = () => {
             className: 'text-center',
         },
         {
-            title: 'ID Proveedor',
-            dataIndex: 'ID_Proveedor',
-            key: 'ID_Proveedor',
+            title: 'Productos activos',
+            dataIndex: 'activos',
+            key: 'activos',
             className: 'text-center',
         },
         {
