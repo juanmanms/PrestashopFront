@@ -16,3 +16,20 @@ export const stateMappingEntrega = {
     27: 'Entrega, pagado en la parada',
     30: 'Entrega TPV'
 };
+
+export const getMondayOfWeek = (date) => {
+    const dayOfWeek = date.getDay(); // 0 (domingo) a 6 (sábado)
+    const monday = new Date(date);
+    monday.setDate(date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1)); // Ajusta para obtener el lunes
+    return monday;
+};
+
+// Obtiene el domingo de la semana dada una fecha
+export const getSundayOfWeek = (date) => {
+    const sunday = new Date(getMondayOfWeek(date));
+    sunday.setDate(sunday.getDate() + 6); // Suma 6 días al lunes para obtener el domingo
+    return sunday;
+};
+
+// Formatea una fecha como 'YYYY-MM-DD'
+export const formatDate = (date) => date.toISOString().split('T')[0];

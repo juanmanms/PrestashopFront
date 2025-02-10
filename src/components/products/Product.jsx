@@ -20,10 +20,17 @@ const ProductForm = ({ initialData, onSubmit }) => {
     const [validationErrors, setValidationErrors] = useState([]);
     const [bulkInput, setBulkInput] = useState('');
 
+    const calculateNetPrice = (price, taxRateId) => {
+        const taxRate = TAX_RATES.find(rate => rate.id === taxRateId)?.value || 0;
+        return price / (1 + taxRate / 100);
+    };
+
     const handleSubmit = async (values) => {
         setIsSubmitting(true);
         try {
-            await onSubmit(values);
+            const netPrice = calculateNetPrice(values.price, values.taxRate);
+            const productData = { ...values, netPrice };
+            await onSubmit(productData);
             message.success('Producto guardado exitosamente');
             form.resetFields();
         } catch (error) {
@@ -37,9 +44,13 @@ const ProductForm = ({ initialData, onSubmit }) => {
     const handleBulkSubmit = async () => {
         setIsSubmitting(true);
         try {
-            bulkData.map(async (product) => {
+            const bulkDataWithNetPrice = bulkData.map(product => ({
+                ...product,
+                netPrice: calculateNetPrice(product.price, product.taxRate),
+            }));
+            for (const product of bulkDataWithNetPrice) {
                 await onSubmit(product);
-            });
+            }
             message.success('Productos guardados exitosamente');
             setBulkData([]);
         } catch (error) {

@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import ConsultService from "../../common/service/consultService"
 import { Table, message, Button } from 'antd'
 import * as XLSX from 'xlsx';
-
-
-
-
+import { getMondayOfWeek, getSundayOfWeek, formatDate } from '../../common/utils/OrderUtils'
 const ResumPagos = () => {
     const consultService = useMemo(() => ConsultService(), [])
     const [report, setReport] = useState([])
@@ -73,37 +70,38 @@ const ResumPagos = () => {
     }
 
     const buttonLastWeek = () => {
-        const date = new Date()
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() - 7)
-        const lastDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (6 - date.getDay() - 7))
+        const today = new Date();
+        const mondayOfLastWeek = new Date(getMondayOfWeek(today));
+        mondayOfLastWeek.setDate(mondayOfLastWeek.getDate() - 7); // Resta 7 días para obtener el lunes de la semana pasada
 
-        setFrom(firstDay.toISOString().split('T')[0])
-        setTo(lastDay.toISOString().split('T')[0])
-    }
+        const sundayOfLastWeek = new Date(mondayOfLastWeek);
+        sundayOfLastWeek.setDate(mondayOfLastWeek.getDate() + 6); // Suma 6 días para obtener el domingo de la semana pasada
+
+        setFrom(formatDate(mondayOfLastWeek));
+        setTo(formatDate(sundayOfLastWeek));
+    };
 
     const buttonWeek = () => {
-        const date = new Date()
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay())
-        const lastDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (6 - date.getDay()))
+        const today = new Date();
+        const mondayOfCurrentWeek = getMondayOfWeek(today);
+        const sundayOfCurrentWeek = getSundayOfWeek(today);
 
-        setFrom(firstDay.toISOString().split('T')[0])
-        setTo(lastDay.toISOString().split('T')[0])
-    }
-
-
+        setFrom(formatDate(mondayOfCurrentWeek));
+        setTo(formatDate(sundayOfCurrentWeek));
+    };
 
     const buttonDay = () => {
-        const date = new Date()
-        setFrom(date.toISOString().split('T')[0])
-        setTo(date.toISOString().split('T')[0])
-    }
+        const today = new Date();
+        setFrom(formatDate(today));
+        setTo(formatDate(today));
+    };
 
     const buttonYesterday = () => {
-        const date = new Date()
-        date.setDate(date.getDate() - 1)
-        setFrom(date.toISOString().split('T')[0])
-        setTo(date.toISOString().split('T')[0])
-    }
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        setFrom(formatDate(yesterday));
+        setTo(formatDate(yesterday));
+    };
 
 
 
