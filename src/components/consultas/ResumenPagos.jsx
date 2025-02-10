@@ -309,7 +309,7 @@ const ResumPagos = () => {
                         value={selectedPaymentMethod}
                         onChange={handlePaymentMethodChange}
                         placeholder="Seleccione forma de pago"
-                        style={{ width: 200 }}
+                        className="w-64 mb-4 mt-2 text-gray-500 border border-gray-400 rounded-md "
                     >
                         <Option value="">Todas</Option>
                         {paymentMethods.map(method => (
@@ -319,8 +319,8 @@ const ResumPagos = () => {
                         ))}
                     </Select>
                     <hr />
-                    <h3>Agrupado por:</h3>
-                    <Button onClick={exportToExcel}>Exportar</Button>
+                    <h3>Exportar a Excel</h3>
+                    <Button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={exportToExcel}>Exportar</Button>
                 </div>
             </div>
 
