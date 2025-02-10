@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
 import ConsultService from "../../common/service/consultService"
-import { Table, message, Button } from 'antd'
+import { Table, message, Button, Select } from 'antd'
 import * as XLSX from 'xlsx';
 import { getMondayOfWeek, getSundayOfWeek, formatDate } from '../../common/utils/OrderUtils'
+
+const { Option } = Select;
 const ResumPagos = () => {
     const consultService = useMemo(() => ConsultService(), [])
     const [report, setReport] = useState([])
@@ -10,7 +12,9 @@ const ResumPagos = () => {
     const [filterReport, setFilterReport] = useState([])
     const [from, setFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0])
     const [to, setTo] = useState(new Date().toISOString().split('T')[0])
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
 
+    const paymentMethods = ['tpv', 'efectivo', 'parada']; // Define aquí tus opciones de forma de pago
 
     const columns = [
         {
@@ -129,27 +133,27 @@ const ResumPagos = () => {
         setFilterReport(filtered)
     }
 
-    const handleGroupCliente = () => {
-        setGroup(true)
-        const grouped = report.reduce((acc, item) => {
-            const key = `${item.Cliente}-${item.Pago}`;
-            if (!acc[key]) {
-                acc[key] = [];
-            }
-            acc[key].push(item);
-            return acc;
-        }, {});
-        const filtered = Object.values(grouped).map(group => ({
-            ...group[0],
-            Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
-            Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
-            NumeroPedidos: group.length,
-            Data: "--",
-            Parada: "--",
-            ID: "--"
-        }));
-        setFilterReport(filtered)
-    }
+    // const handleGroupCliente = () => {
+    //     setGroup(true)
+    //     const grouped = report.reduce((acc, item) => {
+    //         const key = `${item.Cliente}-${item.Pago}`;
+    //         if (!acc[key]) {
+    //             acc[key] = [];
+    //         }
+    //         acc[key].push(item);
+    //         return acc;
+    //     }, {});
+    //     const filtered = Object.values(grouped).map(group => ({
+    //         ...group[0],
+    //         Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
+    //         Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
+    //         NumeroPedidos: group.length,
+    //         Data: "--",
+    //         Parada: "--",
+    //         ID: "--"
+    //     }));
+    //     setFilterReport(filtered)
+    // }
     const handleGroupClientDay = () => {
         setGroup(true)
         const grouped = report.reduce((acc, item) => {
@@ -221,6 +225,7 @@ const ResumPagos = () => {
                 radio.checked = true;
             }
         });
+        setSelectedPaymentMethod('');
     }, [from, to, consultService])
 
     useEffect(() => {
@@ -230,13 +235,26 @@ const ResumPagos = () => {
     }, [from, to])
 
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(filterReport);
+        const reportWithNumericTotal = filterReport.map(item => ({
+            ...item,
+            Total: parseFloat(item.Total),
+        }));
+        const worksheet = XLSX.utils.json_to_sheet(reportWithNumericTotal);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Report');
         const fileName = `report_${from}_to_${to}${group ? '_grouped' : ''}.xlsx`;
         XLSX.writeFile(workbook, fileName);
     };
 
+    const handlePaymentMethodChange = (value) => {
+        setSelectedPaymentMethod(value);
+        if (value) {
+            const filtered = report.filter(item => item.Pago === value);
+            setFilterReport(filtered);
+        } else {
+            setFilterReport(report);
+        }
+    };
 
     return (
         <div className="container mx-auto mt-4">
@@ -250,17 +268,17 @@ const ResumPagos = () => {
                         Forma de pago
                     </label>
                     <label className="block">
+                        <input type="radio" name="group" value="Parada-pago" onChange={() => handleGroupParada()} />
+                        Parada y forma de pago
+                    </label>
+                    {/* <label className="block">
                         <input type="radio" name="group" value="Cliente-pago" onChange={() => handleGroupCliente()} />
                         Cliente y forma de pago
-                    </label>
+                    </label> */}
                     <label
                         className="block">
                         <input type="radio" name="group" value="Cliente-pago-dia" onChange={() => handleGroupClientDay()} />
                         Cliente, forma de pago y día
-                    </label>
-                    <label className="block">
-                        <input type="radio" name="group" value="Parada-pago" onChange={() => handleGroupParada()} />
-                        Parada y forma de pago
                     </label>
                     <label className="block">
                         <input type="radio" name="group" value="sin-agrup" onChange={() => handleNoGroup()} />
@@ -286,6 +304,21 @@ const ResumPagos = () => {
                     </div>
                 </div>
                 <div className="mb-4">
+                    <h3>Forma de pago:</h3>
+                    <Select
+                        value={selectedPaymentMethod}
+                        onChange={handlePaymentMethodChange}
+                        placeholder="Seleccione forma de pago"
+                        style={{ width: 200 }}
+                    >
+                        <Option value="">Todas</Option>
+                        {paymentMethods.map(method => (
+                            <Option key={method} value={method}>
+                                {method}
+                            </Option>
+                        ))}
+                    </Select>
+                    <hr />
                     <h3>Agrupado por:</h3>
                     <Button onClick={exportToExcel}>Exportar</Button>
                 </div>
