@@ -7,6 +7,7 @@ import ClienteMoreAddress from '../consultas/ClienteMoreAddress';
 import SinFotos from '../consultas/SinFotos';
 import SinCategorias from '../consultas/SinCategorias';
 import InfoSeller from '../consultas/InfoSeller';
+import ResumParadas from '../consultas/ResumenParadas';
 
 const Consultas = ({ id, setConsulta }) => {
     // Implementa la lógica para mostrar la consulta basada en el id
@@ -29,6 +30,7 @@ const Consultas = ({ id, setConsulta }) => {
                 {id === 6 && <SinCategorias />}
                 {id === 7 && <ClienteMoreAddress />}
                 {id === 8 && <InfoSeller />}
+                {id === 9 && <ResumParadas />}
                 {/* Agrega más condiciones según sea necesario */}
                 {/* Aquí puedes agregar más lógica para mostrar los detalles de la consulta */}
             </div>

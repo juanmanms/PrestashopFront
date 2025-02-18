@@ -57,6 +57,12 @@ const cardData = [
         description: 'Información del vendedor',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
+    {
+        id: 9,
+        title: 'Resumen de paradas',
+        description: 'Resumen de pedidos por parada',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    }
 
     // {
     //     id: 3,
