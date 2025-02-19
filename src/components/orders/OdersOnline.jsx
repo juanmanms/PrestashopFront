@@ -13,13 +13,22 @@ export const OdersOnline = () => {
         const fetchOrders = async () => {
             const ordersService = OrdersService();
             let data;
+            console.log('user', user);
             try {
-                if (user.id_seller === "") {
+                if (user.role != "") {
                     data = await ordersService.getOrdersOnline();
                 } else {
-                    data = await ordersService.getOrdersOnlineBySeller(user.id_seller);
+                    data = await ordersService.getOrdersOnlineBySeller();
                 }
                 setOrders(data);
+                // if (data.length > 0) {
+                //     message.alert({
+                //         content: 'Orders fetched successfully',
+                //         duration: 5,
+                //         type: 'alert',
+                //     });
+                // }
+
             } catch (error) {
                 console.error('Error fetching orders:', error);
                 message.error('Error fetching orders');
