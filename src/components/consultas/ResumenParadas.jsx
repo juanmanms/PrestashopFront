@@ -18,19 +18,19 @@ const ResumParadas = () => {
     const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
     const columns = [
-        {
+        groupType === 'sin-agrup' && {
             title: "Id Pedido",
             dataIndex: 'ID',
             key: 'id',
             sorter: (a, b) => a.ID.localeCompare(b.ID),
         },
-        {
+        groupType === 'sin-agrup' && {
             title: "Id Cliente",
             dataIndex: 'Cliente',
             key: 'name',
             sorter: (a, b) => a.Cliente.localeCompare(b.Cliente),
         },
-        {
+        groupType === 'Parada-mes-pago' || groupType === 'Parada-año-pago' || groupType === 'sin-agrup' && {
             title: "Forma de pago",
             dataIndex: 'Pago',
             key: 'Pago',
@@ -60,16 +60,11 @@ const ResumParadas = () => {
             key: 'transport',
             sorter: (a, b) => parseFloat(a.Transport) - parseFloat(b.Transport),
         },
-    ];
+    ].filter(Boolean);
 
     if (groupType !== 'sin-agrup') {
         columns.push({
-            title: () => (
-                <div>
-                    Nº Pedidos
-                    <Button size="small" onClick={() => handleSort('NumeroPedidos')}>Sort</Button>
-                </div>
-            ),
+            title: "NumeroPedidos",
             dataIndex: 'NumeroPedidos',
             key: 'numeroPedidos',
             render: (text, record) => record.NumeroPedidos || 1,
@@ -77,16 +72,16 @@ const ResumParadas = () => {
         });
     }
 
-    const handleSort = (key) => {
-        const sortedData = [...filterReport].sort((a, b) => {
-            if (typeof a[key] === 'string') {
-                return a[key].localeCompare(b[key]);
-            } else {
-                return a[key] - b[key];
-            }
-        });
-        setFilterReport(sortedData);
-    };
+    // const handleSort = (key) => {
+    //     const sortedData = [...filterReport].sort((a, b) => {
+    //         if (typeof a[key] === 'string') {
+    //             return a[key].localeCompare(b[key]);
+    //         } else {
+    //             return a[key] - b[key];
+    //         }
+    //     });
+    //     setFilterReport(sortedData);
+    // };
 
     const handleNoGroup = () => {
         setGroupType('sin-agrup');

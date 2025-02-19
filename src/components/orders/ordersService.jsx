@@ -184,6 +184,61 @@ export const OrdersService = () => {
         return data
     }
 
+    const getOrdersOnline = async () => {
+        try {
+            const response = await fetch(`${apiUrl}orders/pedidos-online`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            const data = await response.json() // This will log the data to the console
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+
+    }
+
+    const getOrdersOnlineBySeller = async () => {
+        try {
+            const response = await fetch(`${apiUrl}orders/pedidos-online-vendedor`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+
+    }
+
+    const getLineasPedido = async (id_order) => {
+        try {
+            const response = await fetch(`${apiUrl}orders/lineas-pedido/${id_order}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            const data = await response.json();
+
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+
+    }
+
 
     return {
         getProductID,
@@ -196,7 +251,10 @@ export const OrdersService = () => {
         getRepartosFuturo,
         getPedidosRepartoFuturo,
         changeStateOrder,
-        changePaymentOrders
+        changePaymentOrders,
+        getOrdersOnlineBySeller,
+        getOrdersOnline,
+        getLineasPedido
     };
 
 }

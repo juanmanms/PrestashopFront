@@ -15,6 +15,7 @@ import ClientesPage from '../pages/ClientesPage';
 import CategoryPage from '../pages/CategoryPage';
 import ProductPage from '../pages/ProductPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import SellerPage from '../pages/SellerPage';
 
 
 function SellerDashboard() {
@@ -28,7 +29,7 @@ function SellerDashboard() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/productos" element={<ProductsPage />} />
                 <Route path="/combinaciones" element={<CombinationPage />} />
-                <Route path="/seller" element={<h1>Seller</h1>} />
+                <Route path="/seller" element={<SellerPage />} />
                 <Route path="/order" element={<FormOrder />} />
                 <Route path="/imagenes" element={<ImagesPage />} />
                 <Route path="/cliente" element={<CustomerForm />} />

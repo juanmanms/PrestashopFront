@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Switch } from "antd";
-import { Select } from 'antd';
 
-const { Option } = Select;
 import PropTypes from 'prop-types';
 import DeliveryService from '../../common/service/deliveryService';
 
