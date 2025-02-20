@@ -1,6 +1,7 @@
 export const stateMapping = {
     3: "Preparación en curso",
     6: 'cancelado',
+    10: 'Pendiente en parada',
     13: 'Pendiente de pago',
     22: 'Ticket Definitivo',
     23: 'Comanda per revisar',
