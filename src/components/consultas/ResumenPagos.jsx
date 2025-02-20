@@ -1,48 +1,56 @@
-import { useEffect, useMemo, useState } from "react"
-import ConsultService from "../../common/service/consultService"
-import { Table, message, Button, Select } from 'antd'
+import { useEffect, useMemo, useState } from "react";
+import ConsultService from "../../common/service/consultService";
+import { Table, message, Button, Select } from 'antd';
 import * as XLSX from 'xlsx';
-import { getMondayOfWeek, getSundayOfWeek, formatDate } from '../../common/utils/OrderUtils'
+import { getMondayOfWeek, getSundayOfWeek, formatDate } from '../../common/utils/OrderUtils';
 
 const { Option } = Select;
+
 const ResumPagos = () => {
-    const consultService = useMemo(() => ConsultService(), [])
-    const [report, setReport] = useState([])
-    const [group, setGroup] = useState(false)
-    const [filterReport, setFilterReport] = useState([])
-    const [from, setFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0])
-    const [to, setTo] = useState(new Date().toISOString().split('T')[0])
+    const consultService = useMemo(() => ConsultService(), []);
+    const [report, setReport] = useState([]);
+    const [group, setGroup] = useState(false);
+    const [filterReport, setFilterReport] = useState([]);
+    const [from, setFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0]);
+    const [to, setTo] = useState(new Date().toISOString().split('T')[0]);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+    const [selectedGroup, setSelectedGroup] = useState('sin-agrup');
 
     const paymentMethods = ['tpv', 'efectivo', 'parada']; // Define aquí tus opciones de forma de pago
+    /*case 'Forma de pago':
+                        key = item.Pago;
+                        break;
+                    case 'Parada-pago':
+                        key = `${item.Parada}-${item.Pago}`;
+                        break;
+                    case 'Cliente-pago-dia':*/
 
     const columns = [
-        {
+        ...(selectedGroup === 'sin-agrup' ? [{
             title: 'Id pedido',
             dataIndex: 'ID',
             key: 'id',
-        },
-        {
+        }] : []),
+        ...(['Cliente-pago-dia', 'sin-agrup'].includes(selectedGroup) ? [{
             title: 'Cliente',
             dataIndex: 'Cliente',
             key: 'name',
-        },
+        }] : []),
         {
             title: 'Forma de pago',
             dataIndex: 'Pago',
             key: 'Pago',
         },
-        {
+        ...(!['Parada-pago', 'Forma de pago'].includes(selectedGroup) ? [{
             title: 'Fecha',
             dataIndex: 'Data',
             key: 'date',
-        },
-        {
+        }] : []),
+        ...(selectedGroup !== 'Forma de pago' ? [{
             title: 'Parada',
             dataIndex: 'Parada',
             key: 'stop',
-        }
-        ,
+        }] : []),
         {
             title: 'Total',
             dataIndex: 'Total',
@@ -53,9 +61,7 @@ const ResumPagos = () => {
             dataIndex: 'Transport',
             key: 'transport',
         }
-
-        // Add more columns as needed
-    ]
+    ];
 
     if (group) {
         columns.push({
@@ -67,11 +73,12 @@ const ResumPagos = () => {
     }
 
     const handleDateFromChange = (dates) => {
-        setFrom(dates)
-    }
+        setFrom(dates);
+    };
+
     const handleDateToChange = (dates) => {
-        setTo(dates)
-    }
+        setTo(dates);
+    };
 
     const buttonLastWeek = () => {
         const today = new Date();
@@ -107,118 +114,81 @@ const ResumPagos = () => {
         setTo(formatDate(yesterday));
     };
 
+    const handleGroupChange = (value) => {
+        setSelectedGroup(value);
+        setGroup(value !== 'sin-agrup');
+        applyFilters(value, selectedPaymentMethod);
+    };
 
+    const handlePaymentMethodChange = (value) => {
+        setSelectedPaymentMethod(value);
+        applyFilters(selectedGroup, value);
+    };
 
-    const handleGroupPago = () => {
-        setGroup(true)
-        const grouped = report.reduce((acc, item) => {
-            const key = item.Pago;
-            if (!acc[key]) {
-                acc[key] = [];
-            }
-            acc[key].push(item);
-            return acc;
-        }, {});
-        const filtered = Object.values(grouped).map(group => ({
-            ...group[0],
-            Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
-            Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
-            NumeroPedidos: group.length,
-            Data: "--",
-            Cliente: "--",
-            ID: "--",
-            id_customer: "--",
-            Parada: "--"
-        }));
-        setFilterReport(filtered)
-    }
+    const applyFilters = (group, paymentMethod) => {
+        let filtered = report;
 
-    // const handleGroupCliente = () => {
-    //     setGroup(true)
-    //     const grouped = report.reduce((acc, item) => {
-    //         const key = `${item.Cliente}-${item.Pago}`;
-    //         if (!acc[key]) {
-    //             acc[key] = [];
-    //         }
-    //         acc[key].push(item);
-    //         return acc;
-    //     }, {});
-    //     const filtered = Object.values(grouped).map(group => ({
-    //         ...group[0],
-    //         Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
-    //         Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
-    //         NumeroPedidos: group.length,
-    //         Data: "--",
-    //         Parada: "--",
-    //         ID: "--"
-    //     }));
-    //     setFilterReport(filtered)
-    // }
-    const handleGroupClientDay = () => {
-        setGroup(true)
-        const grouped = report.reduce((acc, item) => {
-            const key = `${item.Cliente}-${item.Pago}-${item.Data}`;
-            if (!acc[key]) {
-                acc[key] = [];
-            }
-            acc[key].push(item);
-            return acc;
-        }, {});
-        const filtered = Object.values(grouped).map(group => ({
-            ...group[0],
-            Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
-            Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
-            NumeroPedidos: group.length,
-            Parada: "--",
-            ID: "--"
-        }));
-        setFilterReport(filtered)
-    }
+        if (paymentMethod) {
+            filtered = filtered.filter(item => item.Pago === paymentMethod);
+        }
 
+        if (group !== 'sin-agrup') {
+            const grouped = filtered.reduce((acc, item) => {
+                let key;
+                switch (group) {
+                    case 'Forma de pago':
+                        key = item.Pago;
+                        break;
+                    case 'Parada-pago':
+                        key = `${item.Parada}-${item.Pago}`;
+                        break;
+                    case 'Cliente-pago-dia':
+                        key = `${item.Cliente}-${item.Pago}-${item.Data}`;
+                        break;
+                    default:
+                        key = item.Pago;
+                }
+                if (!acc[key]) {
+                    acc[key] = [];
+                }
+                acc[key].push(item);
+                return acc;
+            }, {});
 
-    const handleGroupParada = () => {
-        setGroup(true)
-        const grouped = report.reduce((acc, item) => {
-            const key = `${item.Parada}-${item.Pago}`;
-            if (!acc[key]) {
-                acc[key] = [];
-            }
-            acc[key].push(item);
-            return acc;
-        }, {});
-        const filtered = Object.values(grouped).map(group => ({
-            ...group[0],
-            Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
-            Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
-            NumeroPedidos: group.length,
-            Data: "--",
-            Cliente: "--",
-            ID: "--"
-        }));
-        setFilterReport(filtered)
-    }
+            filtered = Object.values(grouped).map(group => ({
+                ...group[0],
+                Total: group.reduce((sum, item) => sum + parseFloat(item.Total), 0).toFixed(2),
+                Transport: group.reduce((sum, item) => sum + parseFloat(item.Transport), 0).toFixed(2),
+                NumeroPedidos: group.length,
+                Data: group.every(item => item.Data === group[0].Data) ? group[0].Data : "--",
+                Cliente: group.every(item => item.Cliente === group[0].Cliente) ? group[0].Cliente : "--",
+                ID: group.every(item => item.ID === group[0].ID) ? group[0].ID : "--",
+                id_customer: group.every(item => item.id_customer === group[0].id_customer) ? group[0].id_customer : "--",
+                Parada: group.every(item => item.Parada === group[0].Parada) ? group[0].Parada : "--"
+            }));
+        }
+        setFilterReport(filtered);
+    };
 
     const handleNoGroup = () => {
-        setGroup(false)
-        setFilterReport(report)
-    }
-
-
+        setGroup(false);
+        setFilterReport(report);
+    };
 
     useEffect(() => {
         const fetchReport = async () => {
             try {
-                const response = await consultService.getReportsGeneric(from, to)
-                setReport(response)
-                setFilterReport(response)
+                const response = await consultService.getReportsGeneric(from, to);
+                setReport(response);
+                setFilterReport(response);
             } catch (error) {
-                console.error('Error fetching reports:', error)
-                message.error('Error fetching reports')
+                console.error('Error fetching reports:', error);
+                message.error('Error fetching reports');
             }
-        }
+        };
 
-        fetchReport()
-        handleNoGroup()
+        fetchReport();
+        handleNoGroup();
         const radios = document.getElementsByName('group');
         radios.forEach(radio => {
             if (radio.value === 'sin-agrup') {
@@ -226,13 +196,13 @@ const ResumPagos = () => {
             }
         });
         setSelectedPaymentMethod('');
-    }, [from, to, consultService])
+    }, [from, to, consultService]);
 
     useEffect(() => {
         if (new Date(from) > new Date(to)) {
             message.error('La fecha "Desde" no puede ser mayor que la fecha "Hasta".', 2);
         }
-    }, [from, to])
+    }, [from, to]);
 
     const exportToExcel = () => {
         const reportWithNumericTotal = filterReport.map(item => ({
@@ -246,70 +216,59 @@ const ResumPagos = () => {
         XLSX.writeFile(workbook, fileName);
     };
 
-    const handlePaymentMethodChange = (value) => {
-        setSelectedPaymentMethod(value);
-        if (value) {
-            const filtered = report.filter(item => item.Pago === value);
-            setFilterReport(filtered);
-        } else {
-            setFilterReport(report);
-        }
-    };
-
     return (
-        <div className="container mx-auto mt-4">
-            <h2>Resumen Genérico</h2>
+        <div className="container mx-auto mt-4 p-4">
+            <h2 className="text-2xl font-bold mb-4">Resumen Genérico</h2>
 
-            <div className="flex justify-around">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="mb-4">
-                    <h3>Agrupado por:</h3>
-                    <label className="block">
-                        <input type="radio" name="group" value="Forma de pago" onChange={() => handleGroupPago()} />
-                        Forma de pago
-                    </label>
-                    <label className="block">
-                        <input type="radio" name="group" value="Parada-pago" onChange={() => handleGroupParada()} />
-                        Parada y forma de pago
-                    </label>
-                    {/* <label className="block">
-                        <input type="radio" name="group" value="Cliente-pago" onChange={() => handleGroupCliente()} />
-                        Cliente y forma de pago
-                    </label> */}
-                    <label
-                        className="block">
-                        <input type="radio" name="group" value="Cliente-pago-dia" onChange={() => handleGroupClientDay()} />
-                        Cliente, forma de pago y día
-                    </label>
-                    <label className="block">
-                        <input type="radio" name="group" value="sin-agrup" onChange={() => handleNoGroup()} />
-                        Sin agrupar
-                    </label>
+                    <h3 className="text-xl font-semibold mb-2">Agrupado por:</h3>
+                    <Select
+                        onChange={handleGroupChange}
+                        placeholder="Seleccione agrupación"
+                        className="w-full mb-4"
+                    >
+                        <Option value="Forma de pago">Forma de pago</Option>
+                        <Option value="Parada-pago">Parada y forma de pago</Option>
+                        <Option value="Cliente-pago-dia">Cliente, forma de pago y día</Option>
+                        <Option value="sin-agrup">Sin agrupar</Option>
+                    </Select>
                 </div>
                 <div className="mb-4">
-                    <h3>Fechas:</h3>
-                    <label className="block">
-                        Desde:
-                        <input type="date" onChange={(e) => handleDateFromChange(e.target.value)} value={from} />
-                    </label>
-                    <label className="block">
-                        Hasta:
-                        <input type="date" onChange={(e) => handleDateToChange(e.target.value)} value={to} />
-                    </label>
-                    <div className="flex justify-around">
-
-                        <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonLastWeek}>Semana pasada</button>
-                        <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonWeek}>Esta semana</button>
-                        <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonDay}>Hoy</button>
-                        <button className="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded" onClick={buttonYesterday}>Ayer</button>
+                    <h3 className="text-xl font-semibold mb-2">Fechas:</h3>
+                    <div className="flex flex-col md:flex-row md:space-x-4">
+                        <label className="block mb-2 md:mb-0">
+                            Desde:
+                            <input type="date" onChange={(e) => handleDateFromChange(e.target.value)} value={from} className="w-full mt-1 p-2 border rounded-md" />
+                        </label>
+                        <label className="block mb-2 md:mb-0">
+                            Hasta:
+                            <input type="date" onChange={(e) => handleDateToChange(e.target.value)} value={to} className="w-full mt-1 p-2 border rounded-md" />
+                        </label>
                     </div>
+                    <Select
+                        onChange={(value) => {
+                            if (value === 'Semana pasada') buttonLastWeek();
+                            else if (value === 'Esta semana') buttonWeek();
+                            else if (value === 'Hoy') buttonDay();
+                            else if (value === 'Ayer') buttonYesterday();
+                        }}
+                        placeholder="Seleccione rango de fechas"
+                        className="w-full mb-4"
+                    >
+                        <Option value="Semana pasada">Semana pasada</Option>
+                        <Option value="Esta semana">Esta semana</Option>
+                        <Option value="Hoy">Hoy</Option>
+                        <Option value="Ayer">Ayer</Option>
+                    </Select>
                 </div>
                 <div className="mb-4">
-                    <h3>Forma de pago:</h3>
+                    <h3 className="text-xl font-semibold mb-2">Forma de pago:</h3>
                     <Select
                         value={selectedPaymentMethod}
                         onChange={handlePaymentMethodChange}
                         placeholder="Seleccione forma de pago"
-                        className="w-64 mb-4 mt-2 text-gray-500 border border-gray-400 rounded-md "
+                        className="w-full mb-4"
                     >
                         <Option value="">Todas</Option>
                         {paymentMethods.map(method => (
@@ -318,15 +277,15 @@ const ResumPagos = () => {
                             </Option>
                         ))}
                     </Select>
-                    <hr />
-                    <h3>Exportar a Excel</h3>
-                    <Button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={exportToExcel}>Exportar</Button>
+                    <hr className="my-4" />
+                    <h3 className="text-xl font-semibold mb-2">Exportar a Excel</h3>
+                    <Button className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={exportToExcel}>Exportar</Button>
                 </div>
             </div>
 
-            <Table dataSource={filterReport} columns={columns} rowKey="id" />
+            <Table dataSource={filterReport} columns={columns} rowKey="id" className="mt-4" />
         </div>
-    )
-}
+    );
+};
 
-export default ResumPagos
+export default ResumPagos;

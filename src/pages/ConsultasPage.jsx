@@ -59,8 +59,14 @@ const cardData = [
     },
     {
         id: 9,
-        title: 'Resumen de paradas',
+        title: 'Resumen de totales, mes y año',
         description: 'Resumen de pedidos por parada',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
+    {
+        id: 10,
+        title: 'Resumen de reapartos',
+        description: 'Resumen repartos mensualizados',
         imageUrl: '/placeholder.svg?height=200&width=300',
     }
 

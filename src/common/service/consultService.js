@@ -103,6 +103,25 @@ export const ConsultService = () => {
         }
     }
 
+    const getReportRepartos = async (year) => {
+        try {
+            const response = await fetch(`${apiUrl}utiles/totales-repartos/${year}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating delivery time:', error);
+            throw error;
+        }
+    }
+
 
 
 
@@ -113,7 +132,8 @@ export const ConsultService = () => {
         getClientsMoreAddress,
         getProductsSinFoto,
         getProductSinCategoria,
-        getInfoSeller
+        getInfoSeller,
+        getReportRepartos
     };
 
 

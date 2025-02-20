@@ -20,6 +20,8 @@ export const stateMappingEntrega = {
     30: 'Entrega TPV'
 };
 
+export const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
 export const getMondayOfWeek = (date) => {
     const dayOfWeek = date.getDay(); // 0 (domingo) a 6 (sábado)
     const monday = new Date(date);

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ConsultService from "../../common/service/consultService";
+import { monthNames } from "../../common/utils/OrderUtils";
 import { Table, message, Button, Select, Spin } from 'antd';
 import * as XLSX from 'xlsx';
 
@@ -15,7 +16,7 @@ const ResumParadas = () => {
     const [to, setTo] = useState(new Date().toISOString().split('T')[0]);
     const [groupType, setGroupType] = useState('sin-agrup'); // Estado para controlar el tipo de agrupación
 
-    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    // const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
     const columns = [
         groupType === 'sin-agrup' && {
@@ -30,7 +31,7 @@ const ResumParadas = () => {
             key: 'name',
             sorter: (a, b) => a.Cliente.localeCompare(b.Cliente),
         },
-        groupType === 'Parada-mes-pago' || groupType === 'Parada-año-pago' || groupType === 'sin-agrup' && {
+        (groupType === 'Parada-mes-pago' || groupType === 'Parada-anyo-pago') && {
             title: "Forma de pago",
             dataIndex: 'Pago',
             key: 'Pago',
@@ -141,7 +142,7 @@ const ResumParadas = () => {
     };
 
     const handleGroupParadaYearPago = () => {
-        setGroupType('Parada-año-pago');
+        setGroupType('Parada-anyo-pago');
         const grouped = report.reduce((acc, item) => {
             const key = `${item.Parada}-${item.Pago}`;
             if (!acc[key]) {
@@ -258,7 +259,7 @@ const ResumParadas = () => {
                                     case 'Parada-mes':
                                         handleGroupParadaMonth();
                                         break;
-                                    case 'Parada-año-pago':
+                                    case 'Parada-anyo-pago':
                                         handleGroupParadaYearPago();
                                         break;
                                     case 'Parada-mes-pago':
@@ -274,7 +275,7 @@ const ResumParadas = () => {
                         >
                             <Option value="Parada-año">Parada y año</Option>
                             <Option value="Parada-mes">Parada, mes y año</Option>
-                            <Option value="Parada-año-pago">Parada, año y forma de pago</Option>
+                            <Option value="Parada-anyo-pago">Parada, año y forma de pago</Option>
                             <Option value="Parada-mes-pago">Parada, mes, año y forma de pago</Option>
                             <Option value="sin-agrup">Sin agrupar</Option>
                         </Select>

@@ -6,12 +6,12 @@ import { stateMapping } from '../../common/utils/OrderUtils';
 
 export const OdersOnline = () => {
     const user = useSelector((state) => state.user);
+    const ordersService = OrdersService();
     const [orders, setOrders] = useState([]);
     const [lineasPedido, setLineasPedido] = useState({});
 
     useEffect(() => {
         const fetchOrders = async () => {
-            const ordersService = OrdersService();
             let data;
             console.log('user', user);
             try {
@@ -21,13 +21,7 @@ export const OdersOnline = () => {
                     data = await ordersService.getOrdersOnlineBySeller();
                 }
                 setOrders(data);
-                // if (data.length > 0) {
-                //     message.alert({
-                //         content: 'Orders fetched successfully',
-                //         duration: 5,
-                //         type: 'alert',
-                //     });
-                // }
+
 
             } catch (error) {
                 console.error('Error fetching orders:', error);
@@ -39,7 +33,6 @@ export const OdersOnline = () => {
     }, [user]);
 
     const fetchLineasPedido = async (idPedido) => {
-        const ordersService = OrdersService();
         try {
             const data = await ordersService.getLineasPedido(idPedido);
             setLineasPedido(prevState => ({
@@ -51,6 +44,16 @@ export const OdersOnline = () => {
             message.error('Error fetching lineas pedido');
         }
     };
+
+    const changeState = (order) => {
+        console.log("cambio de estado en el pedido", order)
+        ordersService.cancelOrder(order);
+        const updatedOrders = orders.map(o =>
+            o['Id Pedido'] === order ? { ...o, current_state: 6 } : o
+        );
+        setOrders(updatedOrders);
+        message.success('Pedido cancelado correctamente');
+    }
 
     const columns = [
         {
@@ -98,8 +101,7 @@ export const OdersOnline = () => {
                         disabled={isDisabled}
                         className={`px-2 py-1 rounded ${isDisabled ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
                         onClick={() => {
-                            console.log(IDPedido);
-                            // changeState(order['Id Pedido']);
+                            changeState(IDPedido.IDPedido);
                         }}
                     >
                         {stateMapping[state] || 'Desconocido'}
