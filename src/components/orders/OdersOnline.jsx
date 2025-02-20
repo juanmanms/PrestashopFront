@@ -48,9 +48,7 @@ export const OdersOnline = () => {
     const changeState = (order) => {
         console.log("cambio de estado en el pedido", order)
         ordersService.cancelOrder(order);
-        const updatedOrders = orders.map(o =>
-            o['Id Pedido'] === order ? { ...o, current_state: 6 } : o
-        );
+        const updatedOrders = orders.filter(o => o['Id Pedido'] !== order);
         setOrders(updatedOrders);
         message.success('Pedido cancelado correctamente');
     }
