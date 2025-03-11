@@ -8,6 +8,7 @@ const ClientAddressesModal = ({ visible, onClose, idCliente }) => {
     const ordersService = OrdersService();
 
     useEffect(() => {
+        console.log(idCliente)
         const fetchAddresses = async () => {
             try {
                 const data = await ordersService.getAddresses(idCliente);

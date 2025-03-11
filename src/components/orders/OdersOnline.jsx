@@ -56,7 +56,6 @@ export const OdersOnline = () => {
 
     const showModal = (idCliente) => {
         setSelectedClientId(idCliente);
-        console.log('idCliente', idCliente);
         setIsModalVisible(true);
     };
 
