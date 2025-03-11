@@ -11,8 +11,7 @@ const ClientAddressesModal = ({ visible, onClose, idCliente }) => {
         console.log(idCliente)
         const fetchAddresses = async () => {
             try {
-                const data = await ordersService.getAddresses(idCliente);
-                setAddresses(data);
+                await ordersService.getAddresses(idCliente, setAddresses);
             } catch (error) {
                 console.error('Error fetching addresses:', error);
                 message.error('Error fetching addresses');
