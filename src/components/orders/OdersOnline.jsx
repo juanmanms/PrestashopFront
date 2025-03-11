@@ -3,12 +3,15 @@ import { Button, Table, message } from 'antd';
 import { useSelector } from "react-redux";
 import OrdersService from './ordersService';
 import { stateMapping } from '../../common/utils/OrderUtils';
+import ClientAddressesModal from './ClientAddressesModal';
 
 export const OdersOnline = () => {
     const user = useSelector((state) => state.user);
     const ordersService = OrdersService();
     const [orders, setOrders] = useState([]);
     const [lineasPedido, setLineasPedido] = useState({});
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedClientId, setSelectedClientId] = useState(null);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -21,8 +24,6 @@ export const OdersOnline = () => {
                     data = await ordersService.getOrdersOnlineBySeller();
                 }
                 setOrders(data);
-
-
             } catch (error) {
                 console.error('Error fetching orders:', error);
                 message.error('Error fetching orders');
@@ -53,6 +54,16 @@ export const OdersOnline = () => {
         message.success('Pedido cancelado correctamente');
     }
 
+    const showModal = (idCliente) => {
+        setSelectedClientId(idCliente);
+        setIsModalVisible(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalVisible(false);
+        setSelectedClientId(null);
+    };
+
     const columns = [
         {
             title: "ID Pedido",
@@ -69,6 +80,11 @@ export const OdersOnline = () => {
             title: "Cliente",
             dataIndex: "Cliente",
             key: "Cliente",
+            render: (text, record) => (
+                <Button type="link" onClick={() => showModal(record.IDCliente)}>
+                    {text}
+                </Button>
+            ),
         },
         {
             title: "Total sin portes",
@@ -170,6 +186,11 @@ export const OdersOnline = () => {
                         );
                     },
                 }}
+            />
+            <ClientAddressesModal
+                visible={isModalVisible}
+                onClose={handleModalClose}
+                idCliente={selectedClientId}
             />
         </div>
     );
