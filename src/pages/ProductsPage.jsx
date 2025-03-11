@@ -1,9 +1,9 @@
-import TablePrice from '../components/products/TablePrice';
+import TablePrice2 from '../components/products/TablePrice2';
 
 const ProductsPage = () => {
     return (
         <>
-            <TablePrice />
+            <TablePrice2 />
             <hr />
         </>
     );

@@ -2,7 +2,7 @@ import { useLayoutEffect, useState, useEffect, useMemo, useRef } from "react"
 import ProductService from "./ProductService"
 import SearchProduct from './SearchProduct';
 import CreateCombination from "./CreateCombination";
-import { Button, Table } from "antd";
+
 
 
 const TablePrice = () => {
