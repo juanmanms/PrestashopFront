@@ -24,7 +24,6 @@ const TableCombination = () => {
             product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             product.id_product.toString().includes(searchTerm)
         );
-        console.log(products)
         setFilteredProducts(results);
     }, [searchTerm, products]);
 
