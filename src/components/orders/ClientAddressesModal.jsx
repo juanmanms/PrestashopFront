@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Table, message } from 'antd';
-import OrdersService from './ordersService';
+import ClientesService from '../clientes/ClientesService';
 
 const ClientAddressesModal = ({ visible, onClose, idCliente }) => {
     const [addresses, setAddresses] = useState([]);
-    const ordersService = OrdersService();
+    const clienteService = ClientesService();
 
     useEffect(() => {
         console.log(idCliente)
         const fetchAddresses = async () => {
             try {
-                await ordersService.getAddresses(idCliente, setAddresses);
+                await clienteService.getAddresses(idCliente, setAddresses);
             } catch (error) {
                 console.error('Error fetching addresses:', error);
                 message.error('Error fetching addresses');
@@ -21,7 +21,7 @@ const ClientAddressesModal = ({ visible, onClose, idCliente }) => {
         if (visible) {
             fetchAddresses();
         }
-    }, [visible, idCliente, ordersService]);
+    }, [visible, idCliente, clienteService]);
 
     const columns = [
         {
