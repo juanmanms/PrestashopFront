@@ -25,16 +25,6 @@ const ClientAddressesModal = ({ visible, onClose, idCliente }) => {
 
     const columns = [
         {
-            title: 'ID Dirección',
-            dataIndex: 'id_address',
-            key: 'id_address',
-        },
-        {
-            title: 'Alias',
-            dataIndex: 'alias',
-            key: 'alias',
-        },
-        {
             title: 'Dirección 1',
             dataIndex: 'address1',
             key: 'address1',
@@ -50,11 +40,6 @@ const ClientAddressesModal = ({ visible, onClose, idCliente }) => {
             key: 'postcode',
         },
         {
-            title: 'Ciudad',
-            dataIndex: 'city',
-            key: 'city',
-        },
-        {
             title: 'Teléfono',
             dataIndex: 'phone',
             key: 'phone',
@@ -64,16 +49,7 @@ const ClientAddressesModal = ({ visible, onClose, idCliente }) => {
             dataIndex: 'phone_mobile',
             key: 'phone_mobile',
         },
-        {
-            title: 'Otro',
-            dataIndex: 'other',
-            key: 'other',
-        },
-        {
-            title: 'Fecha de Creación',
-            dataIndex: 'date_add',
-            key: 'date_add',
-        },
+
     ];
 
     return (
