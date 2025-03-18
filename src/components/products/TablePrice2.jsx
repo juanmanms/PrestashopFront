@@ -105,9 +105,22 @@ const TablePrice = () => {
         setSelectedProduct(null);
     };
 
-    const discardProduct = (productId) => {
+    const discardProduct = async (productId) => {
         console.log('Descartando producto:', productId);
-        message.loading({ content: 'Todavía sin implementar', key: 'discard' });
+        message.loading({ content: 'Descartando producto...', key: 'discard' });
+        try {
+            await productsService.descatalogProduct(productId);
+            message.success({ content: 'Producto descartado', key: 'discard', duration: 2 });
+            // Actualizar la lista de productos después de descartar
+            const updatedProducts = products.filter(product => product.id_product !== productId);
+            setProducts(updatedProducts);
+            setFilteredProducts(updatedProducts.filter(product =>
+                product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                product.id_product.toString().includes(searchTerm)
+            ));
+        } catch (error) {
+            message.error({ content: 'Error al descartar producto', key: 'discard', duration: 2 });
+        }
     };
 
     useLayoutEffect(() => {
@@ -185,7 +198,7 @@ const TablePrice = () => {
             ),
         },
         {
-            title: 'Combinación',
+            title: 'Crear combinación',
             key: 'create_combination',
             render: (text, record) => (
                 <Button

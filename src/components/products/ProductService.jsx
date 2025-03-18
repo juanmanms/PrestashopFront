@@ -430,10 +430,38 @@ export const ProductService = () => {
         }
     };
 
+    const descatalogProduct = async (id_product) => {
+        console.log('Descatalogando producto en ser:', id_product);
+        try {
+            const response = await fetch(`${apiUrl}products/descatalogar`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    id: id_product,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Descatalog product error:', error);
+            throw error;
+        }
+    }
+
+
 
 
 
     return {
+        descatalogProduct,
         updateProductPriceInDB,
         updateProductIVAInDB,
         getProducts,

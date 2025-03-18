@@ -64,10 +64,24 @@ const InfoSeller = () => {
             className: 'text-center',
         },
         {
-            title: 'Productos activos',
+            title: 'Productos',
+            dataIndex: 'productos',
+            key: 'productos',
+            className: 'text-center',
+        },
+        {
+            title: 'Activos',
             dataIndex: 'activos',
             key: 'activos',
             className: 'text-center',
+        },
+        {
+            title: 'Inactivos',
+            key: 'inactivos',
+            className: 'text-center',
+            render: (text, record) => (
+                <span>{record.productos - record.activos}</span>
+            ),
         },
         {
             title: 'Acciones',
