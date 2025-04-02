@@ -84,9 +84,8 @@ export const DataComanda = ({ setStartDate }) => {
 
     const handleDate = (date) => {
         if (date) {
-            const madridTime = date.tz('Europe/Madrid');
-            const adjustedDate = madridTime.isDST() ? madridTime.add(2, 'hour') : madridTime.add(1, 'hour');
-            setStartDate(adjustedDate);
+            const madridTime = date.tz('Europe/Madrid').startOf('day'); // Asegurar que la hora sea 00:00:00.000
+            setStartDate(madridTime);
         } else {
             setStartDate(null);
         }
