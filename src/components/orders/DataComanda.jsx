@@ -83,14 +83,7 @@ export const DataComanda = ({ setStartDate }) => {
     })();
 
     const handleDate = (date) => {
-        if (date) {
-            const madridTime = date.tz('Europe/Madrid');
-            const adjustedDate = madridTime.isDST() ? madridTime.add(2, 'hour') : madridTime.add(1, 'hour');
-            console.log('Adjusted Date:', adjustedDate.format('HH:mm'));
-            setStartDate(adjustedDate);
-        } else {
-            setStartDate(null);
-        }
+        setStartDate(date ? date.tz('Europe/Madrid') : null);
     }
 
     const spanishLocale = {
