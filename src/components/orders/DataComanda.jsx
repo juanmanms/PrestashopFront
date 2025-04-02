@@ -83,7 +83,7 @@ export const DataComanda = ({ setStartDate }) => {
     })();
 
     const handleDate = (date) => {
-        setStartDate(date ? date.tz('Europe/Madrid') : null);
+        setStartDate(date ? date.tz('Europe/Madrid').add(2, 'hour') : null);
     }
 
     const spanishLocale = {
