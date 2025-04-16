@@ -35,10 +35,33 @@ export const SellerService = () => {
         }
     }
 
+    const updateCategory = async (id, description, keywords) => {
+        try {
+            const response = await fetch(`${apiUrl}sellers/category-info`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    id,
+                    description,
+                    keywords
+                }),
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+    }
+
 
     return {
         getSellers,
-        getFamilys
+        getFamilys,
+        updateCategory
     };
 
 };

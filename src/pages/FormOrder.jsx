@@ -17,8 +17,9 @@ const FormOrder = () => {
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [product, setProduct] = useState(null);
     const [price, setPrice] = useState(null);
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(() => new Date());
     const [isDelivery, setIsDelivery] = useState(true);
+    const [carrier, setCarrier] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState('tpv');
     const { contextHolder, openNotificationWithIcon } = useCustomNotification();
     const delivery = useRef(10);
@@ -35,8 +36,9 @@ const FormOrder = () => {
     }, []);
 
     useEffect(() => {
-        delivery.current = isDelivery ? process.env.REACT_APP_Domicilio : process.env.REACT_APP_recogida;
-    }, [isDelivery])
+        // delivery.current = isDelivery ? process.env.REACT_APP_Domicilio : process.env.REACT_APP_recogida;
+        console.log(carrier)
+    }, [carrier])
 
 
     const handleClick = async () => {
@@ -54,8 +56,8 @@ const FormOrder = () => {
     }
 
     const createOrder = async () => {
-        console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate, 'transportista', delivery.current, 'payment', paymentMethod)
-        ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate, delivery.current, paymentMethod);
+        console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate, 'transportista', carrier, 'payment', paymentMethod)
+        // ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate, carrier, paymentMethod);
         clearData();
         //mostrar notificacion de pedido creado
         openNotificationWithIcon('success', 'Pedido creado', 'El pedido se ha creado correctamente');
@@ -94,8 +96,8 @@ const FormOrder = () => {
                     {selectedClient && selectedAddress && (
                         <>
                             <div className="flex justify-around items-center mt-4">
-                                <SelectDelivery isDelivery={isDelivery} setIsDelivery={setIsDelivery} />
-                                <DataComanda setStartDate={setStartDate} />
+                                <SelectDelivery isDelivery={carrier} setIsDelivery={setCarrier} />
+                                <DataComanda setStartDate={setStartDate} startDate={startDate} carrier={carrier} />
                                 <SelectPay paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
                             </div>
                             <PreuComanda setPrice={setPrice} />

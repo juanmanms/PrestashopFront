@@ -50,6 +50,13 @@ const TableOrders = () => {
             render: (text) => new Date(text).toLocaleDateString(),
         },
         {
+            title: 'Fecha Entrega',
+            dataIndex: 'Fecha Entrega',
+            key: 'Fecha Entrega',
+            render: (text) => new Date(text).toLocaleDateString(),
+        },
+
+        {
             title: 'Total Pagado',
             dataIndex: 'Total Pagado',
             key: 'Total Pagado',

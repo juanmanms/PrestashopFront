@@ -52,9 +52,9 @@ const InfoSeller = () => {
             className: 'text-center',
         },
         {
-            title: 'Categoría por defecto',
-            dataIndex: 'Categoría',
-            key: 'Categoría',
+            title: 'Categoria por defecto',
+            dataIndex: 'Categoria',
+            key: 'Categoria',
             className: 'text-center',
         },
         {

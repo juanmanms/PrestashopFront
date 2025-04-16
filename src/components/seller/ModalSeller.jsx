@@ -1,7 +1,59 @@
+import { useEffect, useState, useMemo } from 'react';
 import { Modal, Button } from 'antd';
+import { Input } from 'antd';
 import PropTypes from 'prop-types';
+import Editor from 'react-simple-wysiwyg';
+
+import SellerService from './SellerService';
+
 
 const ModalSeller = ({ visible, onClose, vendedor }) => {
+    const sellerService = useMemo(() => SellerService(), []);
+
+    const [formValues, setFormValues] = useState({
+        Categoria: '',
+        description: '',
+        email: '',
+        phone: '',
+        keyword: [], // Inicializar como un array
+        Imagen_Categoria: '',
+    });
+
+
+    useEffect(() => {
+        if (vendedor) {
+            setFormValues({
+                ...formValues,
+                Categoria: vendedor.Categoria,
+                description: vendedor.description,
+                email: vendedor.email,
+                phone: vendedor.phone,
+                keyword: vendedor.keyword.split(', '),
+                Imagen_Categoria: vendedor.Imagen_Categoria,
+            });
+
+        }
+    }, [vendedor]);
+
+
+
+
+
+
+    const handleKeywordChange = (index, value) => {
+        const newKeywords = [...formValues.keyword];
+        newKeywords[index] = value;
+        setFormValues({
+            ...formValues,
+            keyword: newKeywords,
+        });
+    };
+
+
+    const handleSave = () => {
+        sellerService.updateCategory(vendedor.ID_Categoria, formValues.description, formValues.keyword.join(', '))
+        onClose();
+    };
 
 
     return (
@@ -14,24 +66,62 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                 <Button key="close" onClick={onClose}>
                     Cerrar
                 </Button>,
+                <Button key="save" type="primary" onClick={handleSave}>
+                    Guardar
+                </Button>,
             ]}
         >
             <div className="modal-seller-content">
-                <h3 className='font-black	' >Sección de categoría/parada: {vendedor.Categoría}</h3>
+                <h3 className='mt-2 font-black'>Sección de vendedor</h3>
+                <section className="info-seller bg-slate-500 p-4 rounded-lg text-white">
+                    <p className="mt-2 ">Vendedor <strong>{vendedor.Vendedor}</strong> con id: {vendedor.ID_Vendedor} </p>
+                    <p><strong>Contacto:</strong> Teléfono: <a href={`tel:${vendedor.phone}`}>{vendedor.phone}</a>, Email: <a href={`mailto:${vendedor.email}`}>{vendedor.email}</a></p>
+                </section>
+                <br />
+                <br />
+                <h3 className='mt-2 font-black'>Sección de categoría</h3>
+                <section className="info-categoria bg-slate-500 p-4 rounded-lg text-white mb-2">
+                    <p className="mt-2 ">Categoría <strong>{vendedor.Categoria}</strong> con id: {vendedor.ID_Categoria} </p>
+                </section>
                 <hr />
-                <div className="modal-seller">
-                    <div dangerouslySetInnerHTML={{ __html: vendedor.description }} />
+                <div className="contacto-item mb-2">
+                    <label>Teléfono</label>
+                    <Input
+                        type="text"
+                        value={formValues.keyword[0] || ''}
+                        onChange={(e) => handleKeywordChange(0, e.target.value)}
+                        placeholder="Teléfono"
+                        className="mb-2"
+                    />
                 </div>
-                <h3 className='mt-2 font-black	'>Sección de Vendedor</h3>
-                <hr />
-                <p><strong>Email:</strong> <a href={`mailto:${vendedor.email}`}>{vendedor.email}</a></p>
-                <p><strong>Teléfono:</strong> <a href={`tel:${vendedor.phone}`}>{vendedor.phone}</a></p>
-                <p><strong>Contacto</strong>{vendedor.keyword}</p>
-                {vendedor.Imagen_Categoria && (
-                    <div className="modal-seller-image">
-                        <img src={vendedor.Imagen_Categoria} alt="Imagen de Categoría" style={{ width: '100%', height: 'auto' }} />
-                    </div>
-                )}
+                <div className="contacto-item mb-2">
+                    <label>WhatsApp (siempre con +34)</label>
+                    <Input
+                        type="text"
+                        value={formValues.keyword[1] || ''}
+                        onChange={(e) => handleKeywordChange(1, e.target.value)}
+                        placeholder="WhatsApp"
+                        className="mb-2"
+                    />
+                </div>
+                <div className="form-group mt-4">
+                    <label htmlFor="customInput">Descripcion</label>
+                    <Editor
+                        value={formValues.description || vendedor.description}
+                        onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
+                        className="editor"
+                        toolbarClassName="toolbarClassName"
+                        editorClassName="editorClassName"
+                        wrapperClassName="wrapperClassName"
+                        toolbarStyle={{ display: 'flex', justifyContent: 'space-between' }}
+                        editorStyle={{ height: '200px', border: '1px solid #ccc', padding: '10px' }}
+                    />
+                    {vendedor.Imagen_Categoria && (
+                        <div className="modal-seller-image">
+                            <img src={vendedor.Imagen_Categoria} alt="Imagen de Categoría" style={{ width: 'auto', height: 'auto' }} />
+                        </div>
+                    )}
+                </div>
             </div>
         </Modal>
     );
