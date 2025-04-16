@@ -56,8 +56,8 @@ const FormOrder = () => {
     }
 
     const createOrder = async () => {
-        console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate, 'transportista', carrier, 'payment', paymentMethod)
-        // ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate, carrier, paymentMethod);
+        // console.log('id_cliente', selectedClient?.id, ' id_address', selectedAddress?.id_address, 'product', product, 'price', price, 'date', startDate, 'transportista', carrier, 'payment', paymentMethod)
+        ordersService.createCart(selectedClient?.id, selectedAddress?.id_address, product, price, startDate, carrier, paymentMethod);
         clearData();
         //mostrar notificacion de pedido creado
         openNotificationWithIcon('success', 'Pedido creado', 'El pedido se ha creado correctamente');
