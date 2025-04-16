@@ -35,11 +35,6 @@ const FormOrder = () => {
         fetchProduct();
     }, []);
 
-    useEffect(() => {
-        // delivery.current = isDelivery ? process.env.REACT_APP_Domicilio : process.env.REACT_APP_recogida;
-        console.log(carrier)
-    }, [carrier])
-
 
     const handleClick = async () => {
         setVisible(true)
