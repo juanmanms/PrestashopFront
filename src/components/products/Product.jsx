@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, Select, Button, message, Tabs, Table } from 'antd';
+import { Form, Input, Select, Button, message, Tabs, Table, Modal } from 'antd';
+import * as XLSX from 'xlsx';
 
 const { TabPane } = Tabs;
 
@@ -18,12 +19,13 @@ const ProductForm = ({ initialData, onSubmit }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [bulkData, setBulkData] = useState([]);
     const [validationErrors, setValidationErrors] = useState([]);
-    const [bulkInput, setBulkInput] = useState('');
+    const [validateBulk, setValidateBulk] = useState(false);
+    const [isInstructionsModalVisible, setIsInstructionsModalVisible] = useState(false);
 
-    const calculateNetPrice = (price, taxRateId) => {
+    const calculateNetPrice = useCallback((price, taxRateId) => {
         const taxRate = TAX_RATES.find(rate => rate.id === taxRateId)?.value || 0;
         return price / (1 + taxRate / 100);
-    };
+    }, []);
 
     const handleSubmit = async (values) => {
         setIsSubmitting(true);
@@ -61,59 +63,130 @@ const ProductForm = ({ initialData, onSubmit }) => {
         }
     };
 
-    const validateBulkData = (text) => {
-        const lines = text.split('\n');
-        const data = [];
+    const addRow = () => {
+        setBulkData([...bulkData, { name: '', price: 0, taxRate: TAX_RATES[0].id }]);
+        setValidateBulk(false);
+    };
+
+    const deleteRow = (index) => {
+        const updatedBulkData = [...bulkData];
+        updatedBulkData.splice(index, 1);
+        setBulkData(updatedBulkData);
+    };
+
+    const updateRow = (index, field, value) => {
+        const updatedBulkData = [...bulkData];
+        updatedBulkData[index][field] = value;
+        setBulkData(updatedBulkData);
+    };
+
+    const validateBulkData = () => {
         const errors = [];
 
-        lines.forEach((line, index) => {
-            const [name, price, taxRateId] = line.split(',');
-
-            if (!name || !price || !taxRateId) {
-                errors.push(`Línea ${index + 1}: Faltan campos`);
-                return;
+        bulkData.forEach((item, index) => {
+            if (!item.name) {
+                errors.push(`Línea ${index + 1}: El nombre es obligatorio`);
             }
-
-            const priceNumber = parseFloat(price);
-            const taxRateIdNumber = parseInt(taxRateId, 10);
-
-            if (isNaN(priceNumber) || priceNumber <= 0) {
-                errors.push(`Línea ${index + 1}: Precio inválido`);
-                return;
+            if (isNaN(item.price) || item.price <= 0) {
+                errors.push(`Línea ${index + 1}: El precio debe ser un número positivo`);
             }
-
-            if (!TAX_RATES.some(rate => rate.id === taxRateIdNumber)) {
-                errors.push(`Línea ${index + 1}: IVA inválido`);
-                return;
+            if (!TAX_RATES.some(rate => rate.id === item.taxRate)) {
+                errors.push(`Línea ${index + 1}: El tipo de IVA es inválido`);
             }
-
-            data.push({
-                name: name.trim(),
-                price: priceNumber,
-                taxRate: taxRateIdNumber,
-            });
         });
 
-        setBulkData(data);
         setValidationErrors(errors);
 
         if (errors.length === 0) {
             message.success('Datos validados correctamente');
+            setValidateBulk(true);
         } else {
             message.error('Errores encontrados en la validación');
+            setValidateBulk(false);
         }
     };
 
     const handleCopyExample = () => {
-        const example = `fresa,10.99,1\nmanzana,15.50,2\npera,20.00,3`;
-        setBulkInput(example);
-        validateBulkData(example);
+        const exampleData = [
+            { name: 'fresa', price: 10.99, taxRate: 1 },
+            { name: 'manzana', price: 15.50, taxRate: 2 },
+            { name: 'pera', price: 20.00, taxRate: 3 },
+        ];
+        setBulkData(exampleData);
+    };
+
+    const downloadExcelExample = () => {
+        const exampleData = [
+            { name: 'fresa', price: 10.99, taxRate: 1 },
+            { name: 'manzana', price: 15.50, taxRate: 2 },
+            { name: 'pera', price: 20.00, taxRate: 3 },
+        ];
+
+        const worksheet = XLSX.utils.json_to_sheet(exampleData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Example');
+        XLSX.writeFile(workbook, 'example.xlsx');
+        setIsInstructionsModalVisible(true);
+    };
+
+    const handleInstructionsModalOk = () => {
+        setIsInstructionsModalVisible(false);
+    };
+
+    const handleInstructionsModalCancel = () => {
+        setIsInstructionsModalVisible(false);
     };
 
     const columns = [
-        { title: 'Nombre', dataIndex: 'name', key: 'name' },
-        { title: 'Precio', dataIndex: 'price', key: 'price' },
-        { title: 'IVA', dataIndex: 'taxRate', key: 'taxRate' },
+        {
+            title: 'Nombre',
+            dataIndex: 'name',
+            key: 'name',
+            render: (text, record, index) => (
+                <Input
+                    value={text}
+                    onChange={(e) => updateRow(index, 'name', e.target.value)}
+                />
+            ),
+        },
+        {
+            title: 'Precio',
+            dataIndex: 'price',
+            key: 'price',
+            render: (text, record, index) => (
+                <Input
+                    type="number"
+                    value={text}
+                    onChange={(e) => updateRow(index, 'price', parseFloat(e.target.value) || 0)}
+                />
+            ),
+        },
+        {
+            title: 'IVA',
+            dataIndex: 'taxRate',
+            key: 'taxRate',
+            render: (text, record, index) => (
+                <Select
+                    value={text}
+                    onChange={(value) => updateRow(index, 'taxRate', value)}
+                >
+                    {TAX_RATES.map(rate => (
+                        <Select.Option key={rate.id} value={rate.id}>
+                            IVA {rate.value}%
+                        </Select.Option>
+                    ))}
+                </Select>
+            ),
+        },
+        {
+            title: 'Acciones',
+            key: 'actions',
+            render: (text, record, index) => (
+                <Button onClick={() => deleteRow(index)}>
+                    Borrar
+                </Button>
+            ),
+        },
     ];
 
     return (
@@ -187,67 +260,57 @@ const ProductForm = ({ initialData, onSubmit }) => {
                     </Form>
                 </TabPane>
                 <TabPane tab="Carga Masiva" key="2">
-                    <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="mb-4">
-                            <h4>Ejemplo de formato CSV:</h4>
-                            <pre>
-                                {`fresa,10.99,1\nmanzana,15.50,2\npera,20.00,3`}
-                            </pre>
-                            <Button type="primary"
-                                htmlType="submit"
-                                className='my-4'
-                                onClick={handleCopyExample}>
-                                Copiar Ejemplo
-                            </Button>
-                        </div>
-                        <div className="mb-4">
-                            <h4>Tipos de IVA</h4>
-                            <pre>
-                                {`0: 0%\n1: 21%\n2: 10%\n3: 4%\n10: 2%\n11: 7.5%`}
-                            </pre>
-                        </div>
+                    <div className="mb-4">
+                        <Button type="primary" onClick={handleCopyExample} className="my-4">
+                            Usar Ejemplo
+                        </Button>
+                        <Button type="primary" onClick={addRow} className="my-4 ml-2">
+                            Añadir Fila
+                        </Button>
+                        <Button type="default" onClick={downloadExcelExample} className="ml-4 my-4">
+                            Descargar Excel Ejemplo
+                        </Button>
                     </div>
-                    <div className="grid gap-4">
-                        <Input.TextArea
-                            value={bulkInput}
-                            onChange={(e) => {
-                                setBulkInput(e.target.value);
-                                validateBulkData(e.target.value);
-                            }}
-                            rows={6}
-                            placeholder="Pegue aquí los productos en formato CSV: nombre,precio,ivaId (un producto por línea)"
-                        />
-                        {validationErrors.length > 0 && (
-                            <div className="text-red-500">
-                                <h4>Errores de validación:</h4>
-                                <ul>
-                                    {validationErrors.map((error, index) => (
-                                        <li key={index}>{error}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-                        {bulkData.length > 0 && (
-                            <>
-                                <Table
-                                    columns={columns}
-                                    dataSource={bulkData}
-                                    rowKey={(record) => record.name}
-                                    pagination={false}
-                                />
-                                <Button
-                                    type="primary"
-                                    onClick={handleBulkSubmit}
-                                    loading={isSubmitting}
-                                    className="w-full"
-                                >
-                                    Crear Productos
-                                </Button>
-                            </>
-                        )}
-                    </div>
+                    {validationErrors.length > 0 && (
+                        <div className="text-red-500">
+                            <h4>Errores de validación:</h4>
+                            <ul>
+                                {validationErrors.map((error, index) => (
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <Table
+                        columns={columns}
+                        dataSource={bulkData}
+                        rowKey={(record, index) => index.toString()}
+                        pagination={false}
+                    />
+                    <Button type="primary" onClick={validateBulkData} className="my-4">
+                        Validar Datos
+                    </Button>
+                    <Button
+                        type="primary"
+                        onClick={handleBulkSubmit}
+                        loading={isSubmitting}
+                        className="w-full"
+                        disabled={!validateBulk}
+                    >
+                        Crear Productos
+                    </Button>
                 </TabPane>
             </Tabs>
+            <Modal
+                title="Instrucciones"
+                visible={isInstructionsModalVisible}
+                onOk={handleInstructionsModalOk}
+                onCancel={handleInstructionsModalCancel}
+            >
+                <p>El excel esta en descargas.</p>
+                <p>Abrir, rellenar, guardar y enviar por correo al gestor del mercado</p>
+                <p>info@gestiodemercats.cat</p>
+            </Modal>
         </div>
     );
 };

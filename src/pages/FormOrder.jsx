@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import SelectClientes from '../components/clientes/SelectClientes';
 import ClientAddresses from '../components/clientes/ClientAddresses';
 import OrdersService from '../components/orders/ordersService';
@@ -18,11 +18,9 @@ const FormOrder = () => {
     const [product, setProduct] = useState(null);
     const [price, setPrice] = useState(null);
     const [startDate, setStartDate] = useState(() => new Date());
-    const [isDelivery, setIsDelivery] = useState(true);
     const [carrier, setCarrier] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState('tpv');
     const { contextHolder, openNotificationWithIcon } = useCustomNotification();
-    const delivery = useRef(10);
 
 
 
