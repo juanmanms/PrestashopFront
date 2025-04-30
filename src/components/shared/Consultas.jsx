@@ -10,7 +10,11 @@ import InfoSeller from '../consultas/InfoSeller';
 import ResumParadas from '../consultas/ResumenParadas';
 import ResumRepartos from '../consultas/ResumRepartos';
 
+import { useSelector } from "react-redux"
+
+
 const Consultas = ({ id, setConsulta }) => {
+    const user = useSelector((state) => state.user);
     // Implementa la lógica para mostrar la consulta basada en el id
     return (
         <>
