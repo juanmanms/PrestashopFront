@@ -216,7 +216,7 @@ const TablePrice = () => {
             ),
         },
         {
-            title: 'Descartar',
+            title: 'Eliminar',
             key: 'discard',
             render: (text, record) => (
                 <Button

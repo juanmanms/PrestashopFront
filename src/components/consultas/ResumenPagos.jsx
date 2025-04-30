@@ -16,14 +16,7 @@ const ResumPagos = () => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const [selectedGroup, setSelectedGroup] = useState('sin-agrup');
 
-    const paymentMethods = ['tpv', 'efectivo', 'parada']; // Define aquí tus opciones de forma de pago
-    /*case 'Forma de pago':
-                        key = item.Pago;
-                        break;
-                    case 'Parada-pago':
-                        key = `${item.Parada}-${item.Pago}`;
-                        break;
-                    case 'Cliente-pago-dia':*/
+    const paymentMethods = ['tpv', 'efectivo', 'parada'];
 
     const columns = [
         ...(selectedGroup === 'sin-agrup' ? [{
@@ -46,7 +39,7 @@ const ResumPagos = () => {
             dataIndex: 'Data',
             key: 'date',
         }] : []),
-        ...(selectedGroup !== 'Forma de pago' ? [{
+        ...(!['Forma de pago', 'Pago-dia', 'Cliente-pago-dia'].includes(selectedGroup) ? [{
             title: 'Parada',
             dataIndex: 'Parada',
             key: 'stop',
@@ -83,10 +76,10 @@ const ResumPagos = () => {
     const buttonLastWeek = () => {
         const today = new Date();
         const mondayOfLastWeek = new Date(getMondayOfWeek(today));
-        mondayOfLastWeek.setDate(mondayOfLastWeek.getDate() - 7); // Resta 7 días para obtener el lunes de la semana pasada
+        mondayOfLastWeek.setDate(mondayOfLastWeek.getDate() - 7);
 
         const sundayOfLastWeek = new Date(mondayOfLastWeek);
-        sundayOfLastWeek.setDate(mondayOfLastWeek.getDate() + 6); // Suma 6 días para obtener el domingo de la semana pasada
+        sundayOfLastWeek.setDate(mondayOfLastWeek.getDate() + 6);
 
         setFrom(formatDate(mondayOfLastWeek));
         setTo(formatDate(sundayOfLastWeek));
@@ -144,6 +137,9 @@ const ResumPagos = () => {
                         break;
                     case 'Cliente-pago-dia':
                         key = `${item.Cliente}-${item.Pago}-${item.Data}`;
+                        break;
+                    case 'Pago-dia':
+                        key = `${item.Pago}-${item.Data}`;
                         break;
                     default:
                         key = item.Pago;
@@ -218,7 +214,6 @@ const ResumPagos = () => {
 
     return (
         <div className="container mx-auto mt-4 p-4">
-            <h2 className="text-2xl font-bold mb-4">Resumen Genérico</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="mb-4">
@@ -231,6 +226,7 @@ const ResumPagos = () => {
                         <Option value="Forma de pago">Forma de pago</Option>
                         <Option value="Parada-pago">Parada y forma de pago</Option>
                         <Option value="Cliente-pago-dia">Cliente, forma de pago y día</Option>
+                        <Option value="Pago-dia">Forma de pago y día</Option>
                         <Option value="sin-agrup">Sin agrupar</Option>
                     </Select>
                 </div>

@@ -16,16 +16,19 @@ const NavBar = () => {
         { to: "/imagenes", label: "Imagenes", disabled: false },
         { to: "/order", label: "Pedidos", disabled: false },
         { to: "/productos-categorias", label: "Categorias", disabled: false },
+        { to: "/", label: "Online", disabled: false },
         (user.name === "Menjar Saludable Sa i Bo" || user.name === "Xarcuteries Paez") && { to: "/producto", label: "Crear productos", disabled: false }
 
     ] : user.role === "1" ? [
         // { to: "/admin", label: "Admin", disabled: false },
         { to: "/repartos", label: "Repartos", disabled: false },
+        { to: "/", label: "Online", disabled: false },
         { to: "/consultas", label: "Consultas", disabled: false },
         { to: "/configuracion", label: "Configuración", disabled: false },
         { to: "/clientes", label: "Clientes", disabled: false },
     ] : [
         { to: "/repartos", label: "Repartos", disabled: false },
+        { to: "/", label: "Online", disabled: false },
         { to: "/consultas", label: "Consultas", disabled: false },
         { to: "/clientes", label: "Clientes", disabled: false },
     ];

@@ -114,9 +114,9 @@ const TableCombination = () => {
                     <tr>
                         <th className="py-2 px-4 border-b border-gray-200">ID</th>
                         <th className="py-2 px-4 border-b border-gray-200">Nombre</th>
-                        <th className="py-2 px-4 border-b border-gray-200">Impuesto</th>
+                        <th className="py-2 px-4 border-b border-gray-200">IVA</th>
                         <th className="py-2 px-4 border-b border-gray-200">Atributo</th>
-                        <th className="py-2 px-4 border-b border-gray-200">Precio</th>
+                        <th className="py-2 px-4 border-b border-gray-200">PVP</th>
                         <th className="py-2 px-4 border-b border-gray-200">Eliminar</th>
                     </tr>
                 </thead>
