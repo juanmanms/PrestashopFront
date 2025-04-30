@@ -1,13 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Row, Col, Typography } from 'antd';
 import Consultas from '../components/shared/Consultas';
-
-
+import { useSelector } from 'react-redux';
 
 const { Meta } = Card;
 const { Title } = Typography;
 
-// Datos de ejemplo para las cards
 const cardData = [
     {
         id: 1,
@@ -39,12 +37,12 @@ const cardData = [
         description: 'Productos que no tienen fotos, por parada',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
-    {
-        id: 6,
-        title: 'Productos sin categoria',
-        description: 'Productos que no están bien categorizados',
-        imageUrl: '/placeholder.svg?height=200&width=300',
-    },
+    // {
+    //     id: 6,
+    //     title: 'Productos sin categoria',
+    //     description: 'Productos que no están bien categorizados',
+    //     imageUrl: '/placeholder.svg?height=200&width=300',
+    // },
     {
         id: 7,
         title: 'Clientes - direcciones',
@@ -69,32 +67,33 @@ const cardData = [
         description: 'Resumen repartos mensualizados',
         imageUrl: '/placeholder.svg?height=200&width=300',
     }
-
-    // {
-    //     id: 3,
-    //     title: 'Card 3',
-    //     description: 'This is the description for Card 3',
-    //     imageUrl: '/placeholder.svg?height=200&width=300',
-    // },
-    // {
-    //     id: 4,
-    //     title: 'Card 4',
-    //     description: 'This is the description for Card 4',
-    //     imageUrl: '/placeholder.svg?height=200&width=300',
-    // },
 ];
+
 const ConsultasPage = () => {
     const [consulta, setConsulta] = useState(0);
+    const user = useSelector((state) => state.user);
+    const [allowedCardData, setAllowedCardData] = useState([]);
+
+    useEffect(() => {
+        if (user.role === "1") {
+            // If user has role 1, show all cards
+            setAllowedCardData(cardData);
+        } else {
+            // If user doesn't have role 1, only show card with id 2
+            setAllowedCardData(cardData.filter(card => card.id === 2));
+        }
+    }, [user.role]);
+
     const handleCardClick = (card) => {
         setConsulta(card.id);
     };
 
     return (
         <div >
-            <Title level={2} className="mb-6">Consultas {consulta !== 0 && ` - ${cardData.find(card => card.id === consulta).title}`}</Title>
+            <Title level={2} className="mb-6">Consultas {consulta !== 0 && ` - ${cardData.find(card => card.id === consulta)?.title}`}</Title>
             {consulta === 0 ? (
                 <Row gutter={[16, 16]}>
-                    {cardData.map((card) => (
+                    {allowedCardData.filter(card => [4, 3, 6, 8].includes(card.id)).map((card) => (
                         <Col xs={24} sm={12} md={8} lg={6} key={card.id}>
                             <Card
                                 hoverable
