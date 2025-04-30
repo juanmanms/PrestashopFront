@@ -14,6 +14,7 @@ const TablePrice = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [inputValues, setInputValues] = useState({});
+    const [change, setChange] = useState(false);
     const debounceTimeout = useRef(null);
 
     const productsService = useMemo(() => ProductService(), []);
@@ -50,6 +51,8 @@ const TablePrice = () => {
         const newProducts = products.map((product) => {
             if (product.id_product === productId) {
                 productsService.updateProductIVAInDB(product.id_product, newIVA);
+                message.warning('⚠️ Revisa el PVP si cambias el IVA');
+                setChange(true);
                 return { ...product, id_tax_rules_group: newIVA, precio_IVA: product.price * (tiposIVA.find(tipo => tipo.id === newIVA).value * 0.01 + 1) };
             }
             return product;
@@ -146,28 +149,17 @@ const TablePrice = () => {
             title: 'ID',
             dataIndex: 'id_product',
             key: 'id_product',
+            sorter: (a, b) => a.id_product - b.id_product,
         },
         {
             title: 'Nombre',
             dataIndex: 'product_name',
             key: 'product_name',
+            sorter: (a, b) => a.product_name.localeCompare(b.product_name),
             render: (text, record) => (
                 <Input
                     value={inputValues[record.id_product] || text}
                     onChange={(e) => changeName(e, record.id_product)}
-                    onFocus={(e) => e.target.select()}
-                />
-            ),
-        },
-        {
-            title: 'Con IVA',
-            dataIndex: 'precio_IVA',
-            key: 'precio_IVA',
-            render: (text, record) => (
-                <Input
-                    type="number"
-                    value={text || record.price}
-                    onChange={(e) => InputConIvaChange(e, record.id_product)}
                     onFocus={(e) => e.target.select()}
                 />
             ),
@@ -185,6 +177,20 @@ const TablePrice = () => {
                         <Option key={tipo.id} value={tipo.id}>{tipo.value}%</Option>
                     ))}
                 </Select>
+            ),
+        },
+        {
+            title: 'PVP',
+            dataIndex: 'precio_IVA',
+            key: 'precio_IVA',
+            sorter: (a, b) => a.precio_IVA - b.precio_IVA,
+            render: (text, record) => (
+                <Input
+                    type="number"
+                    value={text || record.price}
+                    onChange={(e) => InputConIvaChange(e, record.id_product)}
+                    onFocus={(e) => e.target.select()}
+                />
             ),
         },
         {
@@ -217,7 +223,7 @@ const TablePrice = () => {
                     className="font-bold py-2 px-4 rounded bg-red-500 hover:bg-red-700 text-white"
                     onClick={() => discardProduct(record.id_product)}
                 >
-                    Descartar
+                    Eliminar
                 </Button>
             ),
         },
@@ -225,6 +231,11 @@ const TablePrice = () => {
 
     return (
         <div className="p-4">
+            {change && (
+                <div className="mb-4 p-2 bg-yellow-200 text-yellow-800 font-bold rounded">
+                    ⚠️ Revisa el PVP de los productos que hayas cambiado el IVA
+                </div>
+            )}
             <SearchProduct searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <Spin spinning={isLoading}>
                 <Table
