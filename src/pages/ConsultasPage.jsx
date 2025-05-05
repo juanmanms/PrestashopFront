@@ -93,7 +93,7 @@ const ConsultasPage = () => {
             <Title level={2} className="mb-6">Consultas {consulta !== 0 && ` - ${cardData.find(card => card.id === consulta)?.title}`}</Title>
             {consulta === 0 ? (
                 <Row gutter={[16, 16]}>
-                    {allowedCardData.filter(card => [4, 3, 6, 8].includes(card.id)).map((card) => (
+                    {allowedCardData.map((card) => (
                         <Col xs={24} sm={12} md={8} lg={6} key={card.id}>
                             <Card
                                 hoverable
