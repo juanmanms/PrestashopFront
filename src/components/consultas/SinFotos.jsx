@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
-import { Table, Select, message } from 'antd';
+import { Table, Select, message, Button } from 'antd';
 import ConsultService from '../../common/service/consultService';
-
+import * as XLSX from 'xlsx';
 
 const { Option } = Select;
 
@@ -10,16 +10,13 @@ const SinFotos = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('');
-    const [filteredProducts, setFilteredProducts] = useState([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            message.warning('este proceso puede tardar un poco')
+            message.warning('este proceso puede tardar un poco');
             try {
-                const data = await consultService.getProductsSinFoto
-                    ();
+                const data = await consultService.getProductsSinFoto();
                 setProducts(data);
-                setFilteredProducts(data);
             } catch (error) {
                 console.error('Error fetching products:', error);
                 message.error('Error fetching products');
@@ -28,14 +25,13 @@ const SinFotos = () => {
             }
         };
         fetchProducts();
-    }, []);
+    }, [consultService]);
 
-    useEffect(() => {
+    const filteredProducts = useMemo(() => {
         if (filter) {
-            setFilteredProducts(products.filter(product => product.seller_name === filter));
-        } else {
-            setFilteredProducts(products);
+            return products.filter(product => product.seller_name === filter);
         }
+        return products;
     }, [filter, products]);
 
     const handleFilterChange = (value) => {
@@ -54,9 +50,10 @@ const SinFotos = () => {
             key: 'product_name',
         },
         {
-            title: 'ID Vendedor',
-            dataIndex: 'id_seller',
-            key: 'id_seller',
+            title: 'Activo',
+            dataIndex: 'active',
+            key: 'active',
+            render: (active) => (active === 1 ? '✔' : '❌'),
         },
         {
             title: 'Nombre del Vendedor',
@@ -65,7 +62,17 @@ const SinFotos = () => {
         },
     ];
 
-    const uniqueSellers = [...new Set(products.map(product => product.seller_name))];
+    const uniqueSellers = useMemo(
+        () => [...new Set(products.map(product => product.seller_name))],
+        [products]
+    );
+
+    const downloadExcel = () => {
+        const worksheet = XLSX.utils.json_to_sheet(filteredProducts);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Products Without Photos');
+        XLSX.writeFile(workbook, 'products_without_photos.xlsx');
+    };
 
     return (
         <div className="container mx-auto mt-4">
@@ -91,6 +98,9 @@ const SinFotos = () => {
                                 ))}
                             </Select>
                             <Table dataSource={filteredProducts} columns={columns} rowKey="id_product" />
+                            <Button type="primary" onClick={downloadExcel}>
+                                Descargar Excel
+                            </Button>
                         </>
                     )}
                 </>

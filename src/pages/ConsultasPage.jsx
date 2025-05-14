@@ -9,25 +9,25 @@ const { Title } = Typography;
 const cardData = [
     {
         id: 1,
-        title: 'Listados de productos de parada',
+        title: 'Productos por parada',
         description: 'Elige parada y ve todos los productos que se venden en ella',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
     {
         id: 2,
-        title: 'Historico, ultimos 100 pedidos',
+        title: 'Últimos 100 pedidos',
         description: 'Pedidos no cancelados',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
     {
         id: 3,
-        title: 'Resumen generico',
+        title: 'Pedidos por parada y por cliente',
         description: 'Resumen de pedidos por fecha',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
     {
         id: 4,
-        title: 'Resumen de pagos',
+        title: 'Resumen de pagos por fecha',
         description: 'Resumen de pagos por fecha',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
@@ -45,25 +45,25 @@ const cardData = [
     // },
     {
         id: 7,
-        title: 'Clientes - direcciones',
+        title: 'Clientes con más de una dirección',
         description: 'Clientes con más de una dirección',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
     {
         id: 8,
-        title: 'Info vendedor',
+        title: 'Información del vendedor',
         description: 'Información del vendedor',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
     {
         id: 9,
-        title: 'Resumen de totales, mes y año',
+        title: 'Resumen anual por paradas',
         description: 'Resumen de pedidos por parada',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
     {
         id: 10,
-        title: 'Resumen de reapartos',
+        title: 'Resumen anual por meses',
         description: 'Resumen repartos mensualizados',
         imageUrl: '/placeholder.svg?height=200&width=300',
     }

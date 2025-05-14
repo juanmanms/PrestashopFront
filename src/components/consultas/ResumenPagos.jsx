@@ -29,17 +29,17 @@ const ResumPagos = () => {
             dataIndex: 'Cliente',
             key: 'name',
         }] : []),
-        {
+        ...(!['Día'].includes(selectedGroup) ? [{
             title: 'Forma de pago',
             dataIndex: 'Pago',
             key: 'Pago',
-        },
+        }] : []),
         ...(!['Parada-pago', 'Forma de pago'].includes(selectedGroup) ? [{
             title: 'Fecha',
             dataIndex: 'Data',
             key: 'date',
         }] : []),
-        ...(!['Forma de pago', 'Pago-dia', 'Cliente-pago-dia'].includes(selectedGroup) ? [{
+        ...(!['Forma de pago', 'Pago-dia', 'Cliente-pago-dia', 'Día'].includes(selectedGroup) ? [{
             title: 'Parada',
             dataIndex: 'Parada',
             key: 'stop',
@@ -141,6 +141,9 @@ const ResumPagos = () => {
                     case 'Pago-dia':
                         key = `${item.Pago}-${item.Data}`;
                         break;
+                    case 'Día':
+                        key = item.Data;
+                        break;
                     default:
                         key = item.Pago;
                 }
@@ -227,6 +230,7 @@ const ResumPagos = () => {
                         <Option value="Parada-pago">Parada y forma de pago</Option>
                         <Option value="Cliente-pago-dia">Cliente, forma de pago y día</Option>
                         <Option value="Pago-dia">Forma de pago y día</Option>
+                        <Option value="Día">Día</Option>
                         <Option value="sin-agrup">Sin agrupar</Option>
                     </Select>
                 </div>
