@@ -16,6 +16,7 @@ import CategoryPage from '../pages/CategoryPage';
 import ProductPage from '../pages/ProductPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import SellerPage from '../pages/SellerPage';
+import Footer from '../components/shared/Footer';
 
 
 function SellerDashboard() {
@@ -41,6 +42,7 @@ function SellerDashboard() {
                 <Route path="/producto" element={<ProductPage />} />
                 <Route path="*" element={<NotFoundPage />} /> {/* Ruta para la página 404 */}
             </Routes>
+            <Footer />
         </BrowserRouter>
     );
 }
