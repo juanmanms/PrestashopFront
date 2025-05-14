@@ -1,86 +1,62 @@
 import { useState, useEffect } from 'react';
-import { Card, Row, Col, Typography } from 'antd';
+import { Card, Row, Col, Typography, Divider } from 'antd';
 import Consultas from '../components/shared/Consultas';
 import { useSelector } from 'react-redux';
 
 const { Meta } = Card;
 const { Title } = Typography;
 
-const cardData = [
+// Agrupamos las consultas por tipo
+const groupedCards = [
     {
-        id: 1,
-        title: 'Productos por parada',
-        description: 'Elige parada y ve todos los productos que se venden en ella',
-        imageUrl: '/placeholder.svg?height=200&width=300',
+        group: "Pagos",
+        cards: [
+            { id: 4, title: 'Resumen de pagos por fecha', imageUrl: '/placeholder.svg?height=200&width=300' }
+        ]
     },
     {
-        id: 2,
-        title: 'Últimos 100 pedidos',
-        description: 'Pedidos no cancelados',
-        imageUrl: '/placeholder.svg?height=200&width=300',
+        group: "Consultas",
+        cards: [
+            { id: 2, title: 'Últimos 100 pedidos', imageUrl: '/placeholder.svg?height=200&width=300' },
+            { id: 3, title: 'Pedidos por parada y por cliente', imageUrl: '/placeholder.svg?height=200&width=300' },
+            { id: 1, title: 'Productos por parada', imageUrl: '/placeholder.svg?height=200&width=300' },
+            { id: 8, title: 'Información del vendedor', imageUrl: '/placeholder.svg?height=200&width=300' }
+        ]
     },
     {
-        id: 3,
-        title: 'Pedidos por parada y por cliente',
-        description: 'Resumen de pedidos por fecha',
-        imageUrl: '/placeholder.svg?height=200&width=300',
+        group: "Control",
+        cards: [
+            { id: 7, title: 'Clientes con más de una dirección', imageUrl: '/placeholder.svg?height=200&width=300' },
+            { id: 5, title: 'Productos sin fotos', imageUrl: '/placeholder.svg?height=200&width=300' }
+        ]
     },
     {
-        id: 4,
-        title: 'Resumen de pagos por fecha',
-        description: 'Resumen de pagos por fecha',
-        imageUrl: '/placeholder.svg?height=200&width=300',
-    },
-    {
-        id: 5,
-        title: 'Productos sin fotos',
-        description: 'Productos que no tienen fotos, por parada',
-        imageUrl: '/placeholder.svg?height=200&width=300',
-    },
-    // {
-    //     id: 6,
-    //     title: 'Productos sin categoria',
-    //     description: 'Productos que no están bien categorizados',
-    //     imageUrl: '/placeholder.svg?height=200&width=300',
-    // },
-    {
-        id: 7,
-        title: 'Clientes con más de una dirección',
-        description: 'Clientes con más de una dirección',
-        imageUrl: '/placeholder.svg?height=200&width=300',
-    },
-    {
-        id: 8,
-        title: 'Información del vendedor',
-        description: 'Información del vendedor',
-        imageUrl: '/placeholder.svg?height=200&width=300',
-    },
-    {
-        id: 9,
-        title: 'Resumen anual por paradas',
-        description: 'Resumen de pedidos por parada',
-        imageUrl: '/placeholder.svg?height=200&width=300',
-    },
-    {
-        id: 10,
-        title: 'Resumen anual por meses',
-        description: 'Resumen repartos mensualizados',
-        imageUrl: '/placeholder.svg?height=200&width=300',
+        group: "Cierres",
+        cards: [
+            { id: 9, title: 'Resumen anual por paradas', imageUrl: '/placeholder.svg?height=200&width=300' },
+            { id: 10, title: 'Resumen anual por meses', imageUrl: '/placeholder.svg?height=200&width=300' }
+        ]
     }
 ];
 
 const ConsultasPage = () => {
     const [consulta, setConsulta] = useState(0);
     const user = useSelector((state) => state.user);
-    const [allowedCardData, setAllowedCardData] = useState([]);
+    const [allowedGroupedCards, setAllowedGroupedCards] = useState([]);
 
     useEffect(() => {
         if (user.role === "1") {
-            // If user has role 1, show all cards
-            setAllowedCardData(cardData);
+            setAllowedGroupedCards(groupedCards);
         } else {
-            // If user doesn't have role 1, only show card with id 2
-            setAllowedCardData(cardData.filter(card => card.id === 2));
+            // Solo mostrar la consulta de id 2 para otros roles
+            setAllowedGroupedCards([
+                {
+                    group: "Consultas",
+                    cards: [
+                        { id: 2, title: 'Últimos 100 pedidos', imageUrl: '/placeholder.svg?height=200&width=300' }
+                    ]
+                }
+            ]);
         }
     }, [user.role]);
 
@@ -88,22 +64,36 @@ const ConsultasPage = () => {
         setConsulta(card.id);
     };
 
+    // Para mostrar el título de la consulta seleccionada
+    const allCards = groupedCards.flatMap(g => g.cards);
+    const selectedTitle = allCards.find(card => card.id === consulta)?.title;
+
     return (
-        <div >
-            <Title level={2} className="mb-6">Consultas {consulta !== 0 && ` - ${cardData.find(card => card.id === consulta)?.title}`}</Title>
+        <div>
+            <Title level={2} className="mb-6">
+                Consultas {consulta !== 0 && ` - ${selectedTitle}`}
+            </Title>
             {consulta === 0 ? (
-                <Row gutter={[16, 16]}>
-                    {allowedCardData.map((card) => (
-                        <Col xs={24} sm={12} md={8} lg={6} key={card.id}>
-                            <Card
-                                hoverable
-                                onClick={() => handleCardClick(card)}
-                            >
-                                <Meta title={card.title} description={card.description} />
-                            </Card>
-                        </Col>
+                <>
+                    {allowedGroupedCards.map(({ group, cards }) => (
+                        <div key={group}>
+                            <Divider orientation="left">{group}</Divider>
+                            <Row gutter={[16, 16]}>
+                                {cards.map((card) => (
+                                    <Col xs={24} sm={12} md={8} lg={6} key={card.id}>
+                                        <Card
+                                            className="shadow-lg rounded-lg transition-transform duration-200 hover:scale-105 cursor-pointer bg-blue-100"
+                                            hoverable
+                                            onClick={() => handleCardClick(card)}
+                                        >
+                                            <Meta title={card.title} />
+                                        </Card>
+                                    </Col>
+                                ))}
+                            </Row>
+                        </div>
                     ))}
-                </Row>
+                </>
             ) : (
                 <div>
                     <Consultas id={consulta} setConsulta={setConsulta} />
@@ -113,4 +103,4 @@ const ConsultasPage = () => {
     );
 }
 
-export default ConsultasPage
+export default ConsultasPage;
