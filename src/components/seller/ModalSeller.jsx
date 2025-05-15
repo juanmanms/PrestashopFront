@@ -1,11 +1,9 @@
 import { useEffect, useState, useMemo } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button, message } from 'antd';
 import { Input } from 'antd';
 import PropTypes from 'prop-types';
 import Editor from 'react-simple-wysiwyg';
-
 import SellerService from './SellerService';
-
 
 const ModalSeller = ({ visible, onClose, vendedor }) => {
     const sellerService = useMemo(() => SellerService(), []);
@@ -15,10 +13,10 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         description: '',
         email: '',
         phone: '',
-        keyword: [], // Inicializar como un array
+        keyword: [],
         Imagen_Categoria: '',
     });
-
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         if (vendedor) {
@@ -29,16 +27,13 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                 email: vendedor.email,
                 phone: vendedor.phone,
                 keyword: vendedor.keyword.split(', '),
-                Imagen_Categoria: vendedor.Imagen_Categoria,
+                Imagen_Categoria: vendedor.Imagen_Categoria
+                    ? vendedor.Imagen_Categoria + '?t=' + Date.now()
+                    : '',
             });
-
         }
+        // eslint-disable-next-line
     }, [vendedor]);
-
-
-
-
-
 
     const handleKeywordChange = (index, value) => {
         const newKeywords = [...formValues.keyword];
@@ -49,12 +44,39 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         });
     };
 
-
     const handleSave = () => {
-        sellerService.updateCategory(vendedor.ID_Categoria, formValues.description, formValues.keyword.join(', '))
+        sellerService.updateCategory(vendedor.ID_Categoria, formValues.description, formValues.keyword.join(', '));
         onClose();
     };
 
+    // NUEVO: Cambiar imagen y subirla al servidor
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('id_category', vendedor.ID_Categoria);
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_URL_API}categories/upload-image`, {
+                method: 'POST',
+                body: formData,
+            });
+            if (!response.ok) throw new Error('Error al subir la imagen');
+            const data = await response.json();
+            // Al actualizar la imagen tras subirla:
+            setFormValues({
+                ...formValues,
+                Imagen_Categoria: (data.imageUrl || formValues.Imagen_Categoria) + '?t=' + Date.now(),
+            });
+            message.success('Imagen subida correctamente');
+        } catch (err) {
+            message.error('Error al subir la imagen');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     return (
         <Modal
@@ -116,11 +138,26 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                         toolbarStyle={{ display: 'flex', justifyContent: 'space-between' }}
                         editorStyle={{ height: '200px', border: '1px solid #ccc', padding: '10px' }}
                     />
-                    {vendedor.Imagen_Categoria && (
-                        <div className="modal-seller-image">
-                            <img src={vendedor.Imagen_Categoria} alt="Imagen de Categoría" style={{ width: 'auto', height: 'auto' }} />
+                    <div className="modal-seller-image" style={{ marginTop: 16 }}>
+                        {formValues.Imagen_Categoria && (
+                            <img src={formValues.Imagen_Categoria} alt="Imagen de Categoría" style={{ width: 'auto', height: 'auto', maxHeight: 200 }} />
+                        )}
+                        <div style={{ marginTop: 8 }}>
+                            <Button
+                                onClick={() => document.getElementById('input-img-cat').click()}
+                                loading={uploading}
+                            >
+                                Cambiar imagen
+                            </Button>
+                            <input
+                                id="input-img-cat"
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handleImageChange}
+                            />
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
         </Modal>
@@ -133,4 +170,4 @@ ModalSeller.propTypes = {
     vendedor: PropTypes.object.isRequired,
 };
 
-export default ModalSeller
+export default ModalSeller;
