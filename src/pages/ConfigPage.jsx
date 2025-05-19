@@ -26,12 +26,12 @@ const cardData = [
         description: 'Activar o desactivar opciones de pago',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
-    // {
-    //     id: 4,
-    //     title: 'Card 4',
-    //     description: 'This is the description for Card 4',
-    //     imageUrl: '/placeholder.svg?height=200&width=300',
-    // },
+    {
+        id: 4,
+        title: 'Codigos postales',
+        description: 'Añadir o quitar codigos postales',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
 ];
 const ConfigPage = () => {
     const [configuraciones, setConfiguraciones] = useState(0);

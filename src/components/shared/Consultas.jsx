@@ -9,6 +9,7 @@ import SinCategorias from '../consultas/SinCategorias';
 import InfoSeller from '../consultas/InfoSeller';
 import ResumParadas from '../consultas/ResumenParadas';
 import ResumRepartos from '../consultas/ResumRepartos';
+import RepartosPorParada from '../consultas/RepartosPorParada';
 
 
 
@@ -35,6 +36,7 @@ const Consultas = ({ id, setConsulta }) => {
                 {id === 8 && <InfoSeller />}
                 {id === 9 && <ResumParadas />}
                 {id === 10 && <ResumRepartos />}
+                {id === 11 && <RepartosPorParada />}
                 {/* Agrega más condiciones según sea necesario */}
                 {/* Aquí puedes agregar más lógica para mostrar los detalles de la consulta */}
             </div>

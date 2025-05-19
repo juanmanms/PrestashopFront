@@ -239,6 +239,23 @@ export const OrdersService = () => {
 
     }
 
+    const getParadasConPedidos = async () => {
+        try {
+            const response = await fetch(`${apiUrl}orders/repartos-parada`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+            });
+
+            const data = await response.json();
+            console.log(data);
+            return data;
+        } catch (error) {
+            console.error('Error updating product price:', error);
+        }
+    }
 
     return {
         getProductID,
@@ -254,7 +271,8 @@ export const OrdersService = () => {
         changePaymentOrders,
         getOrdersOnlineBySeller,
         getOrdersOnline,
-        getLineasPedido
+        getLineasPedido,
+        getParadasConPedidos
     };
 
 }

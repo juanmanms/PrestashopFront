@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import DiasReparto from '../configuraciones/DiasReparto';
 import OpcionesPago from '../configuraciones/OpcionesPago';
 import OpcionesReparto from '../configuraciones/OpcionesReparto';
+import CodigosPostales from '../configuraciones/CodigosPostales';
 
 
 const Configuraciones = ({ id, setConsfiguraciones }) => {
@@ -17,6 +18,7 @@ const Configuraciones = ({ id, setConsfiguraciones }) => {
                 {id === 1 && <DiasReparto />}
                 {id === 2 && <OpcionesReparto />}
                 {id === 3 && <OpcionesPago />}
+                {id === 4 && <CodigosPostales />}
 
                 {/* Agrega más condiciones según sea necesario
                 {/* Aquí puedes agregar más lógica para mostrar los detalles de la consulta */}

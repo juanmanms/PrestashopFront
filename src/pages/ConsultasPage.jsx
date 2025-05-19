@@ -20,7 +20,8 @@ const groupedCards = [
             { id: 2, title: 'Últimos 100 pedidos', imageUrl: '/placeholder.svg?height=200&width=300' },
             { id: 3, title: 'Pedidos por parada y por cliente', imageUrl: '/placeholder.svg?height=200&width=300' },
             { id: 1, title: 'Productos por parada', imageUrl: '/placeholder.svg?height=200&width=300' },
-            { id: 8, title: 'Información del vendedor', imageUrl: '/placeholder.svg?height=200&width=300' }
+            { id: 8, title: 'Información del vendedor', imageUrl: '/placeholder.svg?height=200&width=300' },
+            { id: 11, title: 'Repartos por parada', imageUrl: '/placeholder.svg?height=200&width=300' }
         ]
     },
     {
@@ -53,7 +54,8 @@ const ConsultasPage = () => {
                 {
                     group: "Consultas",
                     cards: [
-                        { id: 2, title: 'Últimos 100 pedidos', imageUrl: '/placeholder.svg?height=200&width=300' }
+                        { id: 2, title: 'Últimos 100 pedidos', imageUrl: '/placeholder.svg?height=200&width=300' },
+                        { id: 11, title: 'Repartos por parada', imageUrl: '/placeholder.svg?height=200&width=300' }
                     ]
                 }
             ]);
