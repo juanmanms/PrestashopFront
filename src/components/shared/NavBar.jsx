@@ -7,6 +7,8 @@ const NavBar = () => {
     const user = useSelector((state) => state.user);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const autorizados = ["Menjar Saludable Sa i Bo", "Xarcuteries Paez", "Fruits Secs i Queviures Federico", "Forn de Pa Federico"];
+
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -17,8 +19,7 @@ const NavBar = () => {
         { to: "/order", label: "Pedidos", disabled: false },
         { to: "/productos-categorias", label: "Categorias", disabled: false },
         { to: "/", label: "Online", disabled: false },
-        (user.name === "Menjar Saludable Sa i Bo" || user.name === "Xarcuteries Paez") && { to: "/producto", label: "Crear productos", disabled: false }
-
+        (user.name && autorizados.includes(user.name)) && { to: "/producto", label: "Crear productos", disabled: false }
     ] : user.role === "1" ? [
         // { to: "/admin", label: "Admin", disabled: false },
         { to: "/repartos", label: "Repartos", disabled: false },
