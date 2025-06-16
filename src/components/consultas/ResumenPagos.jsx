@@ -47,12 +47,19 @@ const ResumPagos = () => {
         {
             title: 'Total',
             dataIndex: 'Total',
-            key: 'total',
+            render: (text, record) => (parseFloat(record.Total) - parseFloat(record.Transport)).toFixed(2),
+
         },
         {
             title: 'Transport',
             dataIndex: 'Transport',
             key: 'transport',
+        },
+        {
+            title: 'Total + Transport',
+            dataIndex: 'Total',
+            key: 'totalTransport',
+
         }
     ];
 
