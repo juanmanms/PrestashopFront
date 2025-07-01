@@ -213,7 +213,8 @@ const ResumPagos = () => {
     const exportToExcel = () => {
         const reportWithNumericTotal = filterReport.map(item => ({
             ...item,
-            Total: parseFloat(item.Total),
+            Total: (parseFloat(item.Total) - parseFloat(item.Transport)).toFixed(2),
+            'Total + transporte': parseFloat(item.Total),
         }));
         const worksheet = XLSX.utils.json_to_sheet(reportWithNumericTotal);
         const workbook = XLSX.utils.book_new();
