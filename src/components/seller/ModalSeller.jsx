@@ -13,6 +13,10 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         description: '',
         email: '',
         phone: '',
+        whatsapp: '',
+        instagram: '',
+        facebook: '',
+        Telefono: '',
         keyword: [],
         Imagen_Categoria: '',
     });
@@ -26,7 +30,11 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                 description: vendedor.description,
                 email: vendedor.email,
                 phone: vendedor.phone,
-                keyword: vendedor.keyword.split(', '),
+                whatsapp: vendedor.Whatsapp,
+                instagram: vendedor.Instagram,
+                facebook: vendedor.Facebook,
+                telefono: vendedor.Telefono,
+                keyword: vendedor.keyword ? vendedor.keyword.split(', ') : [],
                 Imagen_Categoria: vendedor.Imagen_Categoria
                     ? vendedor.Imagen_Categoria + '?t=' + Date.now()
                     : '',
@@ -45,7 +53,16 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
     };
 
     const handleSave = () => {
-        sellerService.updateCategory(vendedor.ID_Categoria, formValues.description, formValues.keyword.join(', '));
+        sellerService.updateCategory(
+            vendedor.ID_Categoria,
+            formValues.description,
+            formValues.keyword.join(', '),
+            formValues.telefono,
+            formValues.whatsapp,
+            formValues.facebook,
+            formValues.instagram
+        )
+
         onClose();
     };
 
@@ -98,6 +115,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                 <section className="info-seller bg-slate-500 p-4 rounded-lg text-white">
                     <p className="mt-2 ">Vendedor <strong>{vendedor.Vendedor}</strong> con id: {vendedor.ID_Vendedor} </p>
                     <p><strong>Contacto:</strong> Teléfono: <a href={`tel:${vendedor.phone}`}>{vendedor.phone}</a>, Email: <a href={`mailto:${vendedor.email}`}>{vendedor.email}</a></p>
+
                 </section>
                 <br />
                 <br />
@@ -106,6 +124,48 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                     <p className="mt-2 ">Categoría <strong>{vendedor.Categoria}</strong> con id: {vendedor.ID_Categoria} </p>
                 </section>
                 <hr />
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label>Teléfono</label>
+                        <Input
+                            type="text"
+                            value={formValues.telefono || ''}
+                            onChange={(e) => setFormValues({ ...formValues, telefono: e.target.value })}
+                            placeholder="Teléfono"
+                            className="mb-2"
+                        />
+                    </div>
+                    <div>
+                        <label>WhatsApp</label>
+                        <Input
+                            type="text"
+                            value={formValues.whatsapp || ''}
+                            onChange={(e) => setFormValues({ ...formValues, whatsapp: e.target.value })}
+                            placeholder="WhatsApp"
+                            className="mb-2"
+                        />
+                    </div>
+                    <div>
+                        <label>Facebook</label>
+                        <Input
+                            type="text"
+                            value={formValues.facebook || ''}
+                            onChange={(e) => setFormValues({ ...formValues, facebook: e.target.value })}
+                            placeholder="Facebook"
+                            className="mb-2"
+                        />
+                    </div>
+                    <div>
+                        <label>Instagram</label>
+                        <Input
+                            type="text"
+                            value={formValues.instagram || ''}
+                            onChange={(e) => setFormValues({ ...formValues, instagram: e.target.value })}
+                            placeholder="Instagram"
+                            className="mb-2"
+                        />
+                    </div>
+                </div>
                 <div className="contacto-item mb-2">
                     <label>Teléfono</label>
                     <Input
@@ -159,6 +219,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                         </div>
                     </div>
                 </div>
+
             </div>
         </Modal>
     );

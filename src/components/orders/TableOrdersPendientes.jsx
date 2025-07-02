@@ -64,6 +64,17 @@ const TableOrdersPendientes = ({ cliente, setCliente }) => {
             key: 'TotalPagado',
         },
         {
+            title: 'Entrega',
+            dataIndex: 'Transportista',
+            key: 'Transportista',
+            render: (text) => {
+                if (typeof text === 'string' && text.toLowerCase().startsWith('zona 4')) {
+                    return 'A domicilio';
+                }
+                return text;
+            },
+        },
+        {
             title: 'Transporte',
             dataIndex: 'TotalTransporte',
             key: 'TotalTransporte',
