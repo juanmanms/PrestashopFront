@@ -43,14 +43,14 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         // eslint-disable-next-line
     }, [vendedor]);
 
-    const handleKeywordChange = (index, value) => {
-        const newKeywords = [...formValues.keyword];
-        newKeywords[index] = value;
-        setFormValues({
-            ...formValues,
-            keyword: newKeywords,
-        });
-    };
+    // const handleKeywordChange = (index, value) => {
+    //     const newKeywords = [...formValues.keyword];
+    //     newKeywords[index] = value;
+    //     setFormValues({
+    //         ...formValues,
+    //         keyword: newKeywords,
+    //     });
+    // };
 
     const handleSave = () => {
         sellerService.updateCategory(
@@ -166,7 +166,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                         />
                     </div>
                 </div>
-                <div className="contacto-item mb-2">
+                {/* <div className="contacto-item mb-2">
                     <label>Teléfono</label>
                     <Input
                         type="text"
@@ -185,7 +185,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                         placeholder="WhatsApp"
                         className="mb-2"
                     />
-                </div>
+                </div> */}
                 <div className="form-group mt-4">
                     <label htmlFor="customInput">Descripcion</label>
                     <Editor
