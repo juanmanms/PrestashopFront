@@ -1,30 +1,32 @@
 import { useEffect, useState } from "react";
 import { Select } from "antd";
-
 import PropTypes from 'prop-types';
 import DeliveryService from '../../common/service/deliveryService';
 
 const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
     const deliveryService = DeliveryService();
-    const [carrier, setCarrier] = useState(null);
+    const [carrierOptions, setCarrierOptions] = useState([]);
     const [loading, setLoading] = useState(true);
-
-
-
 
     useEffect(() => {
         const fetchCarriers = async () => {
             try {
                 const data = await deliveryService.getCarriers();
 
-                const carrierOptions = data.map((carrier) => ({
+                const options = data.map((carrier) => ({
                     value: carrier.id_carrier,
                     label: carrier.name,
                 }));
-                setCarrier(carrierOptions)
-                setIsDelivery(carrierOptions[0].value)
+                setCarrierOptions(options);
+
+                // Find the carrier with name "Servici domicili"
+                const serviciDomicili = data.find(carrier => carrier.name === "Servici domicili");
+                if (serviciDomicili) {
+                    setIsDelivery(serviciDomicili.id_carrier);
+                } else if (options.length > 0) {
+                    setIsDelivery(options[0].value); // Fallback to the first carrier if "Servici domicili" is not found
+                }
             } catch (error) {
-                //message.error('Error fetching carriers');
                 console.error('Error fetching carriers:', error);
             } finally {
                 setLoading(false);
@@ -32,10 +34,8 @@ const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
         };
 
         fetchCarriers();
-        if (Array.isArray(carrier) && carrier.length > 1) {
-            console.log('fetchCarriers', carrier);
-        }
-    }, []);
+
+    }, [setIsDelivery, deliveryService]);
 
 
     return (
@@ -45,10 +45,10 @@ const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
                 <p>Cargando opciones de entrega...</p>
             ) : (
                 <div>
-                    {carrier ? (
+                    {carrierOptions.length > 0 ? (
                         <Select
-                            defaultValue={isDelivery || carrier[0].value}
-                            options={carrier}
+                            defaultValue={isDelivery}
+                            options={carrierOptions}
                             onChange={(value) => {
                                 setIsDelivery(value);
                             }}
@@ -64,7 +64,7 @@ const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
     );
 };
 SelectDelivery.propTypes = {
-    isDelivery: PropTypes,
+    isDelivery: PropTypes.number,
     setIsDelivery: PropTypes.func.isRequired,
 };
 
