@@ -1,13 +1,12 @@
 const CmsService = {
-    getImages: async (tipo) => {
+    getImages: async () => {
         try {
             const apiUrl = process.env.REACT_APP_URL_API;
             const response = await fetch(`${apiUrl}cms/images`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                params: { tipo: tipo || 'horarios' }, // Default to 'horarios' if no type is provided
+                },// Default to 'horarios' if no type is provided
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -19,8 +18,7 @@ const CmsService = {
         }
     },
 
-    addImage: async (imageData, tipo) => {
-        console.log(tipo)
+    addImage: async (imageData) => {
         try {
             const apiUrl = process.env.REACT_APP_URL_API;
             const response = await fetch(`${apiUrl}cms/images`, {
