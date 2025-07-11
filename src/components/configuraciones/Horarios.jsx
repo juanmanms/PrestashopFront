@@ -25,15 +25,20 @@ const Horarios = () => {
 
     const baseUrl = process.env.REACT_APP_URL_HOME + 'img/horarios/';
 
-    const handle = (horario) => {
-        message.error(`No desarrollado todavia
-        ${horario}`);
-    }
+    const handleDeleteImage = async (imageName) => {
+        try {
+            await cmsService.deleteImage(imageName);
+            setHorarios(prevHorarios => prevHorarios.filter(horario => horario !== imageName));
+            message.success('Imagen eliminada correctamente');
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            message.error('Error al eliminar la imagen');
+        }
+    };
 
     const handleAddImage = () => {
         fileInputRef.current.click();
     };
-
 
     const handleFileChange = async (e) => {
         const file = e.target.files && e.target.files[0];
@@ -42,7 +47,6 @@ const Horarios = () => {
         setUploading(true);
         const formData = new FormData();
         formData.append('image', file);
-        formData.append('filename', file.name); // Add the filename here
 
         try {
             const result = await cmsService.addImage(formData);
@@ -79,10 +83,13 @@ const Horarios = () => {
                                     className="mb-4 w-full h-40 object-contain"
                                 />
                                 <div className="flex gap-2">
-                                    <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm" onClick={() => handle(horario)}>
+                                    <button
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+                                        onClick={() => handleDeleteImage(horario)}
+                                    >
                                         Eliminar
                                     </button>
-                                    <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm" onClick={() => handle(horario)}>
+                                    <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
                                         Modificar
                                     </button>
                                 </div>

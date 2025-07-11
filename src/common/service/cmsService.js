@@ -37,6 +37,21 @@ const CmsService = {
             throw error;
         }
     },
+    deleteImage: async (imageName) => {
+        try {
+            const apiUrl = process.env.REACT_APP_URL_API;
+            const response = await fetch(`${apiUrl}cms/images/${imageName}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            throw error;
+        }
+    },
 
 };
 
