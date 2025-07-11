@@ -20,7 +20,7 @@ const Horarios = () => {
         fetchHorarios();
     }, [cmsService]);
 
-    const baseUrl = process.env.REACT_APP_URL_HOME + 'cms/images/';
+    const baseUrl = process.env.REACT_APP_URL_HOME + 'img/horarios/';
 
     return (
         <div>
