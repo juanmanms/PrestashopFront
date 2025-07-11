@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import CmsService from '../../common/service/cmsService';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -22,6 +23,12 @@ const Horarios = () => {
 
     const baseUrl = process.env.REACT_APP_URL_HOME + 'img/horarios/';
 
+    const handle = (index) => {
+        message.error(`No desarrollado todavia
+        ${index}`);
+
+    }
+
     return (
         <div>
             <h3 className="mb-4 text-lg font-semibold">Horarios</h3>
@@ -40,10 +47,10 @@ const Horarios = () => {
                                     className="mb-4 w-full h-40 object-contain"
                                 />
                                 <div className="flex gap-2">
-                                    <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">
+                                    <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm" onClick={() => handle(idx)}>
                                         Eliminar
                                     </button>
-                                    <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
+                                    <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm" onClick={() => handle(idx)}>
                                         Modificar
                                     </button>
                                 </div>
