@@ -31,7 +31,6 @@ const Horarios = () => {
 
     const handleAddImage = () => {
         fileInputRef.current.click();
-
     };
 
     const handleFileChange = async (e) => {
