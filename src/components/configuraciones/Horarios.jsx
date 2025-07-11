@@ -7,6 +7,7 @@ const Horarios = () => {
     const [horarios, setHorarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const fileInputRef = useRef(null);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         const fetchHorarios = async () => {
@@ -34,20 +35,27 @@ const Horarios = () => {
     };
 
     const handleFileChange = async (e) => {
-        const file = e.target.files[0];
+        const file = e.target.files && e.target.files[0];
         if (!file) return;
 
+        setUploading(true);
         const formData = new FormData();
         formData.append('image', file);
 
         try {
-            console.log('Subiendo imagen:', file.name);
             const result = await cmsService.addImage(formData);
-            setHorarios([...horarios, result.filename]);
-            message.success('Imagen añadida correctamente');
+            if (result && result.filename) {
+                setHorarios(prev => [...prev, result.filename]);
+                message.success('Imagen añadida correctamente');
+            } else {
+                message.error('No se pudo añadir la imagen');
+            }
         } catch (error) {
             console.error('Error adding image:', error);
             message.error('Error al añadir la imagen');
+        } finally {
+            setUploading(false);
+            e.target.value = '';
         }
     };
 
@@ -79,7 +87,11 @@ const Horarios = () => {
                             </div>
                         ))}
                         <div className="flex flex-col items-center justify-center bg-gray-100 rounded shadow p-4">
-                            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-sm w-full h-40 flex items-center justify-center" onClick={handleAddImage}>
+                            <button
+                                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-sm w-full h-40 flex items-center justify-center"
+                                onClick={handleAddImage}
+                                loading={uploading}
+                            >
                                 Añadir
                             </button>
                             <input
