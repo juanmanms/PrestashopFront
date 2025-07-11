@@ -23,9 +23,9 @@ const Horarios = () => {
 
     const baseUrl = process.env.REACT_APP_URL_HOME + 'img/horarios/';
 
-    const handle = (index) => {
+    const handle = (horario) => {
         message.error(`No desarrollado todavia
-        ${index}`);
+        ${horario}`);
 
     }
 
@@ -47,10 +47,10 @@ const Horarios = () => {
                                     className="mb-4 w-full h-40 object-contain"
                                 />
                                 <div className="flex gap-2">
-                                    <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm" onClick={() => handle(idx)}>
+                                    <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm" onClick={() => handle(horario)}>
                                         Eliminar
                                     </button>
-                                    <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm" onClick={() => handle(idx)}>
+                                    <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm" onClick={() => handle(horario)}>
                                         Modificar
                                     </button>
                                 </div>
