@@ -41,6 +41,7 @@ const Horarios = () => {
         formData.append('image', file);
 
         try {
+            console.log('Subiendo imagen:', file.name);
             const result = await cmsService.addImage(formData);
             setHorarios([...horarios, result.filename]);
             message.success('Imagen añadida correctamente');
