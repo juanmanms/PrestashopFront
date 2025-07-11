@@ -32,6 +32,13 @@ const cardData = [
         description: 'Añadir o quitar codigos postales',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
+    {
+        id: 5,
+        title: 'Horarios',
+        description: 'Configurar horarios de reparto',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
+
 ];
 const ConfigPage = () => {
     const [configuraciones, setConfiguraciones] = useState(0);

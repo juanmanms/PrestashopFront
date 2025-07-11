@@ -3,6 +3,7 @@ import DiasReparto from '../configuraciones/DiasReparto';
 import OpcionesPago from '../configuraciones/OpcionesPago';
 import OpcionesReparto from '../configuraciones/OpcionesReparto';
 import CodigosPostales from '../configuraciones/CodigosPostales';
+import Horarios from '../configuraciones/Horarios';
 
 
 const Configuraciones = ({ id, setConsfiguraciones }) => {
@@ -19,6 +20,7 @@ const Configuraciones = ({ id, setConsfiguraciones }) => {
                 {id === 2 && <OpcionesReparto />}
                 {id === 3 && <OpcionesPago />}
                 {id === 4 && <CodigosPostales />}
+                {id === 5 && <Horarios />}
 
                 {/* Agrega más condiciones según sea necesario
                 {/* Aquí puedes agregar más lógica para mostrar los detalles de la consulta */}
