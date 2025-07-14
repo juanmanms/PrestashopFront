@@ -8,6 +8,8 @@ const Horarios = () => {
     const [loading, setLoading] = useState(true);
     const fileInputRef = useRef(null);
     const [uploading, setUploading] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalImage, setModalImage] = useState('');
 
     useEffect(() => {
         const fetchHorarios = async () => {
@@ -47,7 +49,7 @@ const Horarios = () => {
         setUploading(true);
         const formData = new FormData();
         formData.append('image', file);
-        formData.append('filename', file.name); // Add the filename here
+        formData.append('filename', file.name);
 
         try {
             const result = await cmsService.addImage(formData);
@@ -66,6 +68,15 @@ const Horarios = () => {
         }
     };
 
+    const openModal = (image) => {
+        setModalImage(image);
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setModalImage('');
+    };
 
     return (
         <div>
@@ -82,7 +93,8 @@ const Horarios = () => {
                                 <img
                                     src={`${baseUrl}${horario}`}
                                     alt={`Horario ${idx}`}
-                                    className="mb-4 w-full h-40 object-contain"
+                                    className="mb-4 w-full h-40 object-contain cursor-pointer"
+                                    onClick={() => openModal(`${baseUrl}${horario}`)}
                                 />
                                 <div className="flex gap-2">
                                     <button
@@ -91,8 +103,11 @@ const Horarios = () => {
                                     >
                                         Eliminar
                                     </button>
-                                    <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
-                                        Modificar
+                                    <button
+                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                                        onClick={() => openModal(`${baseUrl}${horario}`)}
+                                    >
+                                        Ver grande
                                     </button>
                                 </div>
                             </div>
@@ -116,6 +131,25 @@ const Horarios = () => {
                     </>
                 )}
             </div>
+            {modalOpen && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+                    onClick={closeModal}
+                >
+                    <div
+                        className="bg-white rounded-lg p-4 max-w-3xl w-full flex flex-col items-center"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <img src={modalImage} alt="Horario grande" className="max-h-[80vh] w-auto mb-4" />
+                        <button
+                            className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-900"
+                            onClick={closeModal}
+                        >
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
