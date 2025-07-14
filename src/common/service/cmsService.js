@@ -21,11 +21,9 @@ const CmsService = {
     addImage: async (imageData) => {
         try {
             const apiUrl = process.env.REACT_APP_URL_API;
-            const formData = new FormData();
-            formData.append('image', imageData);
             const response = await fetch(`${apiUrl}cms/images`, {
                 method: 'POST',
-                body: formData,
+                body: imageData,
             });
             if (!response.ok) {
                 const errorText = await response.text();

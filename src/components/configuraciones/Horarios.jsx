@@ -47,6 +47,7 @@ const Horarios = () => {
         setUploading(true);
         const formData = new FormData();
         formData.append('image', file);
+        formData.append('filename', file.name); // Add the filename here
 
         try {
             const result = await cmsService.addImage(formData);
@@ -64,6 +65,7 @@ const Horarios = () => {
             e.target.value = '';
         }
     };
+
 
     return (
         <div>
