@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Select } from "antd";
 import PropTypes from 'prop-types';
 import DeliveryService from '../../common/service/deliveryService';
 
 const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
-    const deliveryService = DeliveryService();
+    const deliveryService = useMemo(() => DeliveryService(), []); // Usar useMemo para evitar crear nuevas instancias
     const [carrierOptions, setCarrierOptions] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -35,7 +35,7 @@ const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
 
         fetchCarriers();
 
-    }, [setIsDelivery, deliveryService]);
+    }, [deliveryService, setIsDelivery]); // Ahora deliveryService será estable
 
 
     return (
@@ -63,6 +63,7 @@ const SelectDelivery = ({ isDelivery, setIsDelivery }) => {
         </div>
     );
 };
+
 SelectDelivery.propTypes = {
     isDelivery: PropTypes.number,
     setIsDelivery: PropTypes.func.isRequired,
