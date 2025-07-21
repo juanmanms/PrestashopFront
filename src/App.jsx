@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import Login from './components/login/login'
 import SellerDashboard from './layaut/SellerDashboard';
 import { useSelector } from 'react-redux';
-
+import HorariosIframe from './pages/HorariosIframe';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -17,8 +18,14 @@ function App() {
   }, [user, auth]);
 
 
-  return auth ? (<SellerDashboard />) : (<Login />);
-  //return (<Login />);
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={auth ? <SellerDashboard /> : <Login />} />
+        <Route path="/horarios-iframe" element={<HorariosIframe />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App
