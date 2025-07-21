@@ -1,6 +1,5 @@
-
 import { Header } from '../components/shared/Header';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import ProductsPage from '../pages/ProductsPage';
@@ -18,12 +17,9 @@ import NotFoundPage from '../pages/NotFoundPage';
 import SellerPage from '../pages/SellerPage';
 import Footer from '../components/shared/Footer';
 
-
 function SellerDashboard() {
-
-
     return (
-        <BrowserRouter>
+        <>
             <Header />
             <Routes>
                 <Route path="/" element={<HomePage />} />
@@ -43,7 +39,7 @@ function SellerDashboard() {
                 <Route path="*" element={<NotFoundPage />} /> {/* Ruta para la página 404 */}
             </Routes>
             <Footer />
-        </BrowserRouter>
+        </>
     );
 }
 
