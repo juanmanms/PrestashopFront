@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/login/login'
 import SellerDashboard from './layaut/SellerDashboard';
-import HorariosIframe from './pages/HorariosIframe';
 import { useSelector } from 'react-redux';
 
 function App() {
@@ -20,8 +19,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta pública para horarios iframe (sin autenticación ni layout) */}
-        <Route path="/horarios-iframe" element={<HorariosIframe />} />
+        {/* ejemplo Ruta pública para horarios iframe (sin autenticación ni layout) */}
+        {/* <Route path="/horarios-iframe" element={<HorariosIframe />} /> */}
 
         {/* Todas las demás rutas pasan por autenticación */}
         <Route path="/*" element={auth ? <SellerDashboard /> : <Login />} />
