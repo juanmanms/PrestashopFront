@@ -18,10 +18,10 @@ const CmsService = {
         }
     },
 
-    addImage: async (imageData) => {
+    addImage: async (imageData, tipo = 'horarios') => {
         try {
             const apiUrl = process.env.REACT_APP_URL_API;
-            const response = await fetch(`${apiUrl}cms/images`, {
+            const response = await fetch(`${apiUrl}cms/images/${tipo}`, {
                 method: 'POST',
                 body: imageData,
             });
