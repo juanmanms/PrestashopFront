@@ -14,7 +14,7 @@ const Actividades = () => {
     useEffect(() => {
         const fetchActividades = async () => {
             try {
-                const images = await cmsService.getImages('actividades');
+                const images = await cmsService.getImages('activitats');
                 setActividades(images);
             } catch (error) {
                 console.error('Error fetching actividades:', error);
@@ -25,7 +25,7 @@ const Actividades = () => {
         fetchActividades();
     }, [cmsService]);
 
-    const baseUrl = process.env.REACT_APP_URL_HOME + 'img/actividades/';
+    const baseUrl = process.env.REACT_APP_URL_HOME + 'img/activitats/';
 
     const handleDeleteImage = async (imageName) => {
                 message.info('Funcionalidad de añadir imagen aún no implementada' + imageName);
@@ -46,29 +46,30 @@ const Actividades = () => {
     };
 
     const handleFileChange = async (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (!file) return;
+        message.info('Funcionalidad de subir imagen aún no implementada');
+        // const file = e.target.files && e.target.files[0];
+        // if (!file) return;
 
-        setUploading(true);
-        const formData = new FormData();
-        formData.append('image', file);
-        formData.append('filename', file.name);
+        // setUploading(true);
+        // const formData = new FormData();
+        // formData.append('image', file);
+        // formData.append('filename', file.name);
 
-        try {
-            const result = await cmsService.addImage(formData, 'actividades');
-            if (result && result.filename) {
-                setActividades(prev => [...prev, result.filename]);
-                message.success('Imagen añadida correctamente');
-            } else {
-                message.error('No se pudo añadir la imagen');
-            }
-        } catch (error) {
-            console.error('Error adding image:', error);
-            message.error('Error al añadir la imagen');
-        } finally {
-            setUploading(false);
-            e.target.value = '';
-        }
+        // try {
+        //     const result = await cmsService.addImage(formData, 'actividades');
+        //     if (result && result.filename) {
+        //         setActividades(prev => [...prev, result.filename]);
+        //         message.success('Imagen añadida correctamente');
+        //     } else {
+        //         message.error('No se pudo añadir la imagen');
+        //     }
+        // } catch (error) {
+        //     console.error('Error adding image:', error);
+        //     message.error('Error al añadir la imagen');
+        // } finally {
+        //     setUploading(false);
+        //     e.target.value = '';
+        // }
     };
 
     const openModal = (image) => {
