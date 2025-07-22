@@ -38,6 +38,13 @@ const cardData = [
         description: 'Configurar horarios de reparto',
         imageUrl: '/placeholder.svg?height=200&width=300',
     },
+    {
+        id: 6,
+        title: 'Actividades',
+        description: 'Configurar actividades de reparto',
+        imageUrl: '/placeholder.svg?height=200&width=300',
+    },
+
 
 ];
 const ConfigPage = () => {

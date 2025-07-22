@@ -4,7 +4,7 @@ import OpcionesPago from '../configuraciones/OpcionesPago';
 import OpcionesReparto from '../configuraciones/OpcionesReparto';
 import CodigosPostales from '../configuraciones/CodigosPostales';
 import Horarios from '../configuraciones/Horarios';
-
+import Actividades from '../configuraciones/Actividades';
 
 const Configuraciones = ({ id, setConsfiguraciones }) => {
     // Implementa la lógica para mostrar la consulta basada en el id
@@ -21,6 +21,8 @@ const Configuraciones = ({ id, setConsfiguraciones }) => {
                 {id === 3 && <OpcionesPago />}
                 {id === 4 && <CodigosPostales />}
                 {id === 5 && <Horarios />}
+                {id === 6 && <Actividades />}
+                {/* Puedes agregar más condiciones según sea necesario */}
 
                 {/* Agrega más condiciones según sea necesario
                 {/* Aquí puedes agregar más lógica para mostrar los detalles de la consulta */}

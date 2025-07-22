@@ -1,5 +1,5 @@
 const CmsService = {
-    getImages: async (tipo = 'activitats') => {
+    getImages: async (tipo = 'horarios') => {
         try {
             const apiUrl = process.env.REACT_APP_URL_API;
             const response = await fetch(`${apiUrl}cms/images/${tipo}`, {
