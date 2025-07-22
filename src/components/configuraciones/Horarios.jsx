@@ -29,7 +29,7 @@ const Horarios = () => {
 
     const handleDeleteImage = async (imageName) => {
         try {
-            await cmsService.deleteImage(imageName);
+            await cmsService.deleteImage('horarios', imageName);
             setHorarios(prevHorarios => prevHorarios.filter(horario => horario !== imageName));
             message.success('Imagen eliminada correctamente');
         } catch (error) {

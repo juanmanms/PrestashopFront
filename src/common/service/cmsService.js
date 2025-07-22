@@ -35,10 +35,10 @@ const CmsService = {
             throw error;
         }
     },
-    deleteImage: async (imageName) => {
+    deleteImage: async (tipo = 'horarios', imageName) => {
         try {
             const apiUrl = process.env.REACT_APP_URL_API;
-            const response = await fetch(`${apiUrl}cms/images/${imageName}`, {
+            const response = await fetch(`${apiUrl}cms/images/${tipo}/${imageName}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {

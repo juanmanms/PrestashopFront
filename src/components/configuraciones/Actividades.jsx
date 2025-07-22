@@ -28,16 +28,15 @@ const Actividades = () => {
     const baseUrl = process.env.REACT_APP_URL_HOME + 'img/activitats/';
 
     const handleDeleteImage = async (imageName) => {
-                message.info('Funcionalidad de añadir imagen aún no implementada' + imageName);
 
-        // try {
-        //     await cmsService.deleteImage(imageName, 'actividades');
-        //     setActividades(prevActividades => prevActividades.filter(actividad => actividad !== imageName));
-        //     message.success('Imagen eliminada correctamente');
-        // } catch (error) {
-        //     console.error('Error deleting image:', error);
-        //     message.error('Error al eliminar la imagen');
-        // }
+        try {
+            await cmsService.deleteImage('activitats', imageName);
+            setActividades(prevActividades => prevActividades.filter(actividad => actividad !== imageName));
+            message.success('Imagen eliminada correctamente');
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            message.error('Error al eliminar la imagen');
+        }
     };
 
     const handleAddImage = () => {
@@ -81,7 +80,7 @@ const Actividades = () => {
         setModalOpen(false);
         setModalImage('');
     };
-    
+
     return (
         <div>
             <h3 className="mb-4 text-lg font-semibold">Actividades</h3>
