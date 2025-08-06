@@ -1,10 +1,9 @@
 // src/components/products/TableCombination.jsx
-import { useState, useLayoutEffect, useMemo, useEffect } from 'react';
-import ProductService from './ProductService'; // Adjust the import path as necessary
+import { useState, useLayoutEffect, useMemo, useEffect, useRef } from 'react';
+import ProductService from './ProductService'; // Ajusta la ruta según sea necesario
 import SearchProduct from './SearchProduct';
 import useCustomNotification from '../../common/hooks/useCustomNotification';
 import { message } from 'antd';
-
 
 const TableCombination = () => {
     const [products, setProducts] = useState([]);
@@ -12,6 +11,7 @@ const TableCombination = () => {
     const productsService = useMemo(() => ProductService(), []);
     const [searchTerm, setSearchTerm] = useState("");
     const { contextHolder, openNotificationWithIcon } = useCustomNotification();
+    const debounceTimeout = useRef(null); // Para manejar el debounce
 
 
     useLayoutEffect(() => {
@@ -27,49 +27,42 @@ const TableCombination = () => {
         setFilteredProducts(results);
     }, [searchTerm, products]);
 
-    if (products.length === 0) {
-        return <div>Sin resultados...</div>;
-    }
-    const tiposIVA = [
-        { id: 0, value: 0 },
-        { id: 3, value: 4 },
-        { id: 2, value: 10 },
-        { id: 1, value: 21 },
-        { id: 10, value: 2 },
-        { id: 11, value: 7.5 },
-    ];
-    const openMessage = () => {
-        message.open({
-            type: 'loading',
-            content: 'Actulizando IVA...',
-        });
-        setTimeout(() => {
-            message.open({
-                type: 'success',
-                content: 'Iva actualizado correctamente',
-                duration: 2,
-            });
-        }, 3000);
+    const updateProductName = async (id_product, newName) => {
+        try {
+            await productsService.updateProductNameInDB(id_product, newName);
+            setProducts(prevProducts =>
+                prevProducts.map(product =>
+                    product.id_product === id_product ? { ...product, product_name: newName } : product
+                )
+            );
+            message.success('Nombre del producto actualizado correctamente');
+        } catch (error) {
+            console.error('Error al actualizar el nombre del producto:', error);
+            message.error('Error al actualizar el nombre del producto');
+        }
     };
 
+    const handleNameChange = (e, id_product) => {
+        const newName = e.target.value;
 
-    // const changePriceSinIva = (e, id_product_attribute) => {
-    //     e.preventDefault();
-    //     console.log('Cambiando precio sin IVA:', id_product_attribute, 'nuevo precio:', e.target.value);
-    //     const newProducts = products.map((product) => {
-    //         if (product.id_product_attribute === id_product_attribute) {
-    //             productsService.updatePriceCombinationInDB(product.id_product_attribute, parseFloat(e.target.value));
-    //             return { ...product, combination_price: parseFloat(e.target.value), price_with_tax: parseFloat(e.target.value) * (product.tax_rate * 0.01 + 1) };
-    //         }
-    //         return product;
-    //     }
-    //     );
-    //     setProducts(newProducts);
-    // };
+        // Actualizar el estado local inmediatamente
+        setProducts(prevProducts =>
+            prevProducts.map(product =>
+                product.id_product === id_product ? { ...product, product_name: newName } : product
+            )
+        );
+
+        // Manejar el debounce
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+        debounceTimeout.current = setTimeout(() => {
+            updateProductName(id_product, newName);
+        }, 500); // Debounce de 500ms
+    };
 
     const changePriceConIva = (e, id_product_attribute) => {
         e.preventDefault();
-        console.log('Cambiando precio con IVA:', id_product_attribute, 'nuevo precio:', e.target.value);
         const newProducts = products.map((product) => {
             if (product.id_product_attribute === id_product_attribute) {
                 productsService.updatePriceCombinationInDB(product.id_product_attribute, parseFloat(e.target.value) / (1 + product.tax_rate * 0.01));
@@ -91,11 +84,9 @@ const TableCombination = () => {
     const changeIVA = (e, productId) => {
         e.preventDefault();
         const selectedIVA = tiposIVA.find(tipo => tipo.value === parseFloat(e.target.value));
-        console.log('productId:', productId, 'cambio IVA a:', selectedIVA.id);
         const newProducts = products.map((product) => {
             if (product.id_product === productId) {
                 productsService.updateProductIVAInDB(product.id_product, selectedIVA.id);
-                // return { ...product, id_tax_rules_group: parseInt(e.target.value), precio_IVA: product.price * (tiposIVA.find(tipo => tipo.id === parseInt(e.target.value)).value * 0.01 + 1) };
             }
             return product;
         });
@@ -103,6 +94,29 @@ const TableCombination = () => {
         openMessage();
         productsService.getCombinations(setProducts);
     }
+
+    const tiposIVA = [
+        { id: 0, value: 0 },
+        { id: 3, value: 4 },
+        { id: 2, value: 10 },
+        { id: 1, value: 21 },
+        { id: 10, value: 2 },
+        { id: 11, value: 7.5 },
+    ];
+
+    const openMessage = () => {
+        message.open({
+            type: 'loading',
+            content: 'Actulizando IVA...',
+        });
+        setTimeout(() => {
+            message.open({
+                type: 'success',
+                content: 'Iva actualizado correctamente',
+                duration: 2,
+            });
+        }, 3000);
+    };
 
 
     return (
@@ -129,7 +143,14 @@ const TableCombination = () => {
                                 {isNewProduct && (
                                     <tr key={`spacer-${index}`} className="py-2 px-4 border-b border-gray-200 bg-yellow-200 ">
                                         <td className="py-2 px-4 border-b border-gray-200">{product.id_product}</td>
-                                        <td className="py-2 px-4 border-b border-gray-200">{product.product_name}</td>
+                                        <td className="py-2 px-4 border-b border-gray-200">
+                                            <input
+                                                type="text"
+                                                value={product.product_name}
+                                                className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                                onChange={(e) => handleNameChange(e, product.id_product)}
+                                            />
+                                        </td>
                                         <td className="py-2 px-4 border-b border-gray-200">
                                             <select value={parseInt(product.tax_rate)}
                                                 className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
