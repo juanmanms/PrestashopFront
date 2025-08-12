@@ -456,6 +456,32 @@ export const ProductService = () => {
         }
     }
 
+    const cambiarPredeterminadoCombincion = async (id_product, id_attribute) => {
+        console.log('Cambiando predeterminado de la combinación:', id_product, 'a ', id_attribute);
+        try {
+            const response = await fetch(`${apiUrl}products/change-attribute`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    id_product: id_product,
+                    id_attribute: id_attribute,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log(data.message); // "Default combination updated"
+        } catch (error) {
+            console.error('Error changing default combination:', error);
+            throw error;
+        }
+    }
+
+
 
 
 
@@ -479,7 +505,8 @@ export const ProductService = () => {
         getProdutsCategories,
         addProductCategory,
         deleteProductCategory,
-        createProduct
+        createProduct,
+        cambiarPredeterminadoCombincion
     }
 }
 

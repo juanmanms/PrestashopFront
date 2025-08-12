@@ -81,6 +81,18 @@ const TableCombination = () => {
         openNotificationWithIcon('success', 'Success', 'Combination deleted successfully');
     }
 
+    const handleChangePredeterminado = (id_product, id_product_attribute) => {
+        productsService.cambiarPredeterminadoCombincion(id_product, id_product_attribute);
+        setProducts(products.map(product => {
+            if (product.id_product === id_product) {
+                return { ...product, cache_default_attribute: id_product_attribute };
+            }
+            return product;
+        }));
+
+        message.info('Cambio el predeterminado de ' + id_product + ' a ' + id_product_attribute);
+    }
+
     const changeIVA = (e, productId) => {
         e.preventDefault();
         const selectedIVA = tiposIVA.find(tipo => tipo.value === parseFloat(e.target.value));
@@ -132,6 +144,7 @@ const TableCombination = () => {
                         <th className="py-2 px-4 border-b border-gray-200">Atributo</th>
                         <th className="py-2 px-4 border-b border-gray-200">PVP</th>
                         <th className="py-2 px-4 border-b border-gray-200">Eliminar</th>
+                        <th className="py-2 px-4 border-b border-gray-200">Predeterminado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -161,7 +174,7 @@ const TableCombination = () => {
                                                 ))}
                                             </select>
                                         </td>
-                                        <td className="py-2 px-4 border-b border-gray-200" colSpan={3}></td>
+                                        <td className="py-2 px-4 border-b border-gray-200" colSpan={4}></td>
                                     </tr>
                                 )}
                                 <tr key={product.id_product_attribute} style={{ backgroundColor: index % 2 === 0 ? '#f2f2f2' : '#ffffff' }}>
@@ -182,6 +195,16 @@ const TableCombination = () => {
                                         <button onClick={() => {
                                             handleDeleteCombination(product.id_product_attribute);
                                         }}>🗑</button>
+                                    </td>
+                                    <td className="py-2 px-4 border-b border-gray-200">
+                                        <input
+                                            type="checkbox"
+                                            checked={product.cache_default_attribute === product.id_product_attribute}
+                                            onChange={() => {
+                                                handleChangePredeterminado(product.id_product, product.id_product_attribute);
+                                            }}
+                                            disabled={product.cache_default_attribute === product.id_product_attribute}
+                                        />
                                     </td>
                                 </tr>
                             </>
