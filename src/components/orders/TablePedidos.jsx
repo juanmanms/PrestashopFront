@@ -1,27 +1,40 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import OrdersService from './ordersService';
-import { Table } from 'antd';
+import { Table, Checkbox } from 'antd';
 
 const TablePedidos = ({ setCliente }) => {
     const ordersService = OrdersService();
     const [orders, setOrders] = useState([]);
+    const [entregados, setEntregados] = useState({}); // Estado para almacenar los valores de entregado
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const data = await ordersService.getRepartos();
-                setOrders(data)
+                setOrders(data);
+
+                // Cargar el estado de entregado desde localStorage
+                const storedEntregados = JSON.parse(localStorage.getItem('entregados')) || {};
+                setEntregados(storedEntregados);
             } catch (error) {
                 console.error('Failed to fetch orders:', error);
             }
         };
         fetchOrders();
-        console.log(orders)
-    }, [])
+    }, []);
 
     const handleSetCliente = (id_customer) => {
         setCliente(id_customer);
+    };
+
+    const handleEntregadoChange = (id_customer, checked) => {
+        // Actualizar el estado local
+        const updatedEntregados = { ...entregados, [id_customer]: checked };
+        setEntregados(updatedEntregados);
+
+        // Guardar en localStorage
+        localStorage.setItem('entregados', JSON.stringify(updatedEntregados));
     };
 
     const columns = [
@@ -78,6 +91,18 @@ const TablePedidos = ({ setCliente }) => {
             render: (text, record) => `${record.Fijo}--${record.Movil}`,
         },
         {
+            title: 'Entregado',
+            key: 'Entregado',
+            render: (text, record) => (
+                <Checkbox
+                    checked={entregados[record.id_customer] || false}
+                    onChange={(e) => handleEntregadoChange(record.id_customer, e.target.checked)}
+                >
+                    Entregado
+                </Checkbox>
+            ),
+        },
+        {
             title: 'Acciones',
             key: 'Acciones',
             render: (text, record) => (
@@ -103,14 +128,17 @@ const TablePedidos = ({ setCliente }) => {
                     rowKey="id_customer"
                     scroll={{ x: '100%' }}
                     className="w-full overflow-x-auto"
+                    rowClassName={(record) =>
+                        entregados[record.id_customer] ? 'bg-green-100' : ''
+                    } // Colorear la fila de verde si está entregado
                 />
             )}
         </div>
     );
-}
+};
 
 TablePedidos.propTypes = {
     setCliente: PropTypes.func.isRequired,
-}
+};
 
-export default TablePedidos
+export default TablePedidos;
