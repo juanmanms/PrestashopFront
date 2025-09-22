@@ -9,6 +9,7 @@ import cmsService from '../../common/service/cmsService';
 const ModalSeller = ({ visible, onClose, vendedor }) => {
     const sellerService = useMemo(() => SellerService(), []);
     const cms = useMemo(() => cmsService, []);
+    const ref=0
 
     const [formValues, setFormValues] = useState({
         Categoria: '',
@@ -57,6 +58,13 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         try {
             const images = await cms.getImages(`paradas/${id_category}`);
             setParadaImages(images);
+            const maxRef = images
+                .map(img => {
+                    const match = img.match(/(\d+)(?=\.\w+$)/);
+                    return match ? parseInt(match[1], 10) : 0;
+                })
+                .reduce((max, num) => Math.max(max, num), 0);
+            console.log('Max reference number:', maxRef);
         } catch (error) {
             console.error('Error fetching parada images:', error);
             message.error('Error al cargar las imágenes de la parada');
@@ -114,7 +122,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         formData.append('image', file);
 
         try {
-            const result = await cms.addImage(formData, `paradas/${vendedor.ID_Categoria}`);
+            const result = await cms.addImage(formData, `cms/paradas/${vendedor.ID_Categoria}`);
             if (result && result.filename) {
                 setParadaImages(prev => [...prev, result.filename]);
                 message.success('Imagen de parada añadida correctamente');
