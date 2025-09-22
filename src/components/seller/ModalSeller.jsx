@@ -52,7 +52,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
 
     const fetchParadaImages = async (id_category) => {
         if (!id_category) return;
-        
+
         setLoadingImages(true);
         try {
             const images = await cms.getImages(`paradas/${id_category}`);
@@ -108,7 +108,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
     const handleAddParadaImage = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        
+
         setUploading(true);
         const formData = new FormData();
         formData.append('image', file);
@@ -130,7 +130,12 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
 
     const handleDeleteParadaImage = async (imageName) => {
         try {
-            await cms.deleteImage(imageName, `paradas/${vendedor.ID_Categoria}`);
+            const tipo = 'paradas';
+            const parada = vendedor.ID_Categoria;
+            const filename = imageName;
+            const apiUrl = `${process.env.REACT_APP_URL_API}images/${tipo}/${parada}/${filename}`;
+            const response = await fetch(apiUrl, { method: 'DELETE' });
+            if (!response.ok) throw new Error('Error al eliminar la imagen');
             setParadaImages(prev => prev.filter(img => img !== imageName));
             message.success('Imagen eliminada correctamente');
         } catch (error) {
@@ -162,7 +167,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                     <p className="mt-2 ">Vendedor <strong>{vendedor?.Vendedor}</strong> con id: {vendedor?.ID_Vendedor} </p>
                     <p><strong>Contacto:</strong> Teléfono: <a href={`tel:${vendedor?.phone}`}>{vendedor?.phone}</a>, Email: <a href={`mailto:${vendedor?.email}`}>{vendedor?.email}</a></p>
                 </section>
-                
+
                 <br />
                 <h3 className='mt-2 font-black'>Sección de categoría</h3>
                 <section className="info-categoria bg-slate-500 p-4 rounded-lg text-white mb-2">
@@ -224,7 +229,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                         toolbarStyle={{ display: 'flex', justifyContent: 'space-between' }}
                         editorStyle={{ height: '200px', border: '1px solid #ccc', padding: '10px' }}
                     />
-                    
+
                     <div className="modal-seller-image" style={{ marginTop: 16 }}>
                         {formValues.Imagen_Categoria && (
                             <img src={formValues.Imagen_Categoria} alt="Imagen de Categoría" style={{ width: 'auto', height: 'auto', maxHeight: 200 }} />
@@ -250,7 +255,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                 {/* Nueva sección para imágenes de parada */}
                 <div className="parada-images-section mt-6">
                     <h3 className='mt-2 font-black'>Imágenes de la Parada</h3>
-                    
+
                     <div className="mb-4">
                         <Button
                             onClick={() => document.getElementById('input-parada-img').click()}
@@ -289,7 +294,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                             ))}
                         </div>
                     )}
-                    
+
                     {!loadingImages && paradaImages.length === 0 && (
                         <p className="text-gray-500">No hay imágenes de parada disponibles.</p>
                     )}
