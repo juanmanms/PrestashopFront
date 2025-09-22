@@ -133,7 +133,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
             const tipo = 'paradas';
             const parada = vendedor.ID_Categoria;
             const filename = imageName;
-            const apiUrl = `${process.env.REACT_APP_URL_API}images/${tipo}/${parada}/${filename}`;
+            const apiUrl = `${process.env.REACT_APP_URL_API}cms/images/${tipo}/${parada}/${filename}`;
             const response = await fetch(apiUrl, { method: 'DELETE' });
             if (!response.ok) throw new Error('Error al eliminar la imagen');
             setParadaImages(prev => prev.filter(img => img !== imageName));
