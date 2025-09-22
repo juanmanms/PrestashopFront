@@ -124,7 +124,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         try {
             const result = await cms.addImage(formData, `paradas/${vendedor.ID_Categoria}`);
             if (result && result.filename) {
-                setParadaImages(prev => [...prev, "imagen-"+{ref}]);
+                setParadaImages(prev => [...prev, result.filename]);
                 message.success('Imagen de parada añadida correctamente');
             }
         } catch (error) {
