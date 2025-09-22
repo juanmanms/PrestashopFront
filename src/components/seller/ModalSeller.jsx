@@ -4,9 +4,11 @@ import { Input } from 'antd';
 import PropTypes from 'prop-types';
 import Editor from 'react-simple-wysiwyg';
 import SellerService from './SellerService';
+import cmsService from '../../common/service/cmsService';
 
 const ModalSeller = ({ visible, onClose, vendedor }) => {
     const sellerService = useMemo(() => SellerService(), []);
+    const cms = useMemo(() => cmsService, []);
 
     const [formValues, setFormValues] = useState({
         Categoria: '',
@@ -21,6 +23,8 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         Imagen_Categoria: '',
     });
     const [uploading, setUploading] = useState(false);
+    const [paradaImages, setParadaImages] = useState([]);
+    const [loadingImages, setLoadingImages] = useState(false);
 
     useEffect(() => {
         if (vendedor) {
@@ -39,18 +43,27 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                     ? vendedor.Imagen_Categoria + '?t=' + Date.now()
                     : '',
             });
+
+            // Cargar imágenes de la parada específica
+            fetchParadaImages(vendedor.ID_Categoria);
         }
         // eslint-disable-next-line
     }, [vendedor]);
 
-    // const handleKeywordChange = (index, value) => {
-    //     const newKeywords = [...formValues.keyword];
-    //     newKeywords[index] = value;
-    //     setFormValues({
-    //         ...formValues,
-    //         keyword: newKeywords,
-    //     });
-    // };
+    const fetchParadaImages = async (id_category) => {
+        if (!id_category) return;
+        
+        setLoadingImages(true);
+        try {
+            const images = await cms.getImages(`paradas/${id_category}`);
+            setParadaImages(images);
+        } catch (error) {
+            console.error('Error fetching parada images:', error);
+            message.error('Error al cargar las imágenes de la parada');
+        } finally {
+            setLoadingImages(false);
+        }
+    };
 
     const handleSave = () => {
         sellerService.updateCategory(
@@ -62,11 +75,9 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
             formValues.facebook,
             formValues.instagram
         )
-
         onClose();
     };
 
-    // NUEVO: Cambiar imagen y subirla al servidor
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -82,7 +93,6 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
             });
             if (!response.ok) throw new Error('Error al subir la imagen');
             const data = await response.json();
-            // Al actualizar la imagen tras subirla:
             setFormValues({
                 ...formValues,
                 Imagen_Categoria: (data.imageUrl || formValues.Imagen_Categoria) + '?t=' + Date.now(),
@@ -95,9 +105,45 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         }
     };
 
+    const handleAddParadaImage = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const result = await cms.addImage(formData, `paradas/${vendedor.ID_Categoria}`);
+            if (result && result.filename) {
+                setParadaImages(prev => [...prev, result.filename]);
+                message.success('Imagen de parada añadida correctamente');
+            }
+        } catch (error) {
+            console.error('Error adding parada image:', error);
+            message.error('Error al añadir la imagen de la parada');
+        } finally {
+            setUploading(false);
+            e.target.value = '';
+        }
+    };
+
+    const handleDeleteParadaImage = async (imageName) => {
+        try {
+            await cms.deleteImage(imageName, `paradas/${vendedor.ID_Categoria}`);
+            setParadaImages(prev => prev.filter(img => img !== imageName));
+            message.success('Imagen eliminada correctamente');
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            message.error('Error al eliminar la imagen');
+        }
+    };
+
+    const baseParadaUrl = `${process.env.REACT_APP_URL_HOME}img/paradas/${vendedor?.ID_Categoria}/`;
+
     return (
         <Modal
-            width={800}
+            width={1000}
             title="Datos de vendedor"
             open={visible}
             onCancel={onClose}
@@ -113,17 +159,16 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
             <div className="modal-seller-content">
                 <h3 className='mt-2 font-black'>Sección de vendedor</h3>
                 <section className="info-seller bg-slate-500 p-4 rounded-lg text-white">
-                    <p className="mt-2 ">Vendedor <strong>{vendedor.Vendedor}</strong> con id: {vendedor.ID_Vendedor} </p>
-                    <p><strong>Contacto:</strong> Teléfono: <a href={`tel:${vendedor.phone}`}>{vendedor.phone}</a>, Email: <a href={`mailto:${vendedor.email}`}>{vendedor.email}</a></p>
-
+                    <p className="mt-2 ">Vendedor <strong>{vendedor?.Vendedor}</strong> con id: {vendedor?.ID_Vendedor} </p>
+                    <p><strong>Contacto:</strong> Teléfono: <a href={`tel:${vendedor?.phone}`}>{vendedor?.phone}</a>, Email: <a href={`mailto:${vendedor?.email}`}>{vendedor?.email}</a></p>
                 </section>
-                <br />
+                
                 <br />
                 <h3 className='mt-2 font-black'>Sección de categoría</h3>
                 <section className="info-categoria bg-slate-500 p-4 rounded-lg text-white mb-2">
-                    <p className="mt-2 ">Categoría <strong>{vendedor.Categoria}</strong> con id: {vendedor.ID_Categoria} </p>
+                    <p className="mt-2 ">Categoría <strong>{vendedor?.Categoria}</strong> con id: {vendedor?.ID_Categoria} </p>
                 </section>
-                <hr />
+
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label>Teléfono</label>
@@ -166,30 +211,11 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                         />
                     </div>
                 </div>
-                {/* <div className="contacto-item mb-2">
-                    <label>Teléfono</label>
-                    <Input
-                        type="text"
-                        value={formValues.keyword[0] || ''}
-                        onChange={(e) => handleKeywordChange(0, e.target.value)}
-                        placeholder="Teléfono"
-                        className="mb-2"
-                    />
-                </div>
-                <div className="contacto-item mb-2">
-                    <label>WhatsApp (siempre con +34)</label>
-                    <Input
-                        type="text"
-                        value={formValues.keyword[1] || ''}
-                        onChange={(e) => handleKeywordChange(1, e.target.value)}
-                        placeholder="WhatsApp"
-                        className="mb-2"
-                    />
-                </div> */}
+
                 <div className="form-group mt-4">
                     <label htmlFor="customInput">Descripcion</label>
                     <Editor
-                        value={formValues.description || vendedor.description}
+                        value={formValues.description || vendedor?.description}
                         onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
                         className="editor"
                         toolbarClassName="toolbarClassName"
@@ -198,6 +224,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                         toolbarStyle={{ display: 'flex', justifyContent: 'space-between' }}
                         editorStyle={{ height: '200px', border: '1px solid #ccc', padding: '10px' }}
                     />
+                    
                     <div className="modal-seller-image" style={{ marginTop: 16 }}>
                         {formValues.Imagen_Categoria && (
                             <img src={formValues.Imagen_Categoria} alt="Imagen de Categoría" style={{ width: 'auto', height: 'auto', maxHeight: 200 }} />
@@ -220,6 +247,53 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                     </div>
                 </div>
 
+                {/* Nueva sección para imágenes de parada */}
+                <div className="parada-images-section mt-6">
+                    <h3 className='mt-2 font-black'>Imágenes de la Parada</h3>
+                    
+                    <div className="mb-4">
+                        <Button
+                            onClick={() => document.getElementById('input-parada-img').click()}
+                            loading={uploading}
+                            type="primary"
+                        >
+                            Añadir Imagen de Parada
+                        </Button>
+                        <input
+                            id="input-parada-img"
+                            type="file"
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            onChange={handleAddParadaImage}
+                        />
+                    </div>
+
+                    {loadingImages ? (
+                        <p>Cargando imágenes...</p>
+                    ) : (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {paradaImages.map((image, idx) => (
+                                <div key={idx} className="relative group">
+                                    <img
+                                        src={`${baseParadaUrl}${image}`}
+                                        alt={`Parada ${idx + 1}`}
+                                        className="w-full h-32 object-cover rounded"
+                                    />
+                                    <button
+                                        onClick={() => handleDeleteParadaImage(image)}
+                                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    
+                    {!loadingImages && paradaImages.length === 0 && (
+                        <p className="text-gray-500">No hay imágenes de parada disponibles.</p>
+                    )}
+                </div>
             </div>
         </Modal>
     );
