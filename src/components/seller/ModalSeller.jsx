@@ -114,25 +114,42 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
     };
 
     const handleAddParadaImage = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+        if (uploading) return;
+        const file = e.target.files && e.target.files[0];
+        if (!file || !vendedor?.ID_Categoria) {
+            e.target.value = '';
+            return;
+        }
 
         setUploading(true);
-        const formData = new FormData();
-        formData.append('image', file);
-
         try {
-            const result = await cms.addImage(formData, `paradas/${vendedor.ID_Categoria}`);
-            if (result && result.filename) {
-                setParadaImages(prev => [...prev, result.filename]);
-                message.success('Imagen de parada añadida correctamente');
-            }
+            // generar filename seguro: ref + timestamp + extensión
+            const extMatch = (file.name || '').match(/\.[^/.]+$/);
+            const ext = extMatch ? extMatch[0] : '.jpg';
+            const generatedFilename = `${ref}_${Date.now()}${ext}`.replace(/\s+/g, '_');
+
+            // sanear tipo (sin //)
+            const paradaId = String(vendedor.ID_Categoria).replace(/^\/|\/$/g, '');
+            const tipo = `paradas/${paradaId}`;
+
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('filename', generatedFilename);
+            formData.append('tipo', tipo); // opcional, según backend
+
+            const result = await cms.addImage(formData, tipo);
+
+            // backend idealmente devuelve { filename: '...' }
+            const newFilename = (result && result.filename) ? result.filename : generatedFilename;
+            setParadaImages(prev => [...prev, newFilename]);
+            setRef(prev => prev + 1);
+            message.success('Imagen de parada añadida correctamente');
         } catch (error) {
             console.error('Error adding parada image:', error);
             message.error('Error al añadir la imagen de la parada');
         } finally {
             setUploading(false);
-            e.target.value = '';
+            e.target.value = ''; // reset input
         }
     };
 
