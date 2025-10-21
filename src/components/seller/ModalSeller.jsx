@@ -48,7 +48,6 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
             // Cargar imágenes de la parada específica
             fetchParadaImages(vendedor.ID_Categoria);
         }
-        // eslint-disable-next-line
     }, [vendedor]);
 
     const fetchParadaImages = async (id_category) => {
