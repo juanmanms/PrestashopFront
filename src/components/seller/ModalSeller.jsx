@@ -47,6 +47,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
 
             // Cargar imágenes de la parada específica
             fetchParadaImages(vendedor.ID_Categoria);
+            console.log("referencia" + ref);
         }
     }, [vendedor]);
 
