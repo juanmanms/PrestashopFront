@@ -47,7 +47,6 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
 
             // Cargar imágenes de la parada específica
             fetchParadaImages(vendedor.ID_Categoria);
-            console.log("referencia" + ref);
         }
     }, [vendedor]);
 
@@ -126,7 +125,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
             // generar filename seguro: ref + timestamp + extensión
             const extMatch = (file.name || '').match(/\.[^/.]+$/);
             const ext = extMatch ? extMatch[0] : '.jpg';
-            const generatedFilename = `${ref}_${Date.now()}${ext}`.replace(/\s+/g, '_');
+            const generatedFilename = `imagen_${ref}${ext}`.replace(/\s+/g, '_');
 
             // sanear tipo (sin //)
             const paradaId = String(vendedor.ID_Categoria).replace(/^\/|\/$/g, '');
