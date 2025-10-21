@@ -125,7 +125,7 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
             // generar filename seguro: ref + timestamp + extensión
             const extMatch = (file.name || '').match(/\.[^/.]+$/);
             const ext = extMatch ? extMatch[0] : '.jpg';
-            const generatedFilename = `imagen_${ref}${ext}`.replace(/\s+/g, '_');
+            const generatedFilename = `imagen-${ref}${ext}`.replace(/\s+/g, '_');
 
             // sanear tipo (sin //)
             const paradaId = String(vendedor.ID_Categoria).replace(/^\/|\/$/g, '');
