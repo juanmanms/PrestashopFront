@@ -137,6 +137,11 @@ export const OdersOnline = () => {
             key: "NombreProducto",
         },
         {
+            title: "Parada",
+            dataIndex: "Vendedor",
+            key: "Vendedor",
+        },
+        {
             title: "Cantidad",
             dataIndex: "Cantidad",
             key: "Cantidad",
