@@ -105,6 +105,11 @@ export const OdersOnline = () => {
             render: (value) => parseFloat(value).toFixed(2),
         },
         {
+            title: "Transportista",
+            dataIndex: "Transportista",
+            key: "Transportista",
+        },
+        {
             title: "Estado Pedido",
             dataIndex: "EstadoPedido",
             key: "EstadoPedido",
