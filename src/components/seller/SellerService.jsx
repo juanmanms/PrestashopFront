@@ -35,7 +35,7 @@ export const SellerService = () => {
         }
     }
 
-    const updateCategory = async (id, description, keywords, telefono, whatsapp, facebook, instagram) => {
+    const updateCategory = async (id, description, keywords, telefono, whatsapp, facebook, instagram, web, nparada) => {
         try {
             const response = await fetch(`${apiUrl}sellers/category-info`, {
                 method: 'PUT',
@@ -51,6 +51,8 @@ export const SellerService = () => {
                     whatsapp,
                     facebook,
                     instagram,
+                    web,
+                    nparada,
                 }),
             });
 

@@ -22,6 +22,8 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
         Telefono: '',
         keyword: [],
         Imagen_Categoria: '',
+        web: '',
+        nparada: '',
     });
     const [uploading, setUploading] = useState(false);
     const [paradaImages, setParadaImages] = useState([]);
@@ -43,6 +45,8 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                 Imagen_Categoria: vendedor.Imagen_Categoria
                     ? vendedor.Imagen_Categoria + '?t=' + Date.now()
                     : '',
+                web: vendedor.web || '',
+                nparada: vendedor.nparada || '',
             });
 
             // Cargar imágenes de la parada específica
@@ -80,7 +84,9 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
             formValues.telefono,
             formValues.whatsapp,
             formValues.facebook,
-            formValues.instagram
+            formValues.instagram,
+            formValues.web,
+            formValues.nparada
         )
         onClose();
     };
@@ -236,6 +242,26 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                             value={formValues.instagram || ''}
                             onChange={(e) => setFormValues({ ...formValues, instagram: e.target.value })}
                             placeholder="Instagram"
+                            className="mb-2"
+                        />
+                    </div>
+                    <div>
+                        <label>Web</label>
+                        <Input
+                            type="text"
+                            value={formValues.web || ''}
+                            onChange={(e) => setFormValues({ ...formValues, web: e.target.value })}
+                            placeholder="Web"
+                            className="mb-2"
+                        />
+                    </div>
+                    <div>
+                        <label>Número de Parada</label>
+                        <Input
+                            type="text"
+                            value={formValues.nparada || ''}
+                            onChange={(e) => setFormValues({ ...formValues, nparada: e.target.value })}
+                            placeholder="Número de Parada"
                             className="mb-2"
                         />
                     </div>
