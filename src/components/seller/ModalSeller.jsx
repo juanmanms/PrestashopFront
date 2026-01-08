@@ -45,8 +45,8 @@ const ModalSeller = ({ visible, onClose, vendedor }) => {
                 Imagen_Categoria: vendedor.Imagen_Categoria
                     ? vendedor.Imagen_Categoria + '?t=' + Date.now()
                     : '',
-                web: vendedor.web || '',
-                nparada: vendedor.nparada || '',
+                web: vendedor.Web || '',
+                nparada: vendedor.N_Parada || '',
             });
 
             // Cargar imágenes de la parada específica
